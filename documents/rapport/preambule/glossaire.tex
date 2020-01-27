@@ -1,0 +1,40 @@
+% Utilisation des glossaires
+%
+% Dans le préambule, utiliser la commande
+% 	\newglossaryentry{latex}
+% 	{
+% 	    name=latex,
+% 	    description={Is a mark up language specially suited 
+% 	    for scientific documents}
+% 	}
+% ou, pour un acronyme,
+%  	\newacronym{ALI}{ALI}{Amplificateur Linéaire Intégré}
+% 
+% A utiliser avec les commandes \Gls{ALI} ou \gls{ALI} dans le texte
+%
+% Pour afficher le glossaire, les trois lignes suivantes font l'affaire, 
+%	\appendix
+%	\printglossaries
+%	\glsaddallunused % < Pour ajouter les entrées non utilisées dans le texte
+%
+% Plus d'infos : https://www.overleaf.com/learn/latex/Glossaries
+
+% Importation du package glossaires
+
+
+\usepackage[
+	style=super,
+	%nonumberlist,
+	toc,
+	xindy,
+	acronym,
+	numberedsection
+	]{glossaries-extra}
+	
+\setabbreviationstyle[acronym]{long-short}
+\glssetcategoryattribute{acronym}{glossdesc}{title}
+\renewcommand{\glsnamefont}[1]{\textbf{#1}}
+
+\renewcommand*{\glstextformat}[1]{\textsf{#1}}
+
+\makeglossaries

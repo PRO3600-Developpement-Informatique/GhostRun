@@ -1,0 +1,56 @@
+% Supprime des warnings lors de la compilation avec certains plugins obsolètes.
+\usepackage{scrhack}
+
+% Utilisons UTF-8
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Traduire le document en français
+\usepackage[french]{babel}
+
+% Pour ajouter des symboles à LaTeX comme ©
+% Pourrait probablement être abandonné car non maintenu
+% \usepackage{textcomp}
+
+% Pour avoir des liens fonctionnels dans le PDF
+\usepackage{hyperref}
+\usepackage{url}
+
+% Pour definir et choisir des couleurs
+\usepackage[svgnames, table]{xcolor}
+
+% Active la commande \footnote
+\usepackage{footnote}
+
+% Permet d'utiliser les guillemets français avec \og et \fg
+% https://tex.stackexchange.com/questions/281279/style-of-quotation-marks
+\usepackage[autostyle]{csquotes}
+
+% Permet de forcer la présence d'un flotant "ici" avec un grand H
+\usepackage{float}
+
+% Permet de placer du texte côte-à-côte avec des figures
+% Utiliser avec 
+% \begin{wrapfigure}{r}{5cm} FIGURE \end{wrapfigure}
+% r/l/i/o désignant le côté et 5cm la taille de la figure (en majuscule plus ou moins)
+% CF http://mirrors.standaloneinstaller.com/ctan/macros/latex/contrib/wrapfig/wrapfig-doc.pdf
+\usepackage{wrapfig}
+
+% Permet d'utiliser un ensemble de symboles et fonctions mathématiques
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Permet d'ajouter des images
+\usepackage{graphicx}
+
+% Permet d'inclure un PDF depuis le code LaTeX, par exemple pour une page de titre customisée (commande includepdf)
+\usepackage{pdfpages}
+
+% Permet d'écrire du texte sans sens, ce qui permet une visualisation rapide du thème et des parties pleines
+\usepackage{blindtext}
+
+% Calme LaTeX sur la justification à outrance, ce qui évite de couper un mot sur trois
+\global\tolerance=2000
+\global\hyphenpenalty=30000
+
+

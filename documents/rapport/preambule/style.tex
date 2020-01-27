@@ -1,0 +1,86 @@
+% Ce fichier utilise les commandes KOMA-Script pour définir des titres bien plus classes en mode twoside
+% Quelques modification ont probablement été faites, mais la plupart vient d'internet
+
+% Permet de choisir le style de page
+\usepackage{scrlayer-scrpage}
+
+
+\definecolor{LightGreen}{RGB}{228, 241, 195}
+\definecolor{MediumGreen}{RGB}{201, 228, 134}
+
+\definecolor{LightBlue}{RGB}{191, 215, 237}
+\definecolor{MediumBlue}{RGB}{127, 174, 216}
+\definecolor{DarkBlue}{RGB}{0, 94, 184}
+
+\definecolor{LightGray}{gray}{.94}
+\definecolor{DarkGray}{gray}{.172}
+
+
+\colorlet{ctcolorchapterline}{LightBlue}
+\colorlet{ctcolorchapternum}{MediumBlue}
+\colorlet{ctcolorfooterline}{LightBlue}
+\colorlet{ctchaptertitles}{DarkBlue}
+\colorlet{ctsectiontitles}{DarkBlue}
+\colorlet{ctsubsectiontitles}{MediumBlue}
+
+
+
+\cfoot*{}
+\ofoot*{}
+
+\AddLayersToPageStyle{scrheadings}{pagenumber.odd,pagenumber.even}
+\AddLayersToPageStyle{plain.scrheadings}{pagenumber.odd,pagenumber.even}
+\DeclareNewLayer[
+  foreground,
+  oddpage,
+  foot,
+  contents={%
+    \hfill
+    \makebox[0pt][l]{%
+      \pagenumberrule
+      \hspace*{10pt}%
+      \pagemark
+    }%
+  }
+]{pagenumber.odd}
+\DeclareNewLayer[
+  clone=pagenumber.odd,
+  evenpage,
+  contents={%
+    \makebox[0pt][r]{%
+      \pagemark
+      \hspace*{10pt}%
+      \pagenumberrule
+    }%
+  }
+]{pagenumber.even}
+\newcommand*\pagenumberrule{%
+  {\color{ctcolorfooterline}\rule[\dimexpr-10cm+\ht\strutbox\relax]{1.25pt}{10cm}}%
+}
+\addtokomafont{pagenumber}{\usekomafont{disposition}}
+
+\makeatletter
+\renewcommand\chapterlinesformat[3]{%
+  \ifstr{#1}{chapter}
+    {%
+      \parbox[b][\ht\strutbox]{\textwidth}{%
+        \parbox[b]{\dimexpr\textwidth-3em\relax}{\raggedright#3}%
+        \makebox[3em][r]{%
+          \hfill
+          #2%
+        }%
+      }%
+    }{\@hangfrom{#2}{#3}}% <- original definition for other levels
+}
+\makeatother
+\renewcommand\chapterformat{%
+  \textcolor{ctcolorchapterline}{\rule[-5pt]{2pt}{10cm}}%
+  \quad
+  {\fontsize{60}{60}\selectfont\textcolor{ctcolorchapternum}{\thechapter}}%
+}
+
+\renewcommand*\sectionlinesformat[4]{%
+  \makebox[0pt][r]{#3}{\textcolor{ctsectiontitles}{#4}}%
+}
+\setkomafont{chapter}{\normalfont\huge\sffamily\bfseries\color{ctchaptertitles}}
+\setkomafont{subsection}{\color{ctsubsectiontitles}}

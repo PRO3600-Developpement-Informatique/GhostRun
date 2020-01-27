@@ -1,0 +1,42 @@
+\documentclass[
+fontsize=12pt, 	% Taille de police
+a4paper, 		% Papier A4
+twoside=true, 	% Recto-verso
+open=right, 	% Côté d'ouverture
+parskip=full,
+]{scrreprt}
+
+\input{preambule/base}
+
+\input{preambule/style}
+\input{preambule/glossaire}
+\input{preambule/tables}
+\input{preambule/titre}
+\input{preambule/bibliographie}
+\input{preambule/code}
+\input{preambule/boites}
+
+\title{Rapport\\Projet de développement informatique GhostRun}
+\author{Arthur JOVART\\Anthony LAMARQUE\\Erwan ALONSO\\Ilyes BENIGHIL}
+
+\begin{document}
+
+% Page de titre
+\input{titre/STANDARD/titre.tex}
+
+
+
+
+% Sommaire
+\tableofcontents
+
+% Chapitre 1: Introduction
+\include{chapters/00-Introduction}
+\include{chapters/90-Conclusion}
+\include{chapters/91-Annexes}
+
+
+
+
+
+\end{document}
