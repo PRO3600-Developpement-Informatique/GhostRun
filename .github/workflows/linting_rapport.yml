@@ -1,0 +1,14 @@
+name: Lint rapport
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone the repo
+      uses: actions/checkout@v2
+    - name: LaTeX linter (chktex)
+      uses: j2kun/chktex-action@v1.0.2
