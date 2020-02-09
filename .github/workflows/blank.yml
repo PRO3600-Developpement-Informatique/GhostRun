@@ -1,4 +1,4 @@
-name: CI
+name: Compilation LaTeX du rapport
 
 on: [push]
 
@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: LaTeX compilation
       uses: dante-ev/latex-action@v0.2.0
       with:
