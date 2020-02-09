@@ -1,0 +1,18 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: LaTeX compilation
+      uses: dante-ev/latex-action@v0.2.0
+      with:
+        # The root LaTeX file to be compiled
+        root_file: /documents/rapport/main.tex
+       # The working directory for the latex compiler to be invoked
+        working_directory: /documents/rapport # optional
