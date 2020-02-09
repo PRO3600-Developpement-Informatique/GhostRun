@@ -17,3 +17,10 @@ jobs:
         root_file: main.tex
        # The working directory for the latex compiler to be invoked
         working_directory: documents/rapport # optional
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: Rapport.pdf
+        # Directory containing files to upload
+        path: documents/rapport/main.pdf
