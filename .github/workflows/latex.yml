@@ -16,4 +16,4 @@ jobs:
         # The root LaTeX file to be compiled
         root_file: main.tex
        # The working directory for the latex compiler to be invoked
-        working_directory: GhostRun/documents/rapport # optional
+        working_directory: documents/rapport # optional
