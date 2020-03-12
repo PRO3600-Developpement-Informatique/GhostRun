@@ -53,5 +53,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Plz give me your GPS</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Nasa will hack u</string>
 </dict>
 </plist>
