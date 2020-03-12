@@ -26,7 +26,7 @@ const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
-
+const DEFAULT_PADDING = {top: 40, right: 40, bottom: 40, left: 40};
 
 const mapStyle = [
     {
@@ -308,12 +308,12 @@ export default class MainMapView extends React.Component {
                 longitude: LONGITUDE,
                 latitudeDelta: 0,
                 longitudeDelta: 0
-            })
+            }),
+            fitCoordinates: []
         };
     }
 
-    componentDidMount() {
-        const { coordinate } = this.state;
+    demande_permissions() {
         if (Platform.OS === "android") {
             request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
                 // aaa
@@ -323,43 +323,98 @@ export default class MainMapView extends React.Component {
                 // aaa
             });
         }
+    }
+
+
+    affiche_marker_position_depart(position) {
+
+        const {latitude, longitude} = position.coords;
+        const newCoordinate = {
+            latitude,
+            longitude
+        };
+
+        if (Platform.OS === "android") {
+            if (this.start_marker) {
+                this.start_marker._component.animateMarkerToCoordinate(
+                    newCoordinate,
+                    500
+                );
+            }
+        } else {
+            coordinate.timing(newCoordinate).start();
+        }
+
+
+    }
+
+    mise_a_jour_current_position(position) {
+        const {routeCoordinates, distanceTravelled} = this.state;
+        const {latitude, longitude} = position.coords;
+
+        const newCoordinate = {
+            latitude,
+            longitude
+        };
+
+        if (Platform.OS === "android") {
+            if (this.current_position_marker) {
+                this.current_position_marker._component.animateMarkerToCoordinate(
+                    newCoordinate,
+                    0
+                );
+            }
+        } else {
+            coordinate.timing(newCoordinate).start();
+        }
+
+        this.setState({
+            latitude,
+            longitude,
+            routeCoordinates: routeCoordinates.concat([newCoordinate]),
+            distanceTravelled:
+                distanceTravelled + this.calcDistance(newCoordinate),
+            prevLatLng: newCoordinate
+        });
+
+
+    }
+
+    fitToCoordinates() {
+        this.map.fitToCoordinates(this.state.routeCoordinates, {
+            edgePadding: DEFAULT_PADDING,
+            animated: true,
+        });
+    }
+
+
+    componentDidMount() {
+        console.log("Bonjour!");
+        this.demande_permissions();
+        console.log("On a les permissions!");
+        Geolocation.getCurrentPosition(position => {
+                this.affiche_marker_position_depart(position);
+                this.mise_a_jour_current_position(position);
+                this.fitToCoordinates();
+            },
+            error => console.log(error)
+        );
+
+        console.log("Initialisation statique terminée!");
 
         this.watchID = Geolocation.watchPosition(
             position => {
-                const { routeCoordinates, distanceTravelled } = this.state;
-                const { latitude, longitude } = position.coords;
+                console.log("Mise à jour de la position...");
 
-                const newCoordinate = {
-                    latitude,
-                    longitude
-                };
-
-                if (Platform.OS === "android") {
-                    if (this.marker) {
-                        this.marker._component.animateMarkerToCoordinate(
-                            newCoordinate,
-                            500
-                        );
-                    }
-                } else {
-                    coordinate.timing(newCoordinate).start();
-                }
-
-                this.setState({
-                    latitude,
-                    longitude,
-                    routeCoordinates: routeCoordinates.concat([newCoordinate]),
-                    distanceTravelled:
-                        distanceTravelled + this.calcDistance(newCoordinate),
-                    prevLatLng: newCoordinate
-                });
+                this.mise_a_jour_current_position(position);
+                this.fitToCoordinates();
             },
             error => console.log(error),
             {
                 enableHighAccuracy: true,
                 timeout: 20000,
                 maximumAge: 1000,
-                distanceFilter: 10
+                distanceFilter: 1
             }
         );
     }
@@ -376,7 +431,7 @@ export default class MainMapView extends React.Component {
     });
 
     calcDistance = newLatLng => {
-        const { prevLatLng } = this.state;
+        const {prevLatLng} = this.state;
         return haversine(prevLatLng, newLatLng) || 0;
     };
 
@@ -384,6 +439,9 @@ export default class MainMapView extends React.Component {
         return (
             <View style={styles.container}>
                 <MapView
+                    ref={ref => {
+                        this.map = ref;
+                    }}
                     customMapStyle={mapStyle}
                     style={styles.map}
                     provider={PROVIDER_GOOGLE}
@@ -392,18 +450,31 @@ export default class MainMapView extends React.Component {
                     loadingEnabled
                     region={this.getMapRegion()}
                 >
-                    <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
+                    <Polyline coordinates={this.state.routeCoordinates}
+                              strokeWidth={5}
+                              strokeColor={"rgba(255,255,255,0.7)"}
+                              lineCap={"butt"}
+                              lineJoin={"round"}
+                    />
                     <Marker.Animated
                         ref={marker => {
-                            this.marker = marker;
+                            this.start_marker = marker;
                         }}
+                        title={"Position de départ"}
+                        coordinate={this.state.coordinate}
+                    />
+                    <Marker.Animated
+                        ref={marker => {
+                            this.current_position_marker = marker;
+                        }}
+                        title={"Position actuelle"}
                         coordinate={this.state.coordinate}
                     />
                 </MapView>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={[styles.bubble, styles.button]}>
                         <Text style={styles.bottomBarContent}>
-                            {parseFloat(this.state.distanceTravelled).toFixed(3 )} km
+                            ＼（＾ ＾）／ {parseFloat(this.state.distanceTravelled).toFixed(3)} km
                         </Text>
                     </TouchableOpacity>
                 </View>
