@@ -1,14 +1,12 @@
 \chapter{Analyse des besoins (Cahier des charges)}
 
-\section{Description de la demande}
-
 GhostRun est une \textbf{application Android}, sur laquelle l'utilisateur se connecte pour sauvegarder des traces GPS, appelées trajets, qui s'afficheront sur la carte sous la forme d'un \gls{fantome} pendant ses futurs trajets.
 
 Avant d'enregistrer un trajet, l'utilisateur doit d'abord spécifier son itinéraire (départ et arrivée), et le moyen de transport qu'il utilisera. 
 
-Pedant l'enregistrement, il peut spécifier quelle action il réalise. Par exemple, pour un trajet en train, l'utilisateur passe par les modes "préparation", "marche vers la station", "achat d'un billet", "attente du train", "dans le train", "marche vers la destination".
+Pendant l'enregistrement, il peut spécifier quelle action il réalise. Par exemple, pour un trajet en train, l'utilisateur passe par les modes "préparation", "marche vers la station", "achat d'un billet", "attente du train", "dans le train", "marche vers la destination".
 
-Lors de l'enregistrement d'un trajet, l'utilisateur voit sur un carte l'ensemble des \glspl{fantome} qu'il a auparavant sélectionné. Il peut ainsi tenter de les dépasser en temps reel. Ces \glspl{fantome} sont représentés par des icônes symbolisant le moyen de transport utilisé par l'utilisateur lorsqu'ils ont été enregistrés. L'application doit être utilisable la nuit, elle intègre donc un mode sombre, dans lequel la carte aborde un terme noir, et ou les icônes des \glspl{fantome} sont moins contrastées.
+Lors de l'enregistrement d'un trajet, l'utilisateur voit sur un carte l'ensemble des \glspl{fantome} qu'il a auparavant sélectionné. Il peut ainsi tenter de les dépasser en temps réel. Ces \glspl{fantome} sont représentés par des icônes symbolisant le moyen de transport utilisé par l'utilisateur lorsqu'ils ont été enregistrés. L'application doit être utilisable la nuit, elle intègre donc un mode sombre, dans lequel la carte aborde un terme noir, et ou les icônes des \glspl{fantome} sont moins contrastées.
 
 Après avoir enregistré son trajet, l'utilisateur peut y ajouter des metadonnées : conditions particulières, météo, essoufflement, \gls{etat_relax}. L'application calcule et stocke aussi sa vitesse moyenne, maximale, la distance parcourue et d'autres statistiques.
 
@@ -16,8 +14,7 @@ L'application propose aussi un historique des trajets, sur lequel l'utilisateur 
 
 Un bouton permet à l'utilisateur de partager ses scores et l'ensemble de ses \glspl{fantome} si il le désire.
 
-
-L'application synchronise en arrière plan les données générées par les trajets afin de les sauvegarder et de pouvoir les afficher sur un site web annexe.
+L'application synchronise en arrière-plan les données générées par les trajets afin de les sauvegarder et de pouvoir les afficher sur un site web annexe.
 
 Ce projet sera considéré comme fini lorsque l’application sera utilisable et lorsque l’utilisateur pourra bien voir les différentes statistiques de ces différentes courses.
 
@@ -29,6 +26,16 @@ Le livrable 1 doit être rendu avant le 10 février. Il s'agit de rédiger un pr
 
 Le livrable 2 doit être rendu avant le 16 mars. Il s'agit de rendre un prototype du logiciel. Ce prototype sera un squelette des développements futurs du logiciel, toutes les classes utiles à l'application seront définies et toutes les méthodes prévues devront être déclarées et appelées, quitte à ce qu'elles soient vides.
 
-Le livrable 3 doit être rendu avant le 18 mai. Il s'agit de rendre le logiciel, les tests et le rapport. Le rapport doit permmetre à une personne qui ne connait rien du projet de pouvoir comprendre celui-ci.
+Le livrable 3 doit être rendu avant le 18 mai. Il s'agit de rendre le logiciel, les tests et le rapport. Le rapport doit permettre à une personne qui ne connait rien du projet de pouvoir comprendre celui-ci.
 
 Et finalement, la soutenance aura lieu le 2-3 juin. Il s'agira de présenter le projet à un jury, avec une présentation vidéo-projetée, une démonstration du fonctionnement du logiciel, et la réponse aux questions du jury.
+
+\section{Planification des phases du projet}
+
+L'analyse des besoins et la spécification du projet est réalisée dans le cahier des charges avant le 10 février.
+
+Nous commençons la conception architecturale et la conception détaillée de façon à ce que celle-ci soit terminée avant le 16 mars.
+
+Entre le 16 mars et le 20 avril viendra la phase de codage et de rédaction des tests unitaires.
+
+Entre le 20 avril et le 18 mai nous effectuerons les tests de validation et les modifications avec notre client.
