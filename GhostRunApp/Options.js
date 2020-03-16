@@ -10,4 +10,8 @@ import {
 
 export default class PageOptions extends React.Component {
 
+    render() {
+
+    }
+
 }
