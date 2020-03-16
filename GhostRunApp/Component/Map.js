@@ -257,6 +257,7 @@ export default class Mapp extends React.Component {
         }
     } //Demande a l'utilisateur la permission pour le GPS
     componentDidMount() {
+        this.demande_permissions();
         //quand tout est charger cette fonction ce lance
         Geolocation.getCurrentPosition(
             position => {
