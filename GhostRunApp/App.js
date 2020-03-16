@@ -435,20 +435,6 @@ import Geolocation from 'react-native-geolocation-service';
         return haversine(prevLatLng, newLatLng) || 0;
     };
 
-    sauvegarderTrajet(trajet) {
-
-    }
-
-    envoyerMetadonnees(trajet) {
-
-    }
-
-    ConvertirTrajetEnJSON(trajet) {
-
-    }
-
-
-
 
     render() {
         return (
