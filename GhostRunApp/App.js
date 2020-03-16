@@ -22,393 +22,393 @@ import Geolocation from 'react-native-geolocation-service';
 
 // const LATITUDE = 29.95539;
 // const LONGITUDE = 78.07513;
-const LATITUDE_DELTA = 0.009;
-const LONGITUDE_DELTA = 0.009;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const DEFAULT_PADDING = {top: 40, right: 40, bottom: 40, left: 40};
+        const LATITUDE_DELTA = 0.009;
+        const LONGITUDE_DELTA = 0.009;
+        const LATITUDE = 37.78825;
+        const LONGITUDE = -122.4324;
+        const DEFAULT_PADDING = {top: 40, right: 40, bottom: 40, left: 40};
 
-const mapStyle = [
-    {
-        "elementType": "geometry",
-        "stylers": [
+        const mapStyle = [
             {
-                "color": "#242f3e"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#242f3e"
+                    }
+                ]
+            },
             {
-                "color": "#746855"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#746855"
+                    }
+                ]
+            },
             {
-                "color": "#242f3e"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "stylers": [
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#242f3e"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "administrative.land_parcel",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "color": "#d59563"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.neighborhood",
-        "stylers": [
+                "featureType": "administrative.locality",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#d59563"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text",
-        "stylers": [
+                "featureType": "administrative.neighborhood",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "poi",
+                "elementType": "labels.text",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "color": "#d59563"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.business",
-        "stylers": [
+                "featureType": "poi",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#d59563"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
+                "featureType": "poi.business",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "color": "#263c3f"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "poi.park",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#263c3f"
+                    }
+                ]
+            },
             {
-                "color": "#6b9a76"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
+                "featureType": "poi.park",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#6b9a76"
+                    }
+                ]
+            },
             {
-                "color": "#38414e"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.stroke",
-        "stylers": [
+                "featureType": "road",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#38414e"
+                    }
+                ]
+            },
             {
-                "color": "#212a37"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels",
-        "stylers": [
+                "featureType": "road",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#212a37"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.icon",
-        "stylers": [
+                "featureType": "road",
+                "elementType": "labels",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "road",
+                "elementType": "labels.icon",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "color": "#9ca5b3"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
+                "featureType": "road",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#9ca5b3"
+                    }
+                ]
+            },
             {
-                "color": "#746855"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#746855"
+                    }
+                ]
+            },
             {
-                "color": "#1f2835"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "road.highway",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#1f2835"
+                    }
+                ]
+            },
             {
-                "color": "#f3d19c"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "stylers": [
+                "featureType": "road.highway",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#f3d19c"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [
+                "featureType": "transit",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "color": "#2f3948"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "transit",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#2f3948"
+                    }
+                ]
+            },
             {
-                "color": "#d59563"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
+                "featureType": "transit.station",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#d59563"
+                    }
+                ]
+            },
             {
-                "color": "#17263c"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text",
-        "stylers": [
+                "featureType": "water",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#17263c"
+                    }
+                ]
+            },
             {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
+                "featureType": "water",
+                "elementType": "labels.text",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
             {
-                "color": "#515c6d"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.stroke",
-        "stylers": [
+                "featureType": "water",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#515c6d"
+                    }
+                ]
+            },
             {
-                "color": "#17263c"
+                "featureType": "water",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#17263c"
+                    }
+                ]
             }
-        ]
-    }
-];
+        ];
 
-const styles = StyleSheet.create({
-    container: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: "flex-end",
-        alignItems: "center"
-    },
-    map: {
-        ...StyleSheet.absoluteFillObject
-    },
-    bubble: {
-        flex: 1,
-        backgroundColor: "rgba(255,255,255,0.7)",
-        paddingHorizontal: 18,
-        paddingVertical: 12,
-        borderRadius: 20
-    },
-    latlng: {
-        width: 200,
-        alignItems: "stretch"
-    },
-    button: {
-        width: 80,
-        paddingHorizontal: 12,
-        alignItems: "center",
-        marginHorizontal: 10
-    },
-    buttonContainer: {
-        flexDirection: "row",
-        marginVertical: 20,
-        backgroundColor: "transparent"
-    }
-});
-
-
-export default class MainMapView extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            routeCoordinates: [],
-            distanceTravelled: 0,
-            prevLatLng: {},
-            coordinate: new AnimatedRegion({
-                latitude: LATITUDE,
-                longitude: LONGITUDE,
-                latitudeDelta: 0,
-                longitudeDelta: 0
-            }),
-            fitCoordinates: []
-        };
-    }
-
-    demande_permissions() {
-        if (Platform.OS === "android") {
-            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
-                // aaa
-            });
-        } else {
-            request(PERMISSIONS.IOS.LOCATION_ALWAYS).then(result => {
-                // aaa
-            });
-        }
-    }
-
-
-    affiche_marker_position_depart(position) {
-
-        const {latitude, longitude} = position.coords;
-        const newCoordinate = {
-            latitude,
-            longitude
-        };
-
-        if (Platform.OS === "android") {
-            if (this.start_marker) {
-                this.start_marker._component.animateMarkerToCoordinate(
-                    newCoordinate,
-                    500
-                );
+        const styles = StyleSheet.create({
+            container: {
+                ...StyleSheet.absoluteFillObject,
+                justifyContent: "flex-end",
+                alignItems: "center"
+            },
+            map: {
+                ...StyleSheet.absoluteFillObject
+            },
+            bubble: {
+                flex: 1,
+                backgroundColor: "rgba(255,255,255,0.7)",
+                paddingHorizontal: 18,
+                paddingVertical: 12,
+                borderRadius: 20
+            },
+            latlng: {
+                width: 200,
+                alignItems: "stretch"
+            },
+            button: {
+                width: 80,
+                paddingHorizontal: 12,
+                alignItems: "center",
+                marginHorizontal: 10
+            },
+            buttonContainer: {
+                flexDirection: "row",
+                marginVertical: 20,
+                backgroundColor: "transparent"
             }
-        } else {
-            coordinate.timing(newCoordinate).start();
-        }
-
-
-    }
-
-    mise_a_jour_current_position(position) {
-        const {routeCoordinates, distanceTravelled} = this.state;
-        const {latitude, longitude} = position.coords;
-
-        const newCoordinate = {
-            latitude,
-            longitude
-        };
-
-        if (Platform.OS === "android") {
-            if (this.current_position_marker) {
-                this.current_position_marker._component.animateMarkerToCoordinate(
-                    newCoordinate,
-                    0
-                );
-            }
-        } else {
-            coordinate.timing(newCoordinate).start();
-        }
-
-        this.setState({
-            latitude,
-            longitude,
-            routeCoordinates: routeCoordinates.concat([newCoordinate]),
-            distanceTravelled:
-                distanceTravelled + this.calcDistance(newCoordinate),
-            prevLatLng: newCoordinate
         });
 
 
-    }
+        export default class MainMapView extends React.Component {
 
-    fitToCoordinates() {
-        this.map.fitToCoordinates(this.state.routeCoordinates, {
-            edgePadding: DEFAULT_PADDING,
-            animated: true,
-        });
-    }
+            constructor(props) {
+                super(props);
+
+                this.state = {
+                    latitude: LATITUDE,
+                    longitude: LONGITUDE,
+                    routeCoordinates: [],
+                    distanceTravelled: 0,
+                    prevLatLng: {},
+                    coordinate: new AnimatedRegion({
+                        latitude: LATITUDE,
+                        longitude: LONGITUDE,
+                        latitudeDelta: 0,
+                        longitudeDelta: 0
+                    }),
+                    fitCoordinates: []
+                };
+            }
+
+            demande_permissions() {
+                if (Platform.OS === "android") {
+                    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
+                        // aaa
+                    });
+                } else {
+                    request(PERMISSIONS.IOS.LOCATION_ALWAYS).then(result => {
+                        // aaa
+                    });
+                }
+            }
 
 
-    componentDidMount() {
-        console.log("Bonjour!");
-        this.demande_permissions();
-        console.log("On a les permissions!");
-        Geolocation.getCurrentPosition(position => {
-                this.affiche_marker_position_depart(position);
-                this.mise_a_jour_current_position(position);
-                this.fitToCoordinates();
-            },
-            error => console.log(error)
-        );
+            affiche_marker_position_depart(position) {
 
-        console.log("Initialisation statique terminée!");
+                const {latitude, longitude} = position.coords;
+                const newCoordinate = {
+                    latitude,
+                    longitude
+                };
 
-        this.watchID = Geolocation.watchPosition(
-            position => {
-                console.log("Mise à jour de la position...");
+                if (Platform.OS === "android") {
+                    if (this.start_marker) {
+                        this.start_marker._component.animateMarkerToCoordinate(
+                            newCoordinate,
+                            500
+                        );
+                    }
+                } else {
+                    coordinate.timing(newCoordinate).start();
+                }
 
-                this.mise_a_jour_current_position(position);
-                this.fitToCoordinates();
-            },
+
+            }
+
+            mise_a_jour_current_position(position) {
+                const {routeCoordinates, distanceTravelled} = this.state;
+                const {latitude, longitude} = position.coords;
+
+                const newCoordinate = {
+                    latitude,
+                    longitude
+                };
+
+                if (Platform.OS === "android") {
+                    if (this.current_position_marker) {
+                        this.current_position_marker._component.animateMarkerToCoordinate(
+                            newCoordinate,
+                            0
+                        );
+                    }
+                } else {
+                    coordinate.timing(newCoordinate).start();
+                }
+
+                this.setState({
+                    latitude,
+                    longitude,
+                    routeCoordinates: routeCoordinates.concat([newCoordinate]),
+                    distanceTravelled:
+                        distanceTravelled + this.calcDistance(newCoordinate),
+                    prevLatLng: newCoordinate
+                });
+
+
+            }
+
+            fitToCoordinates() {
+                this.map.fitToCoordinates(this.state.routeCoordinates, {
+                    edgePadding: DEFAULT_PADDING,
+                    animated: true,
+                });
+            }
+
+
+            componentDidMount() {
+                console.log("Bonjour!");
+                this.demande_permissions();
+                console.log("On a les permissions!");
+                Geolocation.getCurrentPosition(position => {
+                        this.affiche_marker_position_depart(position);
+                        this.mise_a_jour_current_position(position);
+                        this.fitToCoordinates();
+                    },
+                    error => console.log(error)
+                );
+
+                console.log("Initialisation statique terminée!");
+
+                this.watchID = Geolocation.watchPosition(
+                    position => {
+                        console.log("Mise à jour de la position...");
+
+                        this.mise_a_jour_current_position(position);
+                        this.fitToCoordinates();
+                    },
             error => console.log(error),
             {
                 enableHighAccuracy: true,
@@ -434,6 +434,21 @@ export default class MainMapView extends React.Component {
         const {prevLatLng} = this.state;
         return haversine(prevLatLng, newLatLng) || 0;
     };
+
+    sauvegarderTrajet(trajet) {
+
+    }
+
+    envoyerMetadonnees(trajet) {
+
+    }
+
+    ConvertirTrajetEnJSON(trajet) {
+
+    }
+
+
+
 
     render() {
         return (
