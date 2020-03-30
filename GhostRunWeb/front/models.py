@@ -7,18 +7,24 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class ModeDeTransport(models.Model):
-    name = models.CharField(max_length=50)
-    fa_icon = models.CharField(max_length=50)  # Font Awesome
+class Category(models.Model):
+    name = models.CharField(max_length=50)  # Boulot-Maison, faire des courses, autour du campus....
 
 
 class Trajet(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    started_at = models.DateTimeField()
-    ended_at = models.DateTimeField()
-    transport_used = models.ForeignKey(ModeDeTransport, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # int (id d'user)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # int (id de categorie)
+    started_at = models.DateTimeField()  # 2020-03-30+17-16-03-9923+GMT1 heure de début
+    ended_at = models.DateTimeField() # 2020-03-30+17-16-03-9923+GMT1 heure de fin
+    transport_used = models.CharField(max_length=50)  # car, bike, boat, train, rer, bus, run, ....
+    # localisations = [{Localisations}]
 
-    list_locations = models.TextField()  # Ca sera un JSONField
+
+class Localisations(models.Model):
+    trajet = models.ForeignKey(Trajet, on_delete=models.CASCADE)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    timestamp = models.DateTimeField()
 
 
 class UserSettings(models.Model):
