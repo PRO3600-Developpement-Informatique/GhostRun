@@ -41,6 +41,7 @@ class Localisations(models.Model):
     trajet = models.ForeignKey(Trajet, on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    altitude = models.FloatField()
     timestamp = models.DateTimeField()
 
 
