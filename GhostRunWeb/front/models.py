@@ -25,6 +25,10 @@ TRANSPORT_MODES = [
 
 
 class Category(models.Model):
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # int (id d'user)
     name = models.CharField(max_length=50)  # Boulot-Maison, faire des courses, autour du campus....
 
 
@@ -37,7 +41,7 @@ class Trip(models.Model):
     # localisations = [{Localisations}]
 
 
-class Localisations(models.Model):
+class Localisation(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -46,6 +50,9 @@ class Localisations(models.Model):
 
 
 class UserSettings(models.Model):
+    class Meta:
+        verbose_name_plural = "UsersSettings"
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='_settings')
     # To be continued
 
