@@ -1,2 +1,5 @@
 django
-django-rest-framework
+djangorestframework
+markdown
+django-filter
+django-cachalot
