@@ -28,7 +28,7 @@ class Category(models.Model):
     name = models.CharField(max_length=50)  # Boulot-Maison, faire des courses, autour du campus....
 
 
-class Trajet(models.Model):
+class Trip(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # int (id d'user)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  # int (id de categorie)
     started_at = models.DateTimeField()  # 2020-03-30+17-16-03-9923+GMT1 heure de début
