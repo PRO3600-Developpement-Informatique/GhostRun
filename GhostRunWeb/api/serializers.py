@@ -34,6 +34,14 @@ class TripSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class LocalisationSerializer(serializers.HyperlinkedModelSerializer):
+    def validate_trip(self, value):
+        """
+        Check that the blog post is about Django.
+        """
+        if value.user != self.context['request'].user:
+            raise serializers.ValidationError("Invalid trip user.")
+        return value
+
     class Meta:
         model = Localisation
         fields = '__all__'
