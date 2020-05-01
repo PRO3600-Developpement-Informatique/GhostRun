@@ -7,7 +7,7 @@ from .permissions import SameUserOrNothing, IsOwnerOrNothing, IsTripOwnerOrNothi
 from .serializers import UserSerializer, GroupSerializer, CategorySerializer, TripSerializer, LocalisationSerializer, \
     UserSettingsSerializer
 from front.models import Category, Trip, Localisation, UserSettings
-
+from url_filter.integrations.drf import DjangoFilterBackend
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -67,6 +67,13 @@ class LocalisationViewSet(viewsets.ModelViewSet):
     API endpoint that allows groups to be viewed or edited.
     """
     queryset = Localisation.objects.all().order_by('-timestamp')
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['trip']
+    
+    def get_queryset(self):
+        queryset = self.queryset.filter(trip__user=self.request.user)
+        return queryset
+
     serializer_class = LocalisationSerializer
     permission_classes = [permissions.IsAuthenticated, IsTripOwnerOrNothing]
 
