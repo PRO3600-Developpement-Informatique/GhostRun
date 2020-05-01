@@ -69,7 +69,7 @@ class LocalisationViewSet(viewsets.ModelViewSet):
     queryset = Localisation.objects.all().order_by('-timestamp')
     filter_backends = [DjangoFilterBackend]
     filter_fields = ['trip']
-    
+
     def get_queryset(self):
         queryset = self.queryset.filter(trip__user=self.request.user)
         return queryset
