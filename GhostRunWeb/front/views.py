@@ -5,7 +5,7 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Page d'index à creer")
+    return render(request, "front/index.html", context={})
 
 def login_view(request):
     return HttpResponse("Page à creer")

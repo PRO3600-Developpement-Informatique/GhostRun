@@ -51,7 +51,7 @@ class Localisation(models.Model):
     def __str__(self):
         return f"<Localisation trio={self.trip} pos=({self.latitude}, {self.longitude}, {self.altitude})>"
 
-    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='localisations')
     latitude = models.FloatField()
     longitude = models.FloatField()
     altitude = models.FloatField()
