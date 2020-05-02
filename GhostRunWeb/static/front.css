@@ -1,6 +1,7 @@
+
 .subnav-hero-section {
     text-align: center;
-    background: #1779ba;
+    background: #1779ff;
     background-size: cover;
     position: relative;
     overflow: visible;
@@ -16,7 +17,7 @@
     height: 300px;
 }
 
-.subnav-hero-section .subnav-hero-headline {
+.subnav-hero-headline {
     color: #fefefe;
 }
 
