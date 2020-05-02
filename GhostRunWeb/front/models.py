@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # Create your models here.
@@ -44,12 +45,14 @@ class Trip(models.Model):
     started_at = models.DateTimeField()  # 2020-03-30+17-16-03-9923+GMT1 heure de début
     ended_at = models.DateTimeField(null=True)  # 2020-03-30+17-16-03-9923+GMT1 heure de fin
     transport_used = models.CharField(max_length=50, choices=TRANSPORT_MODES)  # car, bike, boat, train, rer, bus, run, ....
+    weather = models.CharField(max_length=50, null=True, blank=True)
+    feeling = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
     # localisations = [{Localisations}]
 
 
 class Localisation(models.Model):
     def __str__(self):
-        return f"<Localisation trio={self.trip} pos=({self.latitude}, {self.longitude}, {self.altitude})>"
+        return f"<Localisation trip={self.trip} pos=({self.latitude}, {self.longitude}, {self.altitude})>"
 
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='localisations')
     latitude = models.FloatField()
