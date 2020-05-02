@@ -2,10 +2,9 @@ import * as React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import PageOptions from './Component/Options';
-import PageStats from './Component/Stats';
-import Mapp from './Component/Map';
-import {MaterialCommunityIcons} from 'react-native-vector-icons';
+import PageOptions from './Component/options';
+import PageStats from './Component/stats';
+import Mapp from './Component/map';
 
 const Tab = createBottomTabNavigator(); // Creation d'un tableau pour la navigation entre les pages
 
