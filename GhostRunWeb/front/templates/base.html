@@ -30,7 +30,7 @@
         </div>
         <div class="top-bar-right">
             {% if not request.user.is_authenticated %}
-            Boutton Connexion
+            Connexion
             {% else %}
             Votre compte ({{request.user.first_name}})
             {% endif %}
