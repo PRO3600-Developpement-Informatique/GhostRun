@@ -13,3 +13,7 @@ class FrontTests(TestCase):
         example_trip.ended_at = None
         example_trip.save()
 
+    @given(from_model(Trip, user=from_model(User), category=from_model(Category, user=from_model(User))))
+    def test_trips_can_be_saved(self, example_trip:Trip):
+        example_trip.save()
+
