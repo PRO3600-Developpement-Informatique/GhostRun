@@ -29,7 +29,7 @@
         </div>
         <div class="top-bar-right">
             {% if not request.user.is_authenticated %}
-            Connexion
+                <a href="#" class="round button small">Connexion</a>
             {% else %}
             Votre compte ({{request.user.first_name}})
             {% endif %}
