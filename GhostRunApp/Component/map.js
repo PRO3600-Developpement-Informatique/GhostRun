@@ -265,58 +265,58 @@ export default class Mapp extends React.Component {
   componentDidMount() {
     //quand tout est charger cette fonction ce lance
     Geolocation.getCurrentPosition(
-        position => {
-          // pour avoir la pos au lancement de l'app
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null,
-          });
-        },
-        error => this.setState({error: error.message}),
-        {
-          enableHighAccuracy: true,
-          timeout: 200000,
-          maximumAge: 10000,
-          distanceFilter: 1,
-        },
+      position => {
+        // pour avoir la pos au lancement de l'app
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      error => this.setState({error: error.message}),
+      {
+        enableHighAccuracy: true,
+        timeout: 200000,
+        maximumAge: 10000,
+        distanceFilter: 1,
+      },
     );
     //const {focus} = this.props.navigation.isFocused();
     this.watchID = Geolocation.watchPosition(
-        // pour l'acctualisation de la pos ( que cette partie ce lance en boucle)
-        position => {
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null,
-            liste_des_positions: this.state.liste_des_positions.concat({
-              latitude: this.state.latitude,
-              longitude: this.state.longitude,
-            }),
-          });
-          let newPos = {
+      // pour l'acctualisation de la pos ( que cette partie ce lance en boucle)
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+          liste_des_positions: this.state.liste_des_positions.concat({
             latitude: this.state.latitude,
             longitude: this.state.longitude,
-          };
-          store.update('test', this.state.liste_des_positions);
-          //console.log('non');
-          console.log(this.state.liste_des_positions);
+          }),
+        });
+        let newPos = {
+          latitude: this.state.latitude,
+          longitude: this.state.longitude,
+        };
+        store.update('test', this.state.liste_des_positions);
+        //console.log('non');
+        console.log(this.state.liste_des_positions);
 
-          let value_de_stats = this.props.route.params;
-          if (this.props.route.params == undefined) {
-            console.log('pasdef');
-          } else {
-            this.get_trajet();
-            console.log('c deffff');
-          }
-        },
-        error => console.log(error),
-        {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 1000,
-          distanceFilter: 1,
-        },
+        let value_de_stats = this.props.route.params;
+        if (this.props.route.params == undefined) {
+          console.log('pasdef');
+        } else {
+          this.get_trajet();
+          console.log('c deffff');
+        }
+      },
+      error => console.log(error),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+        distanceFilter: 1,
+      },
     );
   }
   //Cette fonction en react ce lance une fois que tout les composants sont chargés, ici elle nous sert a avoir les potitions de l'utilisateur quand il se deplace
@@ -336,34 +336,34 @@ export default class Mapp extends React.Component {
     let cordOrigine = {latitude: 37.8025259, longitude: 122.4351431};
     console.log(this.state.valuee);
     return (
-        <View>
-          <MapView
-              customMapStyle={mapStyle}
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              region={{
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
-                latitudeDelta: 0.09,
-                longitudeDelta: 0.035,
-              }}>
-            <Marker coordinate={mesCord} />
-            <Polyline
-                //coordinates={this.state.liste_des_positions}
-                coordinates={this.state.valuee}
-                strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-                strokeColors={[
-                  '#7F0000',
-                  '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
-                  '#B24112',
-                  '#E5845C',
-                  '#238C23',
-                  '#7F0000',
-                ]}
-                strokeWidth={6}
-            />
-          </MapView>
-        </View>
+      <View>
+        <MapView
+          customMapStyle={mapStyle}
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          region={{
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            latitudeDelta: 0.09,
+            longitudeDelta: 0.035,
+          }}>
+          <Marker coordinate={mesCord} />
+          <Polyline
+            //coordinates={this.state.liste_des_positions}
+            coordinates={this.state.valuee}
+            strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+            strokeColors={[
+              '#7F0000',
+              '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+              '#B24112',
+              '#E5845C',
+              '#238C23',
+              '#7F0000',
+            ]}
+            strokeWidth={6}
+          />
+        </MapView>
+      </View>
     );
   }
 }
