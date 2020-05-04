@@ -1,5 +1,4 @@
-export const DATA = [
-  {
+export const DATA = [{
     id: '1',
     title: 'Maison/Ecole',
   },
