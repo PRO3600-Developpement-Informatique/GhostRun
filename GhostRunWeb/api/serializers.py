@@ -18,6 +18,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     serializers.ReadOnlyField(source='user')
+    trips = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="trip-detail")
 
     class Meta:
         model = Category

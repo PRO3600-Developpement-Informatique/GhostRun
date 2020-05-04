@@ -41,7 +41,7 @@ class Trip(models.Model):
         return f"<Trip user={self.user} transport={self.transport_used} started_at={self.started_at}>"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # int (id d'user)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # int (id de categorie)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="trips")  # int (id de categorie)
     started_at = models.DateTimeField()  # 2020-03-30+17-16-03-9923+GMT1 heure de début
     ended_at = models.DateTimeField(null=True)  # 2020-03-30+17-16-03-9923+GMT1 heure de fin
     transport_used = models.CharField(max_length=50, choices=TRANSPORT_MODES)  # car, bike, boat, train, rer, bus, run, ....
