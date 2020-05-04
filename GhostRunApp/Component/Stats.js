@@ -17,6 +17,7 @@ import Constants from 'expo-constants';
 import {data_type_trajet} from './data_type_trajet.js';
 import {createStackNavigator} from '@react-navigation/stack';
 import PageDetail from './detailTrajet';
+import base64 from 'react-native-base64';
 
 const Stack = createStackNavigator();
 
@@ -293,6 +294,20 @@ export default class PageStats extends React.Component {
     let tempp = this.state.liste_des_trajets;
     console.log(tempp);
     console.log(this.state.last_liste);
+    fetch('https://e40e14ff.ngrok.io/api/users/', {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: 'Basic ' + base64.encode('arthur:arthur'),
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('Success:', result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     this.handleCancel();
   }
 
@@ -309,7 +324,9 @@ export default class PageStats extends React.Component {
           data={data_type_trajet}
           renderItem={({item}) => (
             <TouchableOpacity
-              onPress={() => this.transmettre_id(item.id,item.tout_les_trajets)}>
+              onPress={() =>
+                this.transmettre_id(item.id, item.tout_les_trajets)
+              }>
               <Item title={item.title} />
             </TouchableOpacity>
           )}

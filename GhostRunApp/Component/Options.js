@@ -10,9 +10,10 @@ import {
 export default class PageOptions extends React.Component {
   changer_style_map() {} // Change le theme de la carte mode jour->mode nuit ou inversement
   render() {
+    console.log(this.props.route);
     return (
       <View>
-        <Text>Page des options !!</Text>
+        <Text>test</Text>
       </View>
     );
   }
