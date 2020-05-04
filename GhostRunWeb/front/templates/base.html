@@ -20,17 +20,16 @@
     <div class="top-bar">
         <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
+                <li class="logo"><img src="https://zupimages.net/up/20/18/7tf6.png"> </li>
                 <li class="menu-text">GhostRun</li>
-                <li class="has-submenu">
-                    <a href="#0">Accueil</a>
-                </li>
+                <li><a href="#0">Accueil</a></li>
                 <li><a href="#0">Carte</a></li>
                 <li><a href="#0">Trajets</a></li>
             </ul>
         </div>
         <div class="top-bar-right">
             {% if not request.user.is_authenticated %}
-            Connexion
+                <a href="#" class="round button small">Connexion</a>
             {% else %}
             Votre compte ({{request.user.first_name}})
             {% endif %}
