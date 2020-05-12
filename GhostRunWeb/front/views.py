@@ -9,18 +9,6 @@ def index(request):
     return render(request, "front/index.html", context={})
 
 
-def login_view(request):
-    return render(request, "front/login.html", context={})
-
-
-def logout_view(request):
-    return HttpResponse("Page à creer")
-
-
-def register_view(request):
-    return HttpResponse("Page à creer")
-
-
 @login_required()
 def my_trips_view(request):
     return HttpResponse("Page à creer")
