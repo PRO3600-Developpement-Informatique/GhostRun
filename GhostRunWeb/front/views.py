@@ -10,7 +10,7 @@ def index(request):
 
 
 def login_view(request):
-    return HttpResponse("Page à creer")
+    return render(request, "front/login.html", context={})
 
 
 def logout_view(request):
