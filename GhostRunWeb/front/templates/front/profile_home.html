@@ -6,8 +6,6 @@
 {% endblock %}
 
 {% block head %}
-    <script src="https://code.highcharts.com/highcharts.src.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.src.js"></script>
     <link rel="stylesheet"
           href="{% static "home_profile.css" %}"/>
 {% endblock %}
@@ -43,13 +41,6 @@
     </div>
     <script>
         $(document).ready(function () {
-            // La page est "ready"
-            Highcharts.setOptions({
-                credits: {
-                    enabled: false
-                },
-            })
-
             Highcharts.chart('bubbles_container', {
                 chart: {
                     type: 'packedbubble',
