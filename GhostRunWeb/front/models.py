@@ -26,7 +26,7 @@ TRANSPORT_MODES = [
     ('kayak', 'Kayak')
 ]
 
-d = { "walk" : "Promenade",
+d_transport = { "walk" : "Promenade",
       "run"  : "Course à pied",
       "car" : "Trajet en voiture",
       "motorbike" : "Trajet en moto",
@@ -41,6 +41,20 @@ d = { "walk" : "Promenade",
       "plane" : "Vol",
       "kayak" : "Kayak"
     }
+
+d_mois = { "Jan" : "Janvier",
+           "Feb" : "Février",
+           "Mar" : "Mars",
+           "Apr" : "Avril",
+           "May" : "Mai",
+           "Jun" : "Juin",
+           "Jul" : "Juillet",
+           "Aug" : "Août",
+           "Sep" : "Septembre",
+           "Oct" : "Octobre",
+           "Nov" : "Novembre",
+           "Dec" : "Décembre"
+        }
 
 class Category(models.Model):
     def __str__(self):
@@ -82,8 +96,9 @@ class Trip(models.Model):
         else:
             strtime = "de nuit"
 
+        date = self.started_at.date()
 
-        return f"{d[self.transport_used]} {strtime}  le {self.started_at.date()}"
+        return f"{d_transport[self.transport_used]} {strtime}  le {date.strftime('%d')} {d_mois[date.strftime('%b')]}"
 
     @property
     def short_name(self):
