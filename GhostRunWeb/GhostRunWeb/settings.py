@@ -133,3 +133,5 @@ REST_FRAMEWORK = {
     ],
     'PAGE_SIZE': 100
 }
+
+LANGUAGE_CODE = "fr-fr"
