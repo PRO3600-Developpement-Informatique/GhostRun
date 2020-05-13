@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block head %}
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <link rel="stylesheet"
           href="{% static "home_profile.css" %}"/>
 {% endblock %}
@@ -13,7 +14,7 @@
 {% block content %}
     <h2>Bienvenue sur votre espace membres</h2>
     <div class="grid-x">
-        <div class="cell small-2">
+        <div class="cell large-3 medium-4 small-5">
             <ul class="vertical menu"
                 data-accordion-menu>
                 {% for category in categories.all %}
@@ -30,7 +31,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="cell small-10">Contenu ici</div>
+        <div class="cell auto">Contenu ici</div>
     </div>
 
 {% endblock %}
