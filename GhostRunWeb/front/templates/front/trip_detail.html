@@ -18,9 +18,32 @@
 
 {% block content %}
     <h2>{{ trip.name }}</h2>
+    <div class="grid-container fluid">
+        <div class="grid-x grid-padding-x">
+            <div class="cell large-8">
+                <div id="map"
+                     style="height: 75vh">
+                </div>
+            </div>
+            <div class="cell large-auto">
 
-    <div id="map"
-         style="height: 75vh"></div>
+                <h3 class="type-sidelines"><span>Vitesse moyenne</span></h3>
+                3 km/h
+                <h3 class="type-sidelines"><span>Dénivelé</span></h3>
+                0 m
+                <h3 class="type-sidelines"><span>Durée</span></h3>
+                6 minutes 40 secondes
+                <h3 class="type-sidelines"><span>Satisfaction</span></h3>
+                {{ trip.feeling }}/10
+                <h3 class="type-sidelines"><span>Météo</span></h3>
+                {{ trip.weather }}
+                <!--<h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
+                3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)-->
+            </div>
+        </div>
+    </div>
+
+
     <script>
         function loadGPXFileIntoGoogleMap(map, filename) {
             $.ajax({

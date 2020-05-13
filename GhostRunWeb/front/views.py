@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import Category, Trip
+from .models import Category, Trip, Localisation
 
 
 class SignUp(generic.CreateView):
@@ -63,6 +63,25 @@ class TripDetail(generic.DetailView):
         return context
 
 
+def render_trip_to_gpxpy_object(trip):
+    gpx = gpxpy.gpx.GPX()
+
+    # Create first track in our GPX:
+    gpx_track = gpxpy.gpx.GPXTrack()
+    gpx.tracks.append(gpx_track)
+
+    # Create first segment in our GPX track:
+    gpx_segment = gpxpy.gpx.GPXTrackSegment()
+    gpx_track.segments.append(gpx_segment)
+
+    # Create points:
+    loc: Localisation
+    gpx_segment.points.extend([gpxpy.gpx.GPXTrackPoint(loc.latitude, loc.longitude, elevation=loc.altitude, time=loc.timestamp)
+                               for loc in trip.localisations.all()])
+
+    return gpx
+
+
 class TripGPX(generic.DetailView):
     model = Trip
     context_object_name = "trip"
@@ -72,17 +91,5 @@ class TripGPX(generic.DetailView):
         return queryset.filter(user=self.request.user).prefetch_related("localisations")
 
     def render_to_response(self, context, **response_kwargs):
-        gpx = gpxpy.gpx.GPX()
-
-        # Create first track in our GPX:
-        gpx_track = gpxpy.gpx.GPXTrack()
-        gpx.tracks.append(gpx_track)
-
-        # Create first segment in our GPX track:
-        gpx_segment = gpxpy.gpx.GPXTrackSegment()
-        gpx_track.segments.append(gpx_segment)
-
-        # Create points:
-        gpx_segment.points.extend([gpxpy.gpx.GPXTrackPoint(loc.latitude, loc.longitude, elevation=loc.altitude)
-                                   for loc in self.get_object().localisations.all()])
+        gpx = render_trip_to_gpxpy_object(self.get_object())
         return HttpResponse(gpx.to_xml(), content_type="text/xml; charset=utf-8")
