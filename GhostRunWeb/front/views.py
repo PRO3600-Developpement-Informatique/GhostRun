@@ -37,11 +37,6 @@ def profile_home(request):
 
 
 @login_required()
-def my_trips_view(request):
-    return HttpResponse("Page à creer")
-
-
-@login_required()
 def my_settings_view(request):
     return HttpResponse("Page à creer")
 
