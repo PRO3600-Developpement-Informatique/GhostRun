@@ -6,8 +6,7 @@
 {% endblock %}
 
 {% block head %}
-    <script async
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
             type="text/javascript"></script>
     <script async
             defer
@@ -33,10 +32,15 @@
                 {{ statistics.speed }} km/h
                 <h3 class="type-sidelines"><span>Durée</span></h3>
                 {{ statistics.duration }}
-                <h3 class="type-sidelines"><span>Satisfaction</span></h3>
-                {{ trip.feeling }}/10
-                <h3 class="type-sidelines"><span>Météo</span></h3>
-                {{ trip.weather }}
+                {% if trip.feeling %}
+                    <h3 class="type-sidelines"><span>Satisfaction</span></h3>
+                    {{ trip.feeling }}/10
+                {% endif %}
+                {% if trip.weather %}
+                    <h3 class="type-sidelines"><span>Météo</span></h3>
+                    {{ trip.weather }}
+                {% endif %}
+
                 <!--<h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
                 3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)-->
             </div>
