@@ -16,6 +16,9 @@ class SignUp(generic.CreateView):
 def index(request):
     return render(request, "front/index.html", context={})
 
+@login_required()
+def profile_home(request):
+    return render(request, "front/profile_home.html", context={})
 
 @login_required()
 def my_trips_view(request):
