@@ -14,25 +14,98 @@
 
 {% block content %}
     <h2>Bienvenue sur votre espace membres</h2>
-    <div class="grid-x">
-        <div class="cell large-3 medium-4 small-5">
-            <ul class="vertical menu"
-                data-accordion-menu>
-                {% for category in categories.all %}
-                <li>
-                    <a href="#">{{ category.name }}</a>
-                    <ul class="menu vertical nested">
+    <div class="grid-container fluid">
+        <div class="grid-x">
+            <div class="cell large-3">
+                <ul class="vertical menu"
+                    data-accordion-menu>
+                    {% for category in categories.all %}
                         <li>
-                            {% for trip in category.trips.all %}
-                            <a href="{% url "trip-detail" trip_id=trip.id %}">Voyage à {{ trip.transport_used }} du {{ trip.started_at }}</a>
-                            {% endfor %}
+                            <a href="#">{{ category.name }}</a>
+                            <ul class="menu vertical nested">
+                                <li>
+                                    {% for trip in category.trips.all %}
+                                        <a href="{% url "trip-detail" trip_id=trip.id %}">{{ trip.name }}</a>
+                                    {% endfor %}
+                                </li>
+                            </ul>
                         </li>
-                    </ul>
-                </li>
-                {% endfor %}
-            </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="cell large-auto">
+                <div id="bubbles_container">
+                    <!-- Will be filled later by highcharts -->
+
+                </div>
+            </div>
         </div>
-        <div class="cell auto">Contenu ici</div>
     </div>
+    <script>
+        $(document).ready(function () {
+            // La page est "ready"
+            Highcharts.setOptions({
+                credits: {
+                    enabled: false
+                },
+            })
+
+            Highcharts.chart('bubbles_container', {
+                chart: {
+                    type: 'packedbubble',
+                    height: (9 / 16 * 100) + '%' // 16:9 ratio
+                },
+                title: {
+                    text: 'Temps passé dans chacun de vos trajets (par catégorie)'
+                },
+                tooltip: {
+                    useHTML: true,
+                    pointFormat: '<b>{point.name}:</b> {point.value} minutes'
+                },
+                plotOptions: {
+                    series: {
+                        cursor: 'pointer',
+                        point: {
+                            events: {
+                                click: function () {
+                                    location.href = '/trips/' + this.pk;
+                                }
+                            }
+                        }
+                    },
+                    packedbubble: {
+                        minSize: '20%',
+                        maxSize: '100%',
+                        zMin: 0,
+                        zMax: 1000,
+                        layoutAlgorithm: {
+                            gravitationalConstant: 0.05,
+                            splitSeries: true,
+                            seriesInteraction: false,
+                            dragBetweenSeries: false,
+                            parentNodeLimit: true
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}',
+                            filter: {
+                                property: 'y',
+                                operator: '>',
+                                value: 20
+                            },
+                            style: {
+                                color: 'black',
+                                textOutline: 'none',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
+                },
+                series: {{ bubbles_series|safe }}
+            });
+
+
+        });
+    </script>
 
 {% endblock %}
