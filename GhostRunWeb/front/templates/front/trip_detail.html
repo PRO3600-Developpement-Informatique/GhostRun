@@ -28,6 +28,7 @@
                 {{ statistics.length_2d }} (2d), {{ statistics.length_3d }} (3d)
                 <h3 class="type-sidelines"><span>Dénivelé</span></h3>
                 <i class="fas fa-angle-up"></i> {{ statistics.uphill }} <i class="fas fa-angle-down"></i> {{ statistics.downhill }}
+                <div id="chart_denivele"></div>
                 <h3 class="type-sidelines"><span>Vitesse moyenne</span></h3>
                 {{ statistics.speed }} km/h
                 <h3 class="type-sidelines"><span>Durée</span></h3>
@@ -41,8 +42,9 @@
                     {{ trip.weather }}
                 {% endif %}
 
-                <!--<h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
-                3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)-->
+                                           <!--<h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
+                                           3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)-->
+
             </div>
         </div>
     </div>
@@ -74,6 +76,58 @@
             var map = new google.maps.Map(document.getElementById("map"),
                 mapOptions);
             loadGPXFileIntoGoogleMap(map, "{% url "trip-gpx" pk=trip.id %}");
+            Highcharts.chart('chart_denivele', {
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Carte du dénivelé'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Altitude (m)'
+                    }
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true
+                        },
+                        enableMouseTracking: false,
+                        threshold: null
+                    },
+                },
+                series: [{
+                    data: {{ statistics.altitude_over_time|safe }},
+                    lineWidth: 0.5,
+                    name: 'Altitude'
+                }]
+
+            });
         });
 
     </script>

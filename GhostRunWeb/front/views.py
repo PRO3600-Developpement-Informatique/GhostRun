@@ -3,6 +3,7 @@ import json
 import humanfriendly
 
 import gpxpy as gpxpy
+from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -83,6 +84,8 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
         context['map_coords'] = json.dumps(map_coords)
         gpx = render_trip_to_gpxpy_object(self.get_object())
         denivele = gpx.get_uphill_downhill()
+
+        elevations = list(map(lambda point: [point.time.timestamp(), point.elevation], gpx.tracks[0].segments[0].points))
         duration = max(gpx.get_duration(), 1)
         length_2d = gpx.length_2d()
         length_3d = gpx.length_3d()
@@ -92,6 +95,7 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
             "length_3d": humanfriendly.format_length(length_3d),  # Metres
             "uphill": humanfriendly.format_length(denivele.uphill),  # Metres
             "downhill": humanfriendly.format_length(denivele.downhill),  # Metres
+            "altitude_over_time": json.dumps(elevations, cls=DjangoJSONEncoder),
             "duration": humanfriendly.format_timespan(duration),  # Minutes
             "speed": int(length_2d/duration * (1000 / 60 / 60)),  # km/h
         }
