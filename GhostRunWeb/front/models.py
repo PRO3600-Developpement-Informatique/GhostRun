@@ -26,35 +26,36 @@ TRANSPORT_MODES = [
     ('kayak', 'Kayak')
 ]
 
-d_transport = { "walk" : "Promenade",
-      "run"  : "Course à pied",
-      "car" : "Trajet en voiture",
-      "motorbike" : "Trajet en moto",
-      "taxi" : "Taxi",
-      "rideshare" : "Taxi partagé",
-      "carpool" : "Covoiturage",
-      "bus" : "Trajet en bus",
-      "bike" : "Trajet en vélo",
-      "boat" : "Trajet en bateau",
-      "train" : "Train",
-      "rer" : "RER",
-      "plane" : "Vol",
-      "kayak" : "Kayak"
-    }
+d_transport = {"walk": "Promenade",
+               "run": "Course à pied",
+               "car": "Trajet en voiture",
+               "motorbike": "Trajet en moto",
+               "taxi": "Taxi",
+               "rideshare": "Taxi partagé",
+               "carpool": "Covoiturage",
+               "bus": "Trajet en bus",
+               "bike": "Trajet en vélo",
+               "boat": "Trajet en bateau",
+               "train": "Train",
+               "rer": "RER",
+               "plane": "Vol",
+               "kayak": "Kayak"
+               }
 
-d_mois = { "Jan" : "Janvier",
-           "Feb" : "Février",
-           "Mar" : "Mars",
-           "Apr" : "Avril",
-           "May" : "Mai",
-           "Jun" : "Juin",
-           "Jul" : "Juillet",
-           "Aug" : "Août",
-           "Sep" : "Septembre",
-           "Oct" : "Octobre",
-           "Nov" : "Novembre",
-           "Dec" : "Décembre"
-        }
+d_mois = {"Jan": "Janvier",
+          "Feb": "Février",
+          "Mar": "Mars",
+          "Apr": "Avril",
+          "May": "Mai",
+          "Jun": "Juin",
+          "Jul": "Juillet",
+          "Aug": "Août",
+          "Sep": "Septembre",
+          "Oct": "Octobre",
+          "Nov": "Novembre",
+          "Dec": "Décembre"
+          }
+
 
 class Category(models.Model):
     def __str__(self):
@@ -78,6 +79,7 @@ class Trip(models.Model):
     transport_used = models.CharField(max_length=50, choices=TRANSPORT_MODES)  # car, bike, boat, train, rer, bus, run, ....
     weather = models.CharField(max_length=50, null=True, blank=True)
     feeling = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
+
     # localisations = [{Localisations}]
 
     @property
@@ -127,9 +129,6 @@ class UserSettings(models.Model):
 
     def __str__(self):
         return f"<UserSettings user={self.user}>"
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='_settings')
     # To be continued
-
-
-
-
