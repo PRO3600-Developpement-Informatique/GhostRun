@@ -7,5 +7,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('me', views.profile_home, name='profile-home'),
     path('settings', views.my_settings_view, name='my-settings'),
-    path('trips/<int:trip_id>', views.trip_detail_view, name='trip-detail'),
+    path('trips/<int:pk>/', views.TripDetail.as_view(), name='trip-detail'),
 ]

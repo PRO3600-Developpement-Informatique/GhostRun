@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block head %}
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.src.js"></script>
+    <link rel="stylesheet"
+          href="{% static "home_profile.css" %}"/>
+{% endblock %}
+
+{% block content %}
+    <h2>{{ trip.name }}</h2>
+
+{% endblock %}

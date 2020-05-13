@@ -25,7 +25,7 @@
                             <ul class="menu vertical nested">
                                 <li>
                                     {% for trip in category.trips.all %}
-                                        <a href="{% url "trip-detail" trip_id=trip.id %}">{{ trip.name }}</a>
+                                        <a href="{% url "trip-detail" pk=trip.id %}">{{ trip.name }}</a>
                                     {% endfor %}
                                 </li>
                             </ul>

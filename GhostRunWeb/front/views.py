@@ -9,7 +9,8 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import Category
+from .models import Category, Trip
+
 
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
@@ -28,7 +29,7 @@ def profile_home(request):
     for category in categories:
         data = []
         for trip in category.trips.filter(ended_at__isnull=False):
-            data.append({'name': trip.short_name, 'value': int(trip.duration.seconds/60), 'pk': trip.id})
+            data.append({'name': trip.short_name, 'value': int(trip.duration.seconds / 60), 'pk': trip.id})
 
         bubbles_series.append({'name': category.name,
                                'data': data})
@@ -41,6 +42,10 @@ def my_settings_view(request):
     return HttpResponse("Page à creer")
 
 
-@login_required()
-def trip_detail_view(request, trip_id: int):
-    return HttpResponse("Page à creer")
+class TripDetail(generic.DetailView):
+    model = Trip
+    context_object_name = "trip"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user).prefetch_related("localisations")
