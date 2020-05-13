@@ -43,6 +43,25 @@ def my_settings_view(request):
     return HttpResponse("Page à creer")
 
 
+def render_trip_to_gpxpy_object(trip):
+    gpx = gpxpy.gpx.GPX()
+
+    # Create first track in our GPX:
+    gpx_track = gpxpy.gpx.GPXTrack()
+    gpx.tracks.append(gpx_track)
+
+    # Create first segment in our GPX track:
+    gpx_segment = gpxpy.gpx.GPXTrackSegment()
+    gpx_track.segments.append(gpx_segment)
+
+    # Create points:
+    loc: Localisation
+    gpx_segment.points.extend([gpxpy.gpx.GPXTrackPoint(loc.latitude, loc.longitude, elevation=loc.altitude, time=loc.timestamp)
+                               for loc in trip.localisations.all()])
+
+    return gpx
+
+
 class TripDetail(generic.DetailView):
     model = Trip
     context_object_name = "trip"
@@ -61,25 +80,6 @@ class TripDetail(generic.DetailView):
 
         context['map_coords'] = json.dumps(map_coords)
         return context
-
-
-def render_trip_to_gpxpy_object(trip):
-    gpx = gpxpy.gpx.GPX()
-
-    # Create first track in our GPX:
-    gpx_track = gpxpy.gpx.GPXTrack()
-    gpx.tracks.append(gpx_track)
-
-    # Create first segment in our GPX track:
-    gpx_segment = gpxpy.gpx.GPXTrackSegment()
-    gpx_track.segments.append(gpx_segment)
-
-    # Create points:
-    loc: Localisation
-    gpx_segment.points.extend([gpxpy.gpx.GPXTrackPoint(loc.latitude, loc.longitude, elevation=loc.altitude, time=loc.timestamp)
-                               for loc in trip.localisations.all()])
-
-    return gpx
 
 
 class TripGPX(generic.DetailView):
