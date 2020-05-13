@@ -1,5 +1,6 @@
 import datetime
 import json
+import humanfriendly
 
 import gpxpy as gpxpy
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import Category, Trip, Localisation
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class SignUp(generic.CreateView):
@@ -62,7 +64,7 @@ def render_trip_to_gpxpy_object(trip):
     return gpx
 
 
-class TripDetail(generic.DetailView):
+class TripDetail(LoginRequiredMixin, generic.DetailView):
     model = Trip
     context_object_name = "trip"
 
@@ -79,10 +81,27 @@ class TripDetail(generic.DetailView):
             map_coords.append({"lat": loc.latitude, "lng": loc.longitude})
 
         context['map_coords'] = json.dumps(map_coords)
+        gpx = render_trip_to_gpxpy_object(self.get_object())
+        denivele = gpx.get_uphill_downhill()
+        duration = max(gpx.get_duration(), 1)
+        length_2d = gpx.length_2d()
+        length_3d = gpx.length_3d()
+        # context['gpx_object'] = gpx
+        statistics = {
+            "length_2d": humanfriendly.format_length(length_2d),  # Metres
+            "length_3d": humanfriendly.format_length(length_3d),  # Metres
+            "uphill": humanfriendly.format_length(denivele.uphill),  # Metres
+            "downhill": humanfriendly.format_length(denivele.downhill),  # Metres
+            "duration": humanfriendly.format_timespan(duration),  # Minutes
+            "speed": int(length_2d/duration * (1000 / 60 / 60)),  # km/h
+        }
+
+        context['statistics'] = statistics
+
         return context
 
 
-class TripGPX(generic.DetailView):
+class TripGPX(LoginRequiredMixin, generic.DetailView):
     model = Trip
     context_object_name = "trip"
 
