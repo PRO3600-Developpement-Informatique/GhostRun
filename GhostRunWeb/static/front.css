@@ -104,3 +104,6 @@ body {
     font-size: 26px;
 }
 
+#map {
+    height: 100%;
+}
