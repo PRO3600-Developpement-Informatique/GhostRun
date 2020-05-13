@@ -22,9 +22,9 @@
     <div class="top-bar">
         <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
-                <li class="logo"><img src="{% static "logo.png" %}" alt="Logo"> </li>
-                <li class="menu-text">GhostRun</li>
-                <li><a href="{% url "profile-home" %}">Accueil</a></li>
+                <li class="logo"><a href="{% url "index" %}"><img src="{% static "logo.png" %}" alt="Logo"></a></li>
+                <li class="menu-text"><a href="{% url "index" %}">GhostRun</a></li>
+                <li><a href="{% url "profile-home" %}">Espace Membres</a></li>
                 <li><a href="{% url "my-settings" %}">Préférences</a></li>
             </ul>
         </div>
