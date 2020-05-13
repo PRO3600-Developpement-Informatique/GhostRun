@@ -11,19 +11,19 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Bienvenue sur votre espace membres</h2>
     <div class="grid-container fluid">
+        <h2>Bienvenue sur votre espace membres</h2>
         <div class="grid-x">
             <div class="cell large-3">
                 <ul class="vertical menu"
                     data-accordion-menu>
                     {% for category in categories.all %}
                         <li>
-                            <a href="#">{{ category.name }}</a>
+                            <a href="#"><i class="far fa-folder-open"></i> {{ category.name }}</a>
                             <ul class="menu vertical nested">
                                 <li>
                                     {% for trip in category.trips.all %}
-                                        <a href="{% url "trip-detail" pk=trip.id %}">{{ trip.name }}</a>
+                                        <a href="{% url "trip-detail" pk=trip.id %}"><i class="fas fa-angle-double-right"></i> {{ trip.name }}</a>
                                     {% endfor %}
                                 </li>
                             </ul>
