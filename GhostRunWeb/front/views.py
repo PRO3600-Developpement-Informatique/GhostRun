@@ -24,7 +24,16 @@ def index(request):
 @login_required()
 def profile_home(request):
     categories = Category.objects.filter(user=request.user).prefetch_related("trips").all()
-    return render(request, "front/profile_home.html", context={"categories": categories})
+    bubbles_series = []
+    for category in categories:
+        data = []
+        for trip in category.trips.filter(ended_at__isnull=False):
+            data.append({'name': trip.short_name, 'value': int(trip.duration.seconds/60), 'pk': trip.id})
+
+        bubbles_series.append({'name': category.name,
+                               'data': data})
+    bubbles_series = json.dumps(bubbles_series)
+    return render(request, "front/profile_home.html", context={"categories": categories, "bubbles_series": bubbles_series})
 
 
 @login_required()
