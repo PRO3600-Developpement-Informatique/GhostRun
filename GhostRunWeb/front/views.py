@@ -49,3 +49,15 @@ class TripDetail(generic.DetailView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user).prefetch_related("localisations")
+
+    def get_context_data(self, **kwargs):
+        self.object: Trip
+        context = super().get_context_data(**kwargs)
+
+        map_coords = []
+        for loc in self.object.localisations.all():
+            map_coords.append({"lat": loc.latitude, "lng": loc.longitude})
+
+        context['map_coords'] = json.dumps(map_coords)
+        return context
+

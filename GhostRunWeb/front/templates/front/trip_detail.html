@@ -6,10 +6,52 @@
 {% endblock %}
 
 {% block head %}
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w&callback=initMap" type="text/javascript"></script>
+    <script async
+            defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w&callback=initMap"
+            type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
     <h2>{{ trip.name }}</h2>
+
+    <div id="map"
+         style="height: 75vh"></div>
+    <script>
+
+        // This example creates a 2-pixel-wide red polyline showing the path of
+        // the first trans-Pacific flight between Oakland, CA, and Brisbane,
+        // Australia which was made by Charles Kingsford Smith.
+
+        function initMap() {
+
+            console.log("Map init...")
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 3,
+                center: {lat: 0, lng: -180},
+                mapTypeId: 'terrain'
+            });
+
+            var flightPlanCoordinates = {{ map_coords|safe }};
+            var flightPath = new google.maps.Polyline({
+                path: flightPlanCoordinates,
+                geodesic: true,
+                strokeColor: '#0055ff',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            var bounds = new google.maps.LatLngBounds();
+            var points = flightPath.getPath().getArray();
+            for (var n = 0; n < points.length; n++) {
+                bounds.extend(points[n]);
+            }
+            map.fitBounds(bounds);
+            flightPath.setMap(map);
+            console.log("Done!")
+
+        }
+    </script>
+
 
 {% endblock %}
