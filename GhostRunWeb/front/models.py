@@ -6,6 +6,7 @@ from django.db import models
 # Create your models here.
 
 from django.contrib.auth import get_user_model
+from django.utils.safestring import mark_safe
 
 User = get_user_model()
 
@@ -39,8 +40,25 @@ d_transport = {"walk": "Promenade",
                "train": "Train",
                "rer": "RER",
                "plane": "Vol",
-               "kayak": "Kayak"
+               "kayak": "Kayak",
                }
+
+d_transport_emoji = {
+               "walk": "walking",
+               "run": "running",
+               "car": "car",
+               "motorbike": "motorcycle",
+               "taxi": "taxi",
+               "rideshare": "taxi",
+               "carpool": "truck-pickup",
+               "bus": "bus-alt",
+               "bike": "bicycle",
+               "boat": "ship",
+               "train": "train",
+               "rer": "subway",
+               "plane": "fighter-jet",
+               "kayak": "swimmer",
+}
 
 d_mois = {"Jan": "Janvier",
           "Feb": "Février",
@@ -55,7 +73,6 @@ d_mois = {"Jan": "Janvier",
           "Nov": "Novembre",
           "Dec": "Décembre"
           }
-
 
 class Category(models.Model):
     def __str__(self):
@@ -108,8 +125,21 @@ class Trip(models.Model):
         return f"Balade du {date.day}/{date.month}"
 
     @property
+    def html_fa_name(self):
+        date = self.started_at.date()
+        return mark_safe(f"{self.fa_html}</br>{date.day}/{date.month}")
+
+    @property
     def duration(self) -> datetime.timedelta:
         return self.ended_at - self.started_at
+
+    @property
+    def fa_name(self):
+        return d_transport_emoji[self.transport_used]
+
+    @property
+    def fa_html(self):
+        return mark_safe(f"<center><i class=\"fas fa-{self.fa_name}\"></i></center>")
 
 
 class Localisation(models.Model):
