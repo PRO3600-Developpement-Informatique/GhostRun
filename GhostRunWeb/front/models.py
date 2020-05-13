@@ -26,6 +26,21 @@ TRANSPORT_MODES = [
     ('kayak', 'Kayak')
 ]
 
+d = { "walk" : "Promenade",
+      "run"  : "Course à pied",
+      "car" : "Trajet en voiture",
+      "motorbike" : "Trajet en moto",
+      "taxi" : "Taxi",
+      "rideshare" : "Taxi partagé",
+      "carpool" : "Covoiturage",
+      "bus" : "Trajet en bus",
+      "bike" : "Trajet en vélo",
+      "boat" : "Trajet en bateau",
+      "train" : "Train",
+      "rer" : "RER",
+      "plane" : "Vol",
+      "kayak" : "Kayak"
+    }
 
 class Category(models.Model):
     def __str__(self):
@@ -55,7 +70,7 @@ class Trip(models.Model):
     def name(self):
         hour = self.started_at.time().hour
         if hour < 6:
-            strtime = "dans la nuit"
+            strtime = "de nuit"
         elif hour < 12:
             strtime = "du matin"
         elif hour < 14:
@@ -65,9 +80,10 @@ class Trip(models.Model):
         elif hour < 22:
             strtime = "du soir"
         else:
-            strtime = "dans la nuit"
+            strtime = "de nuit"
 
-        return f"Balade {strtime} à {self.transport_used} le {self.started_at.date()}"
+
+        return f"{d[self.transport_used]} {strtime}  le {self.started_at.date()}"
 
     @property
     def short_name(self):
