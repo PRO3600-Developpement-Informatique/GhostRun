@@ -6,10 +6,31 @@
 {% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static "login.css" %}"/>
+    <link rel="stylesheet"
+          href="{% static "home_profile.css" %}"/>
 {% endblock %}
 
 {% block content %}
     <h2>Bienvenue sur votre espace membres</h2>
+    <div class="grid-x">
+        <div class="cell small-2">
+            <ul class="vertical menu"
+                data-accordion-menu>
+                {% for category in categories.all %}
+                <li>
+                    <a href="#">{{ category.name }}</a>
+                    <ul class="menu vertical nested">
+                        <li>
+                            {% for trip in category.trips.all %}
+                            <a href="{% url "trip-detail" trip_id=trip.id %}">Voyage à {{ trip.transport_used }} du {{ trip.started_at }}</a>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="cell small-10">Contenu ici</div>
+    </div>
 
 {% endblock %}
