@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-
+from .models import Category
 
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
@@ -20,7 +20,8 @@ def index(request):
 
 @login_required()
 def profile_home(request):
-    return render(request, "front/profile_home.html", context={})
+    categories = Category.objects.filter(user=request.user).prefetch_related("trips").all()
+    return render(request, "front/profile_home.html", context={"categories": categories})
 
 
 @login_required()
