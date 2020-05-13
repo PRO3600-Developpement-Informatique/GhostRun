@@ -1,6 +1,7 @@
 import datetime
 import json
 
+import gpxpy as gpxpy
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -61,3 +62,27 @@ class TripDetail(generic.DetailView):
         context['map_coords'] = json.dumps(map_coords)
         return context
 
+
+class TripGPX(generic.DetailView):
+    model = Trip
+    context_object_name = "trip"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user).prefetch_related("localisations")
+
+    def render_to_response(self, context, **response_kwargs):
+        gpx = gpxpy.gpx.GPX()
+
+        # Create first track in our GPX:
+        gpx_track = gpxpy.gpx.GPXTrack()
+        gpx.tracks.append(gpx_track)
+
+        # Create first segment in our GPX track:
+        gpx_segment = gpxpy.gpx.GPXTrackSegment()
+        gpx_track.segments.append(gpx_segment)
+
+        # Create points:
+        gpx_segment.points.extend([gpxpy.gpx.GPXTrackPoint(loc.latitude, loc.longitude, elevation=loc.altitude)
+                                   for loc in self.get_object().localisations.all()])
+        return HttpResponse(gpx.to_xml(), content_type="text/xml; charset=utf-8")
