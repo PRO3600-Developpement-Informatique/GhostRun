@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 gource \
   --camera-mode overview \
-  --seconds-per-day 6 \
+  --seconds-per-day 7 \
   --auto-skip-seconds 1 \
   --file-idle-time 0 \
   --key \
@@ -9,6 +9,11 @@ gource \
   --bloom-intensity 0.5 \
   --background 555555 \
   --title "Ghost Run" \
+  --highlight-users \
+  --disable-input \
+  --frameless \
+  --user-font-size 15 \
+  --user-scale 1.5 \
   -1280x720 -o - |
 ffmpeg \
   -y \
