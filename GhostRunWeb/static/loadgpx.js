@@ -254,7 +254,7 @@ GPXParser.prototype.centerAndZoom = function(trackSegment) {
     }
 
     if((minlat == maxlat) && (minlat == 0)) {
-        this.map.setCenter(new google.maps.LatLng(49.327667, -122.942333), 14);
+        this.map.setCenter(new google.maps.LatLng(48.6251734, -2.4425934), 21);
         return;
     }
 
