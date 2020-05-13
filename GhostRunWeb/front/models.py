@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -48,6 +50,33 @@ class Trip(models.Model):
     weather = models.CharField(max_length=50, null=True, blank=True)
     feeling = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
     # localisations = [{Localisations}]
+
+    @property
+    def name(self):
+        hour = self.started_at.time().hour
+        if hour < 6:
+            strtime = "dans la nuit"
+        elif hour < 12:
+            strtime = "du matin"
+        elif hour < 14:
+            strtime = "du midi"
+        elif hour < 18:
+            strtime = "dans l'après midi"
+        elif hour < 22:
+            strtime = "du soir"
+        else:
+            strtime = "dans la nuit"
+
+        return f"Balade {strtime} à {self.transport_used} le {self.started_at.date()}"
+
+    @property
+    def short_name(self):
+        date = self.started_at.date()
+        return f"Balade du {date.day}/{date.month}"
+
+    @property
+    def duration(self) -> datetime.timedelta:
+        return self.ended_at - self.started_at
 
 
 class Localisation(models.Model):
