@@ -87,7 +87,7 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
         gpx = render_trip_to_gpxpy_object(self.get_object())
         denivele = gpx.get_uphill_downhill()
 
-        elevations = list(map(lambda point: [point.time.timestamp(), point.elevation], gpx.tracks[0].segments[0].points))
+        elevations = list(map(lambda point: [point.time.timestamp(), round(point.elevation, 2)], gpx.tracks[0].segments[0].points))
         duration = max(gpx.get_duration(), 1)
         length_2d = gpx.length_2d()
         length_3d = gpx.length_3d()
