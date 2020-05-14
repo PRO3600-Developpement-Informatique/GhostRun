@@ -5,6 +5,7 @@ from django.test import TestCase
 from hypothesis.extra.django import TestCase, from_model
 from hypothesis import given
 from .models import Trip, Category, User
+from django.test import Client
 
 
 class FrontTests(TestCase):
@@ -17,3 +18,8 @@ class FrontTests(TestCase):
     def test_trips_can_be_saved(self, example_trip:Trip):
         example_trip.save()
 
+class TestView(TestCase):
+
+    @given(from_model(Trip, user=from_model(User), category=from_model(Category, user=from_model(User))))
+    def test_trips_cant_have_negative_duration(self, example_trip:Trip):
+        self.assertGreaterEqual(example_trip.duration.total_seconds(), 0)
