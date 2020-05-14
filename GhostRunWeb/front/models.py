@@ -74,6 +74,7 @@ d_mois = {"Jan": "Janvier",
           "Dec": "Décembre"
           }
 
+
 class Category(models.Model):
     def __str__(self):
         return f"<Category user={self.user} name={self.name}>"
