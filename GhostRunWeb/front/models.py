@@ -128,7 +128,7 @@ class Trip(models.Model):
     @property
     def html_fa_name(self):
         date = self.started_at.date()
-        return mark_safe(f"{self.fa_html}</br>{date.day}/{date.month}")
+        return mark_safe(f"{self.fa_html}<style=\"line-height:0px;\"br/>{date.day}/{date.month}")
 
     @property
     def duration(self) -> datetime.timedelta:
@@ -145,7 +145,7 @@ class Trip(models.Model):
 
 class Localisation(models.Model):
     def __str__(self):
-        return f"<Localisation trip={self.trip} pos=({self.latitude}, {self.longitude}, {self.altitude})>"
+        return f"<Localisation {self.pk} trip={self.trip} pos=({self.latitude}, {self.longitude}, {self.altitude})>"
 
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='localisations')
     latitude = models.FloatField()
@@ -159,7 +159,7 @@ class UserSettings(models.Model):
         verbose_name_plural = "UsersSettings"
 
     def __str__(self):
-        return f"<UserSettings user={self.user}>"
+        return f"<UserSettings {self.pk} user={self.user}>"
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='_settings')
     # To be continued
