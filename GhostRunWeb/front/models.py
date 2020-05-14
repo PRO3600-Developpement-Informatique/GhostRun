@@ -74,6 +74,8 @@ d_mois = {"Jan": "Janvier",
           "Dec": "Décembre"
           }
 
+class InvalidDatetimeException(Exception):
+    pass
 
 class Category(models.Model):
     def __str__(self):
@@ -99,6 +101,12 @@ class Trip(models.Model):
     feeling = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
     # localisations = [{Localisations}]
+
+    def save(self, *args, **kwargs):
+        if self.duration.total_seconds() >= 0 :
+            super().save(*args,**kwargs)
+        else:
+            raise InvalidDatetimeException()
 
     @property
     def name(self):
