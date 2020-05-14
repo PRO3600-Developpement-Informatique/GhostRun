@@ -7,6 +7,13 @@
 
 {% block content %}
     <h2>Form</h2>
+    {% if form.subject.errors %}
+    <ol>
+    {% for error in form.subject.errors %}
+        <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    </ol>
+{% endif %}
     <form method="post">
         {% csrf_token %}
         {{ form }}

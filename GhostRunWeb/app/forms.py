@@ -1,6 +1,13 @@
+import datetime
+
 from django import forms
 
 from front.models import Trip, User
+
+
+class CategoryChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return f"{obj.name}"
 
 
 class AppInitForm(forms.ModelForm):
@@ -8,7 +15,7 @@ class AppInitForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = user.category_set.all()
 
-    category = forms.ModelChoiceField(queryset=None)
+    category = CategoryChoiceField(queryset=None, empty_label=None)
 
     class Meta:
         model = Trip

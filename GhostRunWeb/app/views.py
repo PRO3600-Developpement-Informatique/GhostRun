@@ -3,9 +3,11 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
+from django.urls import reverse
 from django.views.generic import CreateView
 
 from .forms import AppInitForm
@@ -20,28 +22,41 @@ class IndexView(CreateView):
     def get_form_kwargs(self):
         return {"user": self.request.user}
 
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        form.send_email()
-        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse("app-record", kwargs={"trip_pk": self.object.id})
+
+
+@login_required()
+def index(request):
+    if request.method == "POST":
+        form = AppInitForm(request.POST, user=request.user)
+        if form.is_valid():
+            f_object = form.save(commit=False)
+            f_object.started_at = datetime.datetime.now()
+            f_object.user = request.user
+            f_object.save()
+            return HttpResponseRedirect(reverse("app-record", kwargs={"trip_pk": f_object.id}))
+    else:
+        form = AppInitForm(user=request.user)
+    return render(request, "app/index.html", {"form": form})
+
 
 @login_required()
 def record(request, trip_pk):
     trip = get_object_or_404(Trip, user=request.user, pk=trip_pk)
     context = {"trip": trip, "ghosts_coords": []}
 
-    ghosts = trip.\
-        category.\
-        trips.\
-        exclude(pk=trip_pk).\
-        annotate(loc_count=Count('localisations')).\
-        filter(loc_count__gte=2).\
-        prefetch_related("localisations").\
+    ghosts = trip. \
+        category. \
+        trips. \
+        exclude(pk=trip_pk). \
+        annotate(loc_count=Count('localisations')). \
+        filter(loc_count__gte=2). \
+        prefetch_related("localisations"). \
         all()
 
     for ghost in ghosts:
-        ghost:Trip
+        ghost: Trip
         map_coords = []
         first = ghost.localisations.first()
         starting_time = first.timestamp  # ghost.started_at
