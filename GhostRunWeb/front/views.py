@@ -1,11 +1,10 @@
-import datetime
 import json
 import humanfriendly
 
 import gpxpy as gpxpy
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
 
@@ -14,7 +13,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from .models import Category, Trip, Localisation
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
+
 
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
@@ -46,39 +45,6 @@ def profile_home(request):
 @login_required()
 def my_settings_view(request):
     return HttpResponse("Page à creer")
-
-
-@login_required()
-def testwebapp(request, trip_pk):
-    trip = get_object_or_404(Trip, user=request.user, pk=trip_pk)
-    context = {"trip": trip, "ghosts_coords": []}
-
-    ghosts = trip.\
-        category.\
-        trips.\
-        exclude(pk=trip_pk).\
-        annotate(loc_count=Count('localisations')).\
-        filter(loc_count__gte=2).\
-        prefetch_related("localisations").\
-        all()
-
-    for ghost in ghosts:
-        ghost:Trip
-        map_coords = []
-        first = ghost.localisations.first()
-        starting_time = first.timestamp  # ghost.started_at
-        for loc in ghost.localisations.all():
-            map_coords.append({"lat": loc.latitude, "lng": loc.longitude, "delta": (loc.timestamp - starting_time).seconds})
-        context['ghosts_coords'].append({"coords": map_coords, "name": ghost.name})
-    context['ghosts_coords'] = json.dumps(context['ghosts_coords'])
-
-    map_coords = []
-    for loc in trip.localisations.all():
-        map_coords.append({"lat": loc.latitude, "lng": loc.longitude})
-
-    context['map_coords'] = json.dumps(map_coords)
-
-    return render(request, "front/web_app.html", context=context)
 
 
 def render_trip_to_gpxpy_object(trip):

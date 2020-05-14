@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block content %}
+    <h2>Form</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit"
+               value="C'est parti!">
+    </form>
+{% endblock %}
