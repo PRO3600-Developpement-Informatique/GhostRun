@@ -39,7 +39,9 @@ L'API suit les normes REST usuelles auxquelles on pourrait s'attendre d'un tel s
 Un trajet particulier, identifié par sa clé primaire dans l'URL, pourra être modifié (PATCH), remplacé (PUT), récupéré (GET) ou encore supprimé (DELETE).
 
 Enfin, chaque route supporte la requête de type OPTIONS, qui permet de connaitre les éléments à passer à la route donnée, et les contraintes qui seront calculées.
-Les codes de réponse HTTP sont utilisés par le serveur, qui pourra par exemple répondre 200 (OK) dans le cas ou la requête c'est bien passée, 201 (Created) si l'objet à été créé, 403 (Unauthorised) si l'utilisateur connecté ne peut accéder aux informations demandées, 429 (Rate-Limit Exceeded) si l'application à effectué trop de requêtes pendant une période, 404 (Not found) si la ressource demandée n'a pas été trouvée.
+Les codes de réponse HTTP sont utilisés par le serveur, qui pourra par exemple répondre 200 (OK) dans le cas ou la requête c'est bien passée, 201 (Created) si l'objet à été créé, 403 (Unauthorised) si l'utilisateur connecté ne peut accéder aux informations demandées, 400 (Bad Request) si les paramètres passés sont invalides, 429 (Rate-Limit Exceeded) si l'application à effectué trop de requêtes pendant une période, 404 (Not found) si la ressource demandée n'a pas été trouvée.
+
+Enfin, l'API dispose d'une interface HTML permettant d'interagir facilement sans utiliser de logiciels spécialisés tels que Postman ou Curl. Son interface est visible dans la \autoref{fig:80-interface-API}.
 
 \begin{figure}[h]
     \centering
