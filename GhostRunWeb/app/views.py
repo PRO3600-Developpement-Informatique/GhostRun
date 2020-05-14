@@ -8,7 +8,6 @@ from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse
-from django.views.generic import CreateView
 
 from .forms import AppInitForm
 from front.models import Trip
