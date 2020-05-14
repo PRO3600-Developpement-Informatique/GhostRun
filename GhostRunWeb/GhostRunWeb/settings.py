@@ -25,7 +25,7 @@ SECRET_KEY = 'b13tbqyj9(eov8+-9e0%r))r7k+^4=t6*!2@v-n3_qk2zbj+yg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".ngrok.io", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [".ngrok.io", "127.0.0.1", "localhost", ".serverless.social"]
 
 
 # Application definition
@@ -105,8 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
