@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{{ trip.name }}</h2>
+    <h2>{{ trip.name }} ({{ trip.category.name }})</h2>
     <div class="grid-container fluid">
         <div class="grid-x grid-padding-x">
             <div class="cell large-8">
@@ -77,6 +77,7 @@
             };
             var map = new google.maps.Map(document.getElementById("map"),
                 mapOptions);
+
             loadGPXFileIntoGoogleMap(map, "{% url "front-trip-gpx" pk=trip.id %}");
             Highcharts.chart('chart_denivele', {
                 chart: {
