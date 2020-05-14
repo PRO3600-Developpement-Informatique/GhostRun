@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block head %}
+    {# <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w" type="text/javascript"></script> #}
+{% endblock %}
+
+{% block content %}
+    <h2>{{ trip.name }} ({{ trip.category.name }})</h2>
+    <pre id="capa"></pre>
+    {% csrf_token %}
+    <script>
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        function updateloc() {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;
+                        var altitude = position.coords.altitude;
+                        var accuracy = position.coords.accuracy;
+                        var date = new Date(position.timestamp);
+
+                        $.ajax("{% url 'localisation-list' %}", {
+                            method: "POST",
+                            data: {
+                                "latitude": latitude,
+                                "longitude": longitude,
+                                "altitude": altitude,
+                                "timestamp": date.toISOString(),
+                                "trip": "{% url 'trip-detail' pk=trip.id %}"
+                            }
+                        })
+                        var capa = document.getElementById("capa");
+                        capa.innerHTML = "latitude: " + latitude + ", longitude: " + longitude + ", altitude: " + altitude + ", accuracy: " + accuracy;
+
+                    },
+                    function error(msg) {
+                        alert('Please enable your GPS position feature. ' + msg);
+                    },
+                    {maximumAge: 10000, timeout: 5000, enableHighAccuracy: true});
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+                }
+            }
+        });
+
+        $(document).ready(function () {
+            if (navigator.geolocation) {
+                setInterval(updateloc, 1000);
+            } else {
+                alert("Geolocation API is not supported in your browser.");
+            }
+        });
+
+    </script>
+
+
+{% endblock %}

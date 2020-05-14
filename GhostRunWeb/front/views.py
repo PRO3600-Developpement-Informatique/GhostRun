@@ -5,7 +5,7 @@ import humanfriendly
 import gpxpy as gpxpy
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 # Create your views here.
 
@@ -48,6 +48,12 @@ def my_settings_view(request):
     return HttpResponse("Page à creer")
 
 
+@login_required()
+def testwebapp(request, trip_pk):
+    trip = get_object_or_404(Trip, user=request.user, pk=trip_pk)
+    return render(request, "front/web_app.html", context={"trip": trip})
+
+
 def render_trip_to_gpxpy_object(trip):
     gpx = gpxpy.gpx.GPX()
 
@@ -88,7 +94,8 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
         denivele = gpx.get_uphill_downhill()
 
         elevations = list(map(lambda point: [point.time.timestamp(), round(point.elevation, 2)], gpx.tracks[0].segments[0].points))
-        duration = max(gpx.get_duration(), 1)
+        duration = gpx.get_duration()
+        duration = max(duration if duration else 1, 1)
         length_2d = gpx.length_2d()
         length_3d = gpx.length_3d()
         # context['gpx_object'] = gpx

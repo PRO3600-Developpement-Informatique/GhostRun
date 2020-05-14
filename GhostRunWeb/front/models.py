@@ -165,6 +165,9 @@ class Localisation(models.Model):
     altitude = models.FloatField()
     timestamp = models.DateTimeField()
 
+    class Meta:
+        ordering = ['timestamp']
+
 
 class UserSettings(models.Model):
     class Meta:
