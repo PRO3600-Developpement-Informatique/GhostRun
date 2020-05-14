@@ -6,12 +6,25 @@
 {% endblock %}
 
 {% block head %}
-    {# <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w" type="text/javascript"></script> #}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
+            type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
-    <h2>{{ trip.name }} ({{ trip.category.name }})</h2>
-    <pre id="capa"></pre>
+    <div class="grid-container fluid">
+        <h2>{{ trip.name }} ({{ trip.category.name }})</h2>
+        <div class="grid-x grid-padding-x">
+            <div class="cell large-8">
+                <div id="map_canvas"
+                     style="height: 75vh">
+                </div>
+            </div>
+            <div class="cell large-auto">
+                <div id="status"></div>
+                <pre id="capa"></pre>
+            </div>
+        </div>
+    </div>
     {% csrf_token %}
     <script>
         function csrfSafeMethod(method) {
@@ -19,32 +32,8 @@
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 
-        function updateloc() {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                        var latitude = position.coords.latitude;
-                        var longitude = position.coords.longitude;
-                        var altitude = position.coords.altitude;
-                        var accuracy = position.coords.accuracy;
-                        var date = new Date(position.timestamp);
-
-                        $.ajax("{% url 'localisation-list' %}", {
-                            method: "POST",
-                            data: {
-                                "latitude": latitude,
-                                "longitude": longitude,
-                                "altitude": altitude,
-                                "timestamp": date.toISOString(),
-                                "trip": "{% url 'trip-detail' pk=trip.id %}"
-                            }
-                        })
-                        var capa = document.getElementById("capa");
-                        capa.innerHTML = "latitude: " + latitude + ", longitude: " + longitude + ", altitude: " + altitude + ", accuracy: " + accuracy;
-
-                    },
-                    function error(msg) {
-                        alert('Please enable your GPS position feature. ' + msg);
-                    },
-                    {maximumAge: 10000, timeout: 5000, enableHighAccuracy: true});
+        function setStatus(cssclass, message) {
+            $("#status").html(`<span class="${cssclass} badge"><i class="fas fa-location-arrow"> </i></span> ${message}`)
         }
 
         $.ajaxSetup({
@@ -56,12 +45,96 @@
         });
 
         $(document).ready(function () {
-            if (navigator.geolocation) {
-                setInterval(updateloc, 1000);
-            } else {
-                alert("Geolocation API is not supported in your browser.");
-            }
+            setStatus("secondary", "Démarrage...");
+            initLocationProcedure();
         });
+
+        function locError(error) {
+            // the current position could not be located
+            alert("The current position could not be found! " + error);
+        }
+
+        function initLocationProcedure() {
+            map = new google.maps.Map(document.getElementById('map_canvas'), {
+                zoom: 17
+            });
+            current_location_poly = new google.maps.Polyline({
+                strokeColor: '#0dc6be',
+                strokeOpacity: 0.75,
+                strokeWeight: 3
+            });
+            current_location_poly.setMap(map);
+
+
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(displayAndWatch, locError, {
+                    enableHighAccuracy: true,
+                    timeout: 60000,
+                    maximumAge: 0
+                });
+            } else {
+                alert("Your phone does not support the Geolocation API");
+            }
+        }
+
+        function displayAndWatch(position) {
+            // set current position
+            setUserLocation(position);
+            // watch position
+            watchCurrentPosition();
+        }
+
+        function setUserLocation(pos) {
+            // marker for userLocation
+            userLocation = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                title: "Position actuelle",
+            });
+            // scroll to userLocation
+            map.panTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        }
+
+        function watchCurrentPosition() {
+            var positionTimer = navigator.geolocation.watchPosition(function (position) {
+                setMarkerPosition(userLocation, position);
+                var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+                map.panTo(latLng);
+
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var altitude = position.coords.altitude;
+                var accuracy = position.coords.accuracy;
+                var date = new Date(position.timestamp);
+
+                if (accuracy <= 15) {
+                    var path = current_location_poly.getPath();
+                    path.push(latLng);
+
+                    $.ajax("{% url 'localisation-list' %}", {
+                        method: "POST",
+                        data: {
+                            "latitude": latitude,
+                            "longitude": longitude,
+                            "altitude": altitude,
+                            "timestamp": date.toISOString(),
+                            "trip": "{% url 'trip-detail' pk=trip.id %}"
+                        }
+                    })
+                    setStatus("success", "Enregistrement en cours...");
+                } else {
+                    setStatus("alert", "Précision insuffisante...");
+                }
+                $("#capa").html(`Latitude: ${latitude}\nLongitude: ${longitude}\nAltitude: ${altitude}\nAccuracy: ${accuracy}\nTimestamp: ${date}`);
+
+            });
+        }
+
+        function setMarkerPosition(marker, position) {
+            marker.setPosition(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+            console.log(position);
+        }
 
     </script>
 
