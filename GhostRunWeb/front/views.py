@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from .models import Category, Trip, Localisation
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.db.models import Count
 
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
@@ -51,7 +51,26 @@ def my_settings_view(request):
 @login_required()
 def testwebapp(request, trip_pk):
     trip = get_object_or_404(Trip, user=request.user, pk=trip_pk)
-    context = {"trip": trip}
+    context = {"trip": trip, "ghosts_coords": []}
+
+    ghosts = trip.\
+        category.\
+        trips.\
+        exclude(pk=trip_pk).\
+        annotate(loc_count=Count('localisations')).\
+        filter(loc_count__gte=2).\
+        prefetch_related("localisations").\
+        all()
+
+    for ghost in ghosts:
+        ghost:Trip
+        map_coords = []
+        first = ghost.localisations.first()
+        starting_time = first.timestamp  # ghost.started_at
+        for loc in ghost.localisations.all():
+            map_coords.append({"lat": loc.latitude, "lng": loc.longitude, "delta": (loc.timestamp - starting_time).seconds})
+        context['ghosts_coords'].append({"coords": map_coords, "name": ghost.name})
+    context['ghosts_coords'] = json.dumps(context['ghosts_coords'])
 
     map_coords = []
     for loc in trip.localisations.all():

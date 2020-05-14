@@ -27,6 +27,8 @@
     </div>
     {% csrf_token %}
     <script>
+        ghosts_coords = {{ ghosts_coords|safe }};
+
         function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -54,6 +56,43 @@
             alert("The current position could not be found! " + error);
         }
 
+        function watchGhostsPositions() {
+            setTimeout(watchGhostsPositions, showGhostsPositions())
+        }
+
+        function showGhostsPositions() {
+            var start_date = new Date("{{ trip.started_at.isoformat|escapejs }}");
+            var current_date = new Date();
+            var delta = (current_date - start_date) / 1000;
+            //console.log("Current time is", current_date);
+            //console.log("Starting time is", start_date);
+            console.log("Current delta is", delta);
+            var ghost_id = 0;
+            let call_next = 60;
+            var previous_pos
+            for (var ghost_data_id in ghosts_coords) {
+                ghost_data = ghosts_coords[ghost_data_id];
+                var coords = ghost_data['coords']
+                previous_pos = coords[0];
+                for (var pos_id in coords) {
+                    pos = coords[pos_id];
+                    if (pos['delta'] > delta) {
+                        console.log("Current call_next is", call_next)
+                        console.log("Next delta is ", pos['delta'] - delta)
+                        call_next = Math.min(call_next, pos['delta'] - delta);
+                        ghosts_icons[ghost_id].setPosition(new google.maps.LatLng(previous_pos['lat'], previous_pos['lng']));
+                        break;
+                    } else {
+                        previous_pos = pos;
+                    }
+                }
+                ghost_id++
+            }
+            call_next = (call_next + 3) * 1000
+            console.log("Next delta in", call_next);
+            return call_next
+        }
+
         function initLocationProcedure() {
             map = new google.maps.Map(document.getElementById('map_canvas'), {
                 zoom: 17
@@ -74,6 +113,18 @@
                 strokeWeight: 3,
                 map: map
             });
+
+            ghosts_icons = []
+            for (ghost_data_id in ghosts_coords) {
+                ghost_data = ghosts_coords[ghost_data_id];
+                let initial_pos = new google.maps.LatLng(ghost_data['coords'][0]['lat'], ghost_data['coords'][0]['lng']);
+
+                ghosts_icons.push(new google.maps.Marker({
+                    position: initial_pos,
+                    map: map,
+                    title: ghost_data['name']
+                }));
+            }
             //current_location_poly.setMap(map);
 
 
@@ -93,6 +144,7 @@
             setUserLocation(position);
             // watch position
             watchCurrentPosition();
+            watchGhostsPositions();
         }
 
         function setUserLocation(pos) {
