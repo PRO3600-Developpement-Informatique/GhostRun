@@ -14,18 +14,6 @@ from .forms import AppInitForm
 from front.models import Trip
 
 
-class IndexView(CreateView):
-    model = Trip
-    form_class = AppInitForm
-    template_name = "app/index.html"
-
-    def get_form_kwargs(self):
-        return {"user": self.request.user}
-
-    def get_success_url(self):
-        return reverse("app-record", kwargs={"trip_pk": self.object.id})
-
-
 @login_required()
 def index(request):
     if request.method == "POST":
