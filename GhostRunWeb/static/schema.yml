@@ -1,0 +1,1879 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/users/:
+    get:
+      operationId: listUsers
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        username:
+                          type: string
+                          description: "Requis. 150 caract\xE8res maximum. Uniquement\
+                            \ des lettres, nombres et les caract\xE8res \xAB\_@\_\xBB\
+                            , \xAB\_.\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\_\
+                            _\_\xBB."
+                          pattern: ^[\w.@+-]+\Z
+                          maxLength: 150
+                        email:
+                          type: string
+                          format: email
+                          maxLength: 254
+                        groups:
+                          type: array
+                          items:
+                            type: string
+                          description: Les groupes dont fait partie cet utilisateur.
+                            Celui-ci obtient tous les droits de tous les groupes auxquels
+                            il appartient.
+                      required:
+                      - username
+          description: ''
+    post:
+      operationId: createUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id001
+              properties:
+                username:
+                  type: string
+                  description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                    \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                    .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                groups:
+                  type: array
+                  items:
+                    type: string
+                  description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                    obtient tous les droits de tous les groupes auxquels il appartient.
+              required:
+              - username
+          application/x-www-form-urlencoded:
+            schema: *id001
+          multipart/form-data:
+            schema: *id001
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                      \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                      .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                      obtient tous les droits de tous les groupes auxquels il appartient.
+                required:
+                - username
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: retrieveUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this utilisateur.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                      \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                      .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                      obtient tous les droits de tous les groupes auxquels il appartient.
+                required:
+                - username
+          description: ''
+    put:
+      operationId: updateUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this utilisateur.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id002
+              properties:
+                username:
+                  type: string
+                  description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                    \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                    .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                groups:
+                  type: array
+                  items:
+                    type: string
+                  description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                    obtient tous les droits de tous les groupes auxquels il appartient.
+              required:
+              - username
+          application/x-www-form-urlencoded:
+            schema: *id002
+          multipart/form-data:
+            schema: *id002
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                      \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                      .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                      obtient tous les droits de tous les groupes auxquels il appartient.
+                required:
+                - username
+          description: ''
+    patch:
+      operationId: partial_updateUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this utilisateur.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id003
+              properties:
+                username:
+                  type: string
+                  description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                    \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                    .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                groups:
+                  type: array
+                  items:
+                    type: string
+                  description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                    obtient tous les droits de tous les groupes auxquels il appartient.
+          application/x-www-form-urlencoded:
+            schema: *id003
+          multipart/form-data:
+            schema: *id003
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Requis. 150 caract\xE8res maximum. Uniquement des\
+                      \ lettres, nombres et les caract\xE8res \xAB\_@\_\xBB, \xAB\_\
+                      .\_\xBB, \xAB\_+\_\xBB, \xAB\_-\_\xBB et \xAB\__\_\xBB."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: Les groupes dont fait partie cet utilisateur. Celui-ci
+                      obtient tous les droits de tous les groupes auxquels il appartient.
+                required:
+                - username
+          description: ''
+    delete:
+      operationId: destroyUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this utilisateur.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/groups/:
+    get:
+      operationId: listGroups
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 150
+                      required:
+                      - name
+          description: ''
+    post:
+      operationId: createGroup
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id004
+              properties:
+                name:
+                  type: string
+                  maxLength: 150
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id004
+          multipart/form-data:
+            schema: *id004
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+  /api/groups/{id}/:
+    get:
+      operationId: retrieveGroup
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this groupe.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+    put:
+      operationId: updateGroup
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this groupe.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id005
+              properties:
+                name:
+                  type: string
+                  maxLength: 150
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id005
+          multipart/form-data:
+            schema: *id005
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+    patch:
+      operationId: partial_updateGroup
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this groupe.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id006
+              properties:
+                name:
+                  type: string
+                  maxLength: 150
+          application/x-www-form-urlencoded:
+            schema: *id006
+          multipart/form-data:
+            schema: *id006
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+    delete:
+      operationId: destroyGroup
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this groupe.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/settings/:
+    get:
+      operationId: listUserSettings
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+          description: ''
+    post:
+      operationId: createUserSettings
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id007
+              properties: {}
+          application/x-www-form-urlencoded:
+            schema: *id007
+          multipart/form-data:
+            schema: *id007
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+          description: ''
+  /api/settings/{id}/:
+    get:
+      operationId: retrieveUserSettings
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user settings.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+          description: ''
+    put:
+      operationId: updateUserSettings
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user settings.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id008
+              properties: {}
+          application/x-www-form-urlencoded:
+            schema: *id008
+          multipart/form-data:
+            schema: *id008
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+          description: ''
+    patch:
+      operationId: partial_updateUserSettings
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user settings.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id009
+              properties: {}
+          application/x-www-form-urlencoded:
+            schema: *id009
+          multipart/form-data:
+            schema: *id009
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+          description: ''
+    delete:
+      operationId: destroyUserSettings
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user settings.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/categories/:
+    get:
+      operationId: listCategorys
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        trips:
+                          type: array
+                          items:
+                            properties:
+                              url:
+                                type: string
+                                readOnly: true
+                              localisations:
+                                type: array
+                                items:
+                                  type: string
+                                readOnly: true
+                              started_at:
+                                type: string
+                                format: date-time
+                              ended_at:
+                                type: string
+                                format: date-time
+                                nullable: true
+                              transport_used:
+                                enum:
+                                - walk
+                                - run
+                                - car
+                                - motorbike
+                                - taxi
+                                - rideshare
+                                - carpool
+                                - bus
+                                - bike
+                                - boat
+                                - train
+                                - rer
+                                - plane
+                                - kayak
+                              weather:
+                                type: string
+                                nullable: true
+                                maxLength: 50
+                              feeling:
+                                type: integer
+                                maximum: 10
+                                nullable: true
+                                minimum: 0
+                              category:
+                                type: string
+                            required:
+                            - started_at
+                            - transport_used
+                            - category
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 50
+                      required:
+                      - name
+          description: ''
+    post:
+      operationId: createCategory
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id010
+              properties:
+                name:
+                  type: string
+                  maxLength: 50
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id010
+          multipart/form-data:
+            schema: *id010
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  trips:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        localisations:
+                          type: array
+                          items:
+                            type: string
+                          readOnly: true
+                        started_at:
+                          type: string
+                          format: date-time
+                        ended_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        transport_used:
+                          enum:
+                          - walk
+                          - run
+                          - car
+                          - motorbike
+                          - taxi
+                          - rideshare
+                          - carpool
+                          - bus
+                          - bike
+                          - boat
+                          - train
+                          - rer
+                          - plane
+                          - kayak
+                        weather:
+                          type: string
+                          nullable: true
+                          maxLength: 50
+                        feeling:
+                          type: integer
+                          maximum: 10
+                          nullable: true
+                          minimum: 0
+                        category:
+                          type: string
+                      required:
+                      - started_at
+                      - transport_used
+                      - category
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 50
+                required:
+                - name
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: retrieveCategory
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this category.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  trips:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        localisations:
+                          type: array
+                          items:
+                            type: string
+                          readOnly: true
+                        started_at:
+                          type: string
+                          format: date-time
+                        ended_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        transport_used:
+                          enum:
+                          - walk
+                          - run
+                          - car
+                          - motorbike
+                          - taxi
+                          - rideshare
+                          - carpool
+                          - bus
+                          - bike
+                          - boat
+                          - train
+                          - rer
+                          - plane
+                          - kayak
+                        weather:
+                          type: string
+                          nullable: true
+                          maxLength: 50
+                        feeling:
+                          type: integer
+                          maximum: 10
+                          nullable: true
+                          minimum: 0
+                        category:
+                          type: string
+                      required:
+                      - started_at
+                      - transport_used
+                      - category
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 50
+                required:
+                - name
+          description: ''
+    put:
+      operationId: updateCategory
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this category.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id011
+              properties:
+                name:
+                  type: string
+                  maxLength: 50
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id011
+          multipart/form-data:
+            schema: *id011
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  trips:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        localisations:
+                          type: array
+                          items:
+                            type: string
+                          readOnly: true
+                        started_at:
+                          type: string
+                          format: date-time
+                        ended_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        transport_used:
+                          enum:
+                          - walk
+                          - run
+                          - car
+                          - motorbike
+                          - taxi
+                          - rideshare
+                          - carpool
+                          - bus
+                          - bike
+                          - boat
+                          - train
+                          - rer
+                          - plane
+                          - kayak
+                        weather:
+                          type: string
+                          nullable: true
+                          maxLength: 50
+                        feeling:
+                          type: integer
+                          maximum: 10
+                          nullable: true
+                          minimum: 0
+                        category:
+                          type: string
+                      required:
+                      - started_at
+                      - transport_used
+                      - category
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 50
+                required:
+                - name
+          description: ''
+    patch:
+      operationId: partial_updateCategory
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this category.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id012
+              properties:
+                name:
+                  type: string
+                  maxLength: 50
+          application/x-www-form-urlencoded:
+            schema: *id012
+          multipart/form-data:
+            schema: *id012
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  trips:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        localisations:
+                          type: array
+                          items:
+                            type: string
+                          readOnly: true
+                        started_at:
+                          type: string
+                          format: date-time
+                        ended_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        transport_used:
+                          enum:
+                          - walk
+                          - run
+                          - car
+                          - motorbike
+                          - taxi
+                          - rideshare
+                          - carpool
+                          - bus
+                          - bike
+                          - boat
+                          - train
+                          - rer
+                          - plane
+                          - kayak
+                        weather:
+                          type: string
+                          nullable: true
+                          maxLength: 50
+                        feeling:
+                          type: integer
+                          maximum: 10
+                          nullable: true
+                          minimum: 0
+                        category:
+                          type: string
+                      required:
+                      - started_at
+                      - transport_used
+                      - category
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 50
+                required:
+                - name
+          description: ''
+    delete:
+      operationId: destroyCategory
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this category.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/localisations/:
+    get:
+      operationId: listLocalisations
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        latitude:
+                          type: number
+                        longitude:
+                          type: number
+                        altitude:
+                          type: number
+                        timestamp:
+                          type: string
+                          format: date-time
+                        trip:
+                          type: string
+                      required:
+                      - latitude
+                      - longitude
+                      - altitude
+                      - timestamp
+                      - trip
+          description: ''
+    post:
+      operationId: createLocalisation
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id013
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                altitude:
+                  type: number
+                timestamp:
+                  type: string
+                  format: date-time
+                trip:
+                  type: string
+              required:
+              - latitude
+              - longitude
+              - altitude
+              - timestamp
+              - trip
+          application/x-www-form-urlencoded:
+            schema: *id013
+          multipart/form-data:
+            schema: *id013
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                  altitude:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+                  trip:
+                    type: string
+                required:
+                - latitude
+                - longitude
+                - altitude
+                - timestamp
+                - trip
+          description: ''
+  /api/localisations/{id}/:
+    get:
+      operationId: retrieveLocalisation
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this localisation.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                  altitude:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+                  trip:
+                    type: string
+                required:
+                - latitude
+                - longitude
+                - altitude
+                - timestamp
+                - trip
+          description: ''
+    put:
+      operationId: updateLocalisation
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this localisation.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id014
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                altitude:
+                  type: number
+                timestamp:
+                  type: string
+                  format: date-time
+                trip:
+                  type: string
+              required:
+              - latitude
+              - longitude
+              - altitude
+              - timestamp
+              - trip
+          application/x-www-form-urlencoded:
+            schema: *id014
+          multipart/form-data:
+            schema: *id014
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                  altitude:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+                  trip:
+                    type: string
+                required:
+                - latitude
+                - longitude
+                - altitude
+                - timestamp
+                - trip
+          description: ''
+    patch:
+      operationId: partial_updateLocalisation
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this localisation.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id015
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                altitude:
+                  type: number
+                timestamp:
+                  type: string
+                  format: date-time
+                trip:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema: *id015
+          multipart/form-data:
+            schema: *id015
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                  altitude:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+                  trip:
+                    type: string
+                required:
+                - latitude
+                - longitude
+                - altitude
+                - timestamp
+                - trip
+          description: ''
+    delete:
+      operationId: destroyLocalisation
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this localisation.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /api/trips/:
+    get:
+      operationId: listTrips
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        localisations:
+                          type: array
+                          items:
+                            type: string
+                          readOnly: true
+                        started_at:
+                          type: string
+                          format: date-time
+                        ended_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        transport_used:
+                          enum:
+                          - walk
+                          - run
+                          - car
+                          - motorbike
+                          - taxi
+                          - rideshare
+                          - carpool
+                          - bus
+                          - bike
+                          - boat
+                          - train
+                          - rer
+                          - plane
+                          - kayak
+                        weather:
+                          type: string
+                          nullable: true
+                          maxLength: 50
+                        feeling:
+                          type: integer
+                          maximum: 10
+                          nullable: true
+                          minimum: 0
+                        category:
+                          type: string
+                      required:
+                      - started_at
+                      - transport_used
+                      - category
+          description: ''
+    post:
+      operationId: createTrip
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id016
+              properties:
+                started_at:
+                  type: string
+                  format: date-time
+                ended_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                transport_used:
+                  enum:
+                  - walk
+                  - run
+                  - car
+                  - motorbike
+                  - taxi
+                  - rideshare
+                  - carpool
+                  - bus
+                  - bike
+                  - boat
+                  - train
+                  - rer
+                  - plane
+                  - kayak
+                weather:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                feeling:
+                  type: integer
+                  maximum: 10
+                  nullable: true
+                  minimum: 0
+                category:
+                  type: string
+              required:
+              - started_at
+              - transport_used
+              - category
+          application/x-www-form-urlencoded:
+            schema: *id016
+          multipart/form-data:
+            schema: *id016
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  localisations:
+                    type: array
+                    items:
+                      type: string
+                    readOnly: true
+                  started_at:
+                    type: string
+                    format: date-time
+                  ended_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  transport_used:
+                    enum:
+                    - walk
+                    - run
+                    - car
+                    - motorbike
+                    - taxi
+                    - rideshare
+                    - carpool
+                    - bus
+                    - bike
+                    - boat
+                    - train
+                    - rer
+                    - plane
+                    - kayak
+                  weather:
+                    type: string
+                    nullable: true
+                    maxLength: 50
+                  feeling:
+                    type: integer
+                    maximum: 10
+                    nullable: true
+                    minimum: 0
+                  category:
+                    type: string
+                required:
+                - started_at
+                - transport_used
+                - category
+          description: ''
+  /api/trips/{id}/:
+    get:
+      operationId: retrieveTrip
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this trip.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  localisations:
+                    type: array
+                    items:
+                      type: string
+                    readOnly: true
+                  started_at:
+                    type: string
+                    format: date-time
+                  ended_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  transport_used:
+                    enum:
+                    - walk
+                    - run
+                    - car
+                    - motorbike
+                    - taxi
+                    - rideshare
+                    - carpool
+                    - bus
+                    - bike
+                    - boat
+                    - train
+                    - rer
+                    - plane
+                    - kayak
+                  weather:
+                    type: string
+                    nullable: true
+                    maxLength: 50
+                  feeling:
+                    type: integer
+                    maximum: 10
+                    nullable: true
+                    minimum: 0
+                  category:
+                    type: string
+                required:
+                - started_at
+                - transport_used
+                - category
+          description: ''
+    put:
+      operationId: updateTrip
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this trip.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id017
+              properties:
+                started_at:
+                  type: string
+                  format: date-time
+                ended_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                transport_used:
+                  enum:
+                  - walk
+                  - run
+                  - car
+                  - motorbike
+                  - taxi
+                  - rideshare
+                  - carpool
+                  - bus
+                  - bike
+                  - boat
+                  - train
+                  - rer
+                  - plane
+                  - kayak
+                weather:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                feeling:
+                  type: integer
+                  maximum: 10
+                  nullable: true
+                  minimum: 0
+                category:
+                  type: string
+              required:
+              - started_at
+              - transport_used
+              - category
+          application/x-www-form-urlencoded:
+            schema: *id017
+          multipart/form-data:
+            schema: *id017
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  localisations:
+                    type: array
+                    items:
+                      type: string
+                    readOnly: true
+                  started_at:
+                    type: string
+                    format: date-time
+                  ended_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  transport_used:
+                    enum:
+                    - walk
+                    - run
+                    - car
+                    - motorbike
+                    - taxi
+                    - rideshare
+                    - carpool
+                    - bus
+                    - bike
+                    - boat
+                    - train
+                    - rer
+                    - plane
+                    - kayak
+                  weather:
+                    type: string
+                    nullable: true
+                    maxLength: 50
+                  feeling:
+                    type: integer
+                    maximum: 10
+                    nullable: true
+                    minimum: 0
+                  category:
+                    type: string
+                required:
+                - started_at
+                - transport_used
+                - category
+          description: ''
+    patch:
+      operationId: partial_updateTrip
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this trip.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id018
+              properties:
+                started_at:
+                  type: string
+                  format: date-time
+                ended_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                transport_used:
+                  enum:
+                  - walk
+                  - run
+                  - car
+                  - motorbike
+                  - taxi
+                  - rideshare
+                  - carpool
+                  - bus
+                  - bike
+                  - boat
+                  - train
+                  - rer
+                  - plane
+                  - kayak
+                weather:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                feeling:
+                  type: integer
+                  maximum: 10
+                  nullable: true
+                  minimum: 0
+                category:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema: *id018
+          multipart/form-data:
+            schema: *id018
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  localisations:
+                    type: array
+                    items:
+                      type: string
+                    readOnly: true
+                  started_at:
+                    type: string
+                    format: date-time
+                  ended_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  transport_used:
+                    enum:
+                    - walk
+                    - run
+                    - car
+                    - motorbike
+                    - taxi
+                    - rideshare
+                    - carpool
+                    - bus
+                    - bike
+                    - boat
+                    - train
+                    - rer
+                    - plane
+                    - kayak
+                  weather:
+                    type: string
+                    nullable: true
+                    maxLength: 50
+                  feeling:
+                    type: integer
+                    maximum: 10
+                    nullable: true
+                    minimum: 0
+                  category:
+                    type: string
+                required:
+                - started_at
+                - transport_used
+                - category
+          description: ''
+    delete:
+      operationId: destroyTrip
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this trip.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
