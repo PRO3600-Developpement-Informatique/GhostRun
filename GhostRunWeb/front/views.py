@@ -79,11 +79,11 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
         self.object: Trip
         context = super().get_context_data(**kwargs)
 
-        map_coords = []
-        for loc in self.object.localisations.all():
-            map_coords.append({"lat": loc.latitude, "lng": loc.longitude})
+        #map_coords = []
+        #for loc in self.object.localisations.all():
+        #    map_coords.append({"lat": loc.latitude, "lng": loc.longitude})
 
-        context['map_coords'] = json.dumps(map_coords)
+        #context['map_coords'] = json.dumps(map_coords)
         gpx = render_trip_to_gpxpy_object(self.get_object())
         denivele = gpx.get_uphill_downhill()
 
