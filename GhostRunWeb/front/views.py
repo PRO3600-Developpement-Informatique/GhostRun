@@ -51,7 +51,15 @@ def my_settings_view(request):
 @login_required()
 def testwebapp(request, trip_pk):
     trip = get_object_or_404(Trip, user=request.user, pk=trip_pk)
-    return render(request, "front/web_app.html", context={"trip": trip})
+    context = {"trip": trip}
+
+    map_coords = []
+    for loc in trip.localisations.all():
+        map_coords.append({"lat": loc.latitude, "lng": loc.longitude})
+
+    context['map_coords'] = json.dumps(map_coords)
+
+    return render(request, "front/web_app.html", context=context)
 
 
 def render_trip_to_gpxpy_object(trip):

@@ -58,13 +58,23 @@
             map = new google.maps.Map(document.getElementById('map_canvas'), {
                 zoom: 17
             });
+            var lineSymbol = {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+            };
+
             current_location_poly = new google.maps.Polyline({
+                path: {{ map_coords|safe }},
+                icons: [{
+                    icon: lineSymbol,
+                    offset: '0%',
+                    repeat: '150px'
+                }],
                 strokeColor: '#0dc6be',
                 strokeOpacity: 0.75,
-                strokeWeight: 3
+                strokeWeight: 3,
+                map: map
             });
-            current_location_poly.setMap(map);
-
+            //current_location_poly.setMap(map);
 
 
             if (navigator.geolocation) {
@@ -98,7 +108,7 @@
 
         function watchCurrentPosition() {
             var positionTimer = navigator.geolocation.watchPosition(function (position) {
-                setMarkerPosition(userLocation, position);
+                // setMarkerPosition(userLocation, position);
                 var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
                 map.panTo(latLng);
 
