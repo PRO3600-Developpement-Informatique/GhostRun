@@ -23,3 +23,8 @@ class TestView(TestCase):
     @given(from_model(Trip, user=from_model(User), category=from_model(Category, user=from_model(User))))
     def test_trips_cant_have_negative_duration(self, example_trip:Trip):
         self.assertGreaterEqual(example_trip.duration.total_seconds(), 0)
+
+    @given(from_model(Trip, user=from_model(User), category=from_model(Category, user=from_model(User))))
+    def test_duration_without_ended_at(self, example_trip:Trip):
+        example_trip.ended_at = None
+        example_trip.duration
