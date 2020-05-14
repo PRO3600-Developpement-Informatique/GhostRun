@@ -61,7 +61,7 @@
                     var parser = new GPXParser(data, map);
                     parser.setTrackColour("#00ccff");     // Set the track line colour
                     parser.setTrackWidth(3);          // Set the track line width
-                    parser.setMinTrackPointDelta(0.001);      // Set the minimum distance between track points
+                    parser.setMinTrackPointDelta(0.000000001);      // Set the minimum distance between track points
                     parser.centerAndZoom(data);
                     parser.addTrackpointsToMap();         // Add the trackpoints
                     parser.addRoutepointsToMap();         // Add the routepoints
