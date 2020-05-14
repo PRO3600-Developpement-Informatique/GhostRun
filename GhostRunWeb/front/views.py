@@ -33,10 +33,12 @@ def profile_home(request):
     for category in categories:
         data = []
         for trip in category.trips.filter(ended_at__isnull=False):
-            data.append({'name': trip.html_fa_name, 'value': int(trip.duration.seconds / 60), 'pk': trip.id})
+            if trip.duration.seconds >= 60:
+                data.append({'name': trip.html_fa_name, 'value': int(trip.duration.seconds / 60), 'pk': trip.id})
 
-        bubbles_series.append({'name': category.name,
-                               'data': data})
+        if len(data):
+            bubbles_series.append({'name': category.name,
+                                   'data': data})
     bubbles_series = json.dumps(bubbles_series)
     return render(request, "front/profile_home.html", context={"categories": categories, "bubbles_series": bubbles_series})
 
