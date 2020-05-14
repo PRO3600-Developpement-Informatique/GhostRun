@@ -122,7 +122,8 @@
                 ghosts_icons.push(new google.maps.Marker({
                     position: initial_pos,
                     map: map,
-                    title: ghost_data['name']
+                    title: ghost_data['name'],
+                    icon: "{% static "spooky.png" %}"
                 }));
             }
             //current_location_poly.setMap(map);
