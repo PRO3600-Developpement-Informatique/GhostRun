@@ -1,4 +1,5 @@
 import datetime
+from typing import Optional
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -44,20 +45,20 @@ d_transport = {"walk": "Promenade",
                }
 
 d_transport_emoji = {
-               "walk": "walking",
-               "run": "running",
-               "car": "car",
-               "motorbike": "motorcycle",
-               "taxi": "taxi",
-               "rideshare": "taxi",
-               "carpool": "truck-pickup",
-               "bus": "bus-alt",
-               "bike": "bicycle",
-               "boat": "ship",
-               "train": "train",
-               "rer": "subway",
-               "plane": "fighter-jet",
-               "kayak": "swimmer",
+    "walk": "walking",
+    "run": "running",
+    "car": "car",
+    "motorbike": "motorcycle",
+    "taxi": "taxi",
+    "rideshare": "taxi",
+    "carpool": "truck-pickup",
+    "bus": "bus-alt",
+    "bike": "bicycle",
+    "boat": "ship",
+    "train": "train",
+    "rer": "subway",
+    "plane": "fighter-jet",
+    "kayak": "swimmer",
 }
 
 d_mois = {"Jan": "Janvier",
@@ -74,8 +75,10 @@ d_mois = {"Jan": "Janvier",
           "Dec": "Décembre"
           }
 
+
 class InvalidDatetimeException(Exception):
     pass
+
 
 class Category(models.Model):
     def __str__(self):
@@ -108,6 +111,7 @@ class Trip(models.Model):
         else:
             raise InvalidDatetimeException()
     """
+
     @property
     def name(self):
         hour = self.started_at.time().hour
@@ -139,7 +143,7 @@ class Trip(models.Model):
         return mark_safe(f"{self.fa_html}<style=\"line-height:0px;\"br/>{date.day}/{date.month}")
 
     @property
-    def duration(self) -> datetime.timedelta:
+    def duration(self) -> Optional[datetime.timedelta]:
         return self.ended_at - self.started_at
 
     @property
