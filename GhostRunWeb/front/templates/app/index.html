@@ -6,18 +6,23 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Form</h2>
-    {% if form.subject.errors %}
-    <ol>
-    {% for error in form.subject.errors %}
-        <li><strong>{{ error|escape }}</strong></li>
-    {% endfor %}
-    </ol>
-{% endif %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit"
-               value="C'est parti!">
-    </form>
+    <div class="grid-container fluid">
+    <h2>C'est parti! Démarrage d'un trajet.</h2>
+    <div class="grid-x">
+        <div class="cell auto">
+            {% if form.subject.errors %}
+                <ol>
+                    {% for error in form.subject.errors %}
+                        <li><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit"
+                       value="C'est parti!">
+            </form>
+        </div>
+    </div>
 {% endblock %}
