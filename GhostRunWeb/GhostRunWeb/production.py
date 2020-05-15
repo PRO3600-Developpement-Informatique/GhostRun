@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ["ghostrun.api-d.com"]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'GhostRun',
+        'NAME': 'ghostrun',
         'USER': 'ghostrun',
         'PASSWORD': 'GhostRun',
         'HOST': 'localhost',
