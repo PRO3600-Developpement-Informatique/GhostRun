@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+# DJANGO_SETTINGS_MODULE=GhostRunWeb.production
 from .settings import *
 
 # Quick-start development settings - unsuitable for production
@@ -26,11 +26,13 @@ ALLOWED_HOSTS = ["ghostrun.api-d.com"]
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# https://djangocentral.com/using-postgresql-with-django/
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'GhostRun',
-        'USER': 'GhostRun',
+        'USER': 'ghostrun',
         'PASSWORD': 'GhostRun',
         'HOST': 'localhost',
         'PORT': '',
