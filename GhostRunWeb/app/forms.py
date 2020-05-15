@@ -16,6 +16,8 @@ class AppInitForm(forms.ModelForm):
     def __init__(self, *args, user: User, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = user.category_set.all()
+        self.fields['transport_used'].label = "Votre mode de transport"
+
         self.helper = FormHelper()
         self.helper.form_action = '.'
         self.helper.layout = Layout(
@@ -28,7 +30,9 @@ class AppInitForm(forms.ModelForm):
             ),
         )
 
-    category = CategoryChoiceField(queryset=None, empty_label=None)
+    category = CategoryChoiceField(queryset=None, empty_label=None,
+                                   label="La catégorie de votre trajet",
+                                   help_text="Choississez l'endroit ou vous allez. Attention, un trjet retour n'est pas dans la meme catégorie qu'un trajet aller.")
 
     class Meta:
         model = Trip
