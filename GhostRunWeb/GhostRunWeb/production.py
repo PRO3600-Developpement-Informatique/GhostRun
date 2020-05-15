@@ -20,6 +20,7 @@ SECRET_KEY = 'b13tbqyj9(eov8+-9e0%r))r7k+^4=t6*!2@v-n3_qk2zbj+yg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+STATIC_ROOT = "/var/www/ghostrun.api-d.com/GhostRun/GhostRunWeb/static"
 
 ALLOWED_HOSTS = ["ghostrun.api-d.com"]
 
