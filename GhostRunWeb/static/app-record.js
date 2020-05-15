@@ -124,7 +124,6 @@ function initLocationProcedure() {
 }
 
 function showGhostsPositions() {
-
     var current_date = new Date();
     var delta = (current_date - start_date) / 1000;
     //console.log("Current time is", current_date);
@@ -140,9 +139,12 @@ function showGhostsPositions() {
         for (var pos_id in coords) {
             pos = coords[pos_id];
             if (pos['delta'] > delta) {
-                console.log("Current call_next is", call_next)
-                console.log("Next delta is ", pos['delta'] - delta)
+                console.log("Current call_next is", call_next, "seconds")
+                console.log("This call_next is", pos['delta'] - delta, "seconds")
                 call_next = Math.min(call_next, pos['delta'] - delta);
+                console.log("New call_next is", call_next, "seconds")
+
+                console.log("Current coords are @ ", pos['delta'], previous_pos['lat'], previous_pos['lng']);
                 ghosts_icons[ghost_id].setPosition(new google.maps.LatLng(previous_pos['lat'], previous_pos['lng']));
                 break;
             } else {
@@ -151,8 +153,8 @@ function showGhostsPositions() {
         }
         ghost_id++
     }
-    call_next = (call_next + 3) * 1000
-    console.log("Next delta in", call_next);
+    call_next = Math.round((call_next + 3) * 1000);
+    console.log("Next call in", call_next / 1000, "seconds");
     return call_next
 }
 
