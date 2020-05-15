@@ -1,4 +1,3 @@
-import base64 from 'react-native-base64';
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 

@@ -1,25 +1,8 @@
 import * as React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
 import 'react-native-gesture-handler';
-import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
-import LoginScreen from './Component/LoginScreen';
 import MesComposants from './Component/mesComposants';
-import {composeWithDevTools} from 'redux-devtools-extension';
-import logger from 'redux-logger';
-
-import {connect} from 'react-redux';
-import allReducers from './Component/stateGlobale/allReducer';
-import reducerEstCo from './Component/stateGlobale/reducerEstConnecte';
-import userCorant from './Component/stateGlobale/reducerUtilisateurCourant';
 import {adresse} from './Component/adresseServ';
 
 const initialState = {

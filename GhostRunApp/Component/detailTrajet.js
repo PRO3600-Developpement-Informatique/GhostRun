@@ -4,21 +4,16 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
-  Platform,
-  PermissionsAndroid,
   FlatList,
   Button,
   TouchableHighlight,
-  SafeAreaView,
 } from 'react-native';
-import {data_du_type_de_trajet} from './data_du_type_trajet';
-import {useIsFocused} from '@react-navigation/native';
 import base64 from 'react-native-base64';
 import {connect} from 'react-redux';
 import {ListItem} from 'react-native-elements';
-import ContenuApp from './Contenudelapp';
-import LoginScreen from './LoginScreen';
+import {Picker} from '@react-native-community/picker';
+import {adresse} from './adresseServ';
+
 function Item({title}) {
   return (
     <View style={styles.item}>
@@ -42,6 +37,7 @@ class PageDetail extends React.Component {
       user: this.props.state.userCour.utilisateurCourant,
       password: this.props.state.datatemp.password,
       trips: '',
+      mode_de_transport: 'walk',
     };
   }
   showDialog = () => {
@@ -62,7 +58,7 @@ class PageDetail extends React.Component {
       const passwordString = user.toString();
       const testo = async () => {
         await fetch(
-          'https://0a6b5d0c.ngrok.io/api/categories/' +
+          adresse + 'categories/' +
             this.props.route.params.id +
             '/',
           {
@@ -209,18 +205,20 @@ class PageDetail extends React.Component {
     }
     console.log('Voilalaaa');
     console.log(this.state.liste_vers_map);
-    this.props.navigation.navigate('Carte', {liste_des_details_pour_course: this.state.liste_vers_map,})
+    this.props.navigation.navigate('Carte', {
+      liste_des_details_pour_course: this.state.liste_vers_map,
+    });
     this.props.changementCourseEnCours();
   };
   onPressDebutTrajet = () => {
     this.props.changementEtatCreactionTrajet();
     var date = new Date();
     const currentTime = date.toJSON();
-    const categorie =
-      'https://0a6b5d0c.ngrok.io/api/categories/' +
+    const categorie =adresse+
+      '/categories/' +
       this.props.route.params.id +
       '/';
-    fetch('https://0a6b5d0c.ngrok.io/api/trips/', {
+    fetch(adresse + 'trips/', {
       method: 'POST',
       headers: new Headers({
         Authorization:
@@ -242,8 +240,7 @@ class PageDetail extends React.Component {
   };
   onPressFinTrajet = () => {
     this.props.changementEtatCreactionTrajet();
-  }
-
+  };
 
   render() {
     return (
@@ -273,14 +270,26 @@ class PageDetail extends React.Component {
                   this.onPressDebutTrajet();
                 }}
               />
-              <Dialog.Input
-                label="Type de trajet"
-                onChangeText={text => this.setState({text: text})}
-              />
-              <Dialog.Input
-                label="Trajet"
-                onChangeText={text => this.setState({text: text})}
-              />
+              <Picker
+                selectedValue={this.state.mode_de_transport}
+                style={{height: 50, width: 10}}
+                onValueChange={(itemValue, itemIndex) => console.log(itemValue)
+                }>
+                <Picker.Item label="Marche" value="walk" />
+                <Picker.Item label="Course" value="run" />
+                <Picker.Item label="Voiture" value="car" />
+                <Picker.Item label="Moto/Scooter" value="motorbike" />
+                <Picker.Item label="Taxi" value="taxi" />
+                <Picker.Item label="Uber Pool" value="rideshare" />
+                <Picker.Item label="Blablacar" value="carpool" />
+                <Picker.Item label="Bus" value="bus" />
+                <Picker.Item label="Vélo" value="bike" />
+                <Picker.Item label="Bateau" value="boat" />
+                <Picker.Item label="Train" value="train" />
+                <Picker.Item label="RER" value="rer" />
+                <Picker.Item label="Avion" value="plane" />
+                <Picker.Item label="Kayak" value="kayak" />
+              </Picker>
             </Dialog.Container>
           </View>
         ) : (
@@ -291,8 +300,18 @@ class PageDetail extends React.Component {
               renderItem={this.renderItem}
             />
             <View>
-              <Button title={'Debuter un trajet ! '} onPress={() => {this.onPressDebutTrajet()}} />
-              <Button title={'Fin du trajet ! '} onPress={() => {this.onPressFinTrajet()}} />
+              <Button
+                title={'Debuter un trajet ! '}
+                onPress={() => {
+                  this.onPressDebutTrajet();
+                }}
+              />
+              <Button
+                title={'Fin du trajet ! '}
+                onPress={() => {
+                  this.onPressFinTrajet();
+                }}
+              />
             </View>
           </View>
         )}

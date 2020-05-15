@@ -3,12 +3,11 @@ import {StyleSheet, Platform, AppRegistry, View, Button} from 'react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
-//import {NavigationEvents} from 'react-navigation';
 import 'react-native-gesture-handler';
-import PageStats from './Stats';
 import {mapStyle} from './options.js';
 import {connect} from 'react-redux';
 import base64 from 'react-native-base64';
+import {adresse} from './adresseServ';
 
 AppRegistry.registerComponent('GhostRunApp', () => App);
 
@@ -133,7 +132,7 @@ class Mapp extends React.Component {
   postDataApiLocalisations = tripp => {
     var date = new Date();
     const currentTime = date.toJSON();
-    fetch('https://0a6b5d0c.ngrok.io/api/localisations/', {
+    fetch(adresse + 'localisations/', {
       method: 'POST',
       headers: new Headers({
         Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
