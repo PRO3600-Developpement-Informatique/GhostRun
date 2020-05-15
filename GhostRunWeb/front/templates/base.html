@@ -3,6 +3,8 @@
 <html lang="fr"
       class="no-js">
 <head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable"
           content="yes">
     <meta name="apple-mobile-web-app-status-bar-style"
@@ -85,46 +87,9 @@
     </div>
 {% endblock %}
 
-<!--{% block sidemenu %}
-    <ul class="vertical menu" data-accordion-menu>
-        <li>
-            <a href="#0">Item 1</a>
-            <ul class="menu vertical nested is-active">
-                <li>
-                    <a href="#0">Item 1A</a>
-                    <ul class="menu vertical nested">
-                        <li><a href="#0">Item 1Ai</a></li>
-                        <li><a href="#0">Item 1Aii</a></li>
-                        <li><a href="#0">Item 1Aiii</a></li>
-                    </ul>
-                </li>
-                <li><a href="#0">Item 1B</a></li>
-                <li><a href="#0">Item 1C</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#0">Item 2</a>
-            <ul class="menu vertical nested">
-                <li><a href="#0">Item 2A</a></li>
-                <li><a href="#0">Item 2B</a></li>
-            </ul>
-        </li>
-        <li><a href="#0">Item 3</a></li>
-    </ul>
-    {% endblock %}
-    -->
-
 {% block content %}
 {% endblock %}
-<script>
-    // Check that service workers are supported
-    if ('serviceWorker' in navigator) {
-        // Use the window load event to keep the page load performant
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('{% static "service-worker.js" %}');
-        });
-    }
-</script>
+
 
 </body>
 </html>
