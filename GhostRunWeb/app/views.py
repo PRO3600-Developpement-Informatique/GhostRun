@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.contrib.staticfiles.finders import find as static
+from django.templatetags.static import static
 # Create your views here.
 from django.urls import reverse
 
