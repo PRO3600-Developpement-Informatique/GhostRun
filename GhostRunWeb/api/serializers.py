@@ -16,15 +16,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    serializers.ReadOnlyField(source='user')
-    trips = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="trip-detail")
-
-    class Meta:
-        model = Category
-        exclude = ['user']
-
-
 class TripSerializer(serializers.HyperlinkedModelSerializer):
     localisations = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="localisation-detail")
 
@@ -32,6 +23,16 @@ class TripSerializer(serializers.HyperlinkedModelSerializer):
         model = Trip
         # fields = '__all__'
         exclude = ['user']
+
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    serializers.ReadOnlyField(source='user')
+    trips = TripSerializer(many=True, read_only=True)  # , view_name="trip-detail")
+
+    class Meta:
+        model = Category
+        exclude = ['user']
+        depth = 1
 
 
 class LocalisationSerializer(serializers.HyperlinkedModelSerializer):

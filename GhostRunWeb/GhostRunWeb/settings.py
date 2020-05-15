@@ -25,7 +25,7 @@ SECRET_KEY = 'b13tbqyj9(eov8+-9e0%r))r7k+^4=t6*!2@v-n3_qk2zbj+yg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".ngrok.io", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [".ngrok.io", "127.0.0.1", "localhost", ".serverless.social"]
 
 
 # Application definition
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'GhostRunWeb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +69,7 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_REDIRECT_URL = '/'
 WSGI_APPLICATION = 'GhostRunWeb.wsgi.application'
 
 
@@ -105,8 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -132,3 +131,5 @@ REST_FRAMEWORK = {
     ],
     'PAGE_SIZE': 100
 }
+
+LANGUAGE_CODE = "fr-fr"

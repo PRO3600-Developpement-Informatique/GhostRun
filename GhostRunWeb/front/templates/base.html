@@ -1,14 +1,64 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr"
+      class="no-js">
 <head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="black">
+    <meta name="apple-mobile-web-app-title"
+          content="GhostRun">
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{% static "apple-touch-icon.png" %}">
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{% static "favicon-32x32.png" %}">
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="{% static "favicon-16x16.png" %}">
+    <link rel="manifest"
+          href="{% static "manifest.json" %}">
+    <meta name="description"
+          content="GhostRun est une application de suivi des trajets. Comme dans Mario Kart, battez vous contre vos performances précédentes.">
+    <meta name="theme-color"
+          content="#2F3BA2"/>
+
     <!-- Compressed CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static "front.css" %}"/>
-
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css"
+          integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I="
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="{% static "front.css" %}"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+          integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="
+          crossorigin="anonymous"/>
     <!-- Compressed JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js"
+            integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o="
+            crossorigin="anonymous"
+            defer></script>
+    <script src="https://code.highcharts.com/highcharts.js"
+            defer></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"
+            defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
+            type="text/javascript"
+            defer></script>
+    <script async
+            defer
+            src="{% static "loadgpx.js" %}"
+            type="text/javascript"></script>
 
 
     <title>{% block title %}{% endblock %}</title>
@@ -16,61 +66,62 @@
     {% endblock %}
 </head>
 <body>
-    {% block topbar %}
+<script>
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+            }
+        }
+    });
+    $(document).ready(function () {
+        // La page est "ready"
+        Highcharts.setOptions({
+            credits: {
+                enabled: false
+            },
+            chart: {
+                backgroundColor: null
+            }
+        })
+        }
+    )
+</script>
+{% block topbar %}
     <div class="top-bar">
         <div class="top-bar-left">
-            <ul class="dropdown menu" data-dropdown-menu>
-                <li class="logo"><img src="https://zupimages.net/up/20/18/7tf6.png"> </li>
+            <ul class="menu">
+                <li><a href="{% url "front-index" %}"><img src="{% static "logo.png" %}"
+                                                           alt="Logo"></a></li>
                 <li class="menu-text">GhostRun</li>
-                <li><a href="#0">Accueil</a></li>
-                <li><a href="#0">Carte</a></li>
-                <li><a href="#0">Trajets</a></li>
+                <li><a href="{% url "front-profile-home" %}">Espace Membres</a></li>
+                <!--<li><a href="{% url "front-my-settings" %}">Préférences</a></li>-->
             </ul>
         </div>
         <div class="top-bar-right">
-            {% if not request.user.is_authenticated %}
-                <a href="#" class="round button small">Connexion</a>
-            {% else %}
-            Votre compte ({{request.user.first_name}})
-            {% endif %}
+            <ul class="menu">
+                {% if not request.user.is_authenticated %}
+                    <li><a href="{% url "login" %}"
+                           class="round button small">Connexion</a></li>
+                {% else %}
+                    <li class="menu-text">Votre compte : {{ request.user.first_name }}</li>
+                    <li><a href="{% url "logout" %}">Déconnexion</a></li>
+                {% endif %}
+            </ul>
+
         </div>
-
-
     </div>
-    {% endblock %}
+{% endblock %}
 
-    <!--{% block sidemenu %}
-    <ul class="vertical menu" data-accordion-menu>
-        <li>
-            <a href="#0">Item 1</a>
-            <ul class="menu vertical nested is-active">
-                <li>
-                    <a href="#0">Item 1A</a>
-                    <ul class="menu vertical nested">
-                        <li><a href="#0">Item 1Ai</a></li>
-                        <li><a href="#0">Item 1Aii</a></li>
-                        <li><a href="#0">Item 1Aiii</a></li>
-                    </ul>
-                </li>
-                <li><a href="#0">Item 1B</a></li>
-                <li><a href="#0">Item 1C</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#0">Item 2</a>
-            <ul class="menu vertical nested">
-                <li><a href="#0">Item 2A</a></li>
-                <li><a href="#0">Item 2B</a></li>
-            </ul>
-        </li>
-        <li><a href="#0">Item 3</a></li>
-    </ul>
-    {% endblock %}
-    -->
-
-    {% block content %}
-    {% endblock %}
+{% block content %}
+{% endblock %}
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.0.0/quicklink.umd.js"></script>
+<script>
+    window.addEventListener('load', () => {
+        quicklink.listen();
+    });
+</script>
 </body>
 </html>

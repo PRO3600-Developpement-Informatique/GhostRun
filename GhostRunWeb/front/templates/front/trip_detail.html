@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+    <h2>{{ trip.name }} ({{ trip.category.name }})</h2>
+    <div class="grid-container fluid">
+        <div class="grid-x grid-padding-x">
+            <div class="cell large-8">
+                <div id="map"
+                     style="height: 75vh">
+                </div>
+            </div>
+            <div class="cell large-auto">
+                <h3 class="type-sidelines"><span>Distance parcourue</span></h3>
+                {{ statistics.length_2d }} (2d), {{ statistics.length_3d }} (3d)
+                <h3 class="type-sidelines"><span>Dénivelé</span></h3>
+                <i class="fas fa-angle-up"></i> {{ statistics.uphill }} <i class="fas fa-angle-down"></i> {{ statistics.downhill }}
+                <div id="chart_denivele"></div>
+                <h3 class="type-sidelines"><span>Vitesse moyenne</span></h3>
+                {{ statistics.speed }} km/h
+                <h3 class="type-sidelines"><span>Durée</span></h3>
+                {{ statistics.duration }}
+                {% if trip.feeling %}
+                    <h3 class="type-sidelines"><span>Satisfaction</span></h3>
+                    {{ trip.feeling }}/10
+                {% endif %}
+                {% if trip.weather %}
+                    <h3 class="type-sidelines"><span>Météo</span></h3>
+                    {{ trip.weather }}
+                {% endif %}
+                <h3 class="type-sidelines"><span>Zone de danger</span></h3>
+                <a class="expanded button alert"
+                   href="#"
+                   id="delete_button">Supprimer ce trajet</a>
+
+                                           <!--
+                                           <h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
+                                           3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)
+                                           -->
+
+            </div>
+        </div>
+    </div>
+    {% csrf_token %}
+
+
+    <script>
+        function loadGPXFileIntoGoogleMap(map, filename) {
+            $.ajax({
+                url: filename,
+                dataType: "xml",
+                success: function (data) {
+                    var parser = new GPXParser(data, map);
+                    parser.setTrackColour("#00ccff");     // Set the track line colour
+                    parser.setTrackWidth(3);          // Set the track line width
+                    parser.setMinTrackPointDelta(0.000000001);      // Set the minimum distance between track points
+                    parser.centerAndZoom(data);
+                    parser.addTrackpointsToMap();         // Add the trackpoints
+                    parser.addRoutepointsToMap();         // Add the routepoints
+                    parser.addWaypointsToMap();           // Add the waypoints
+                }
+            });
+        }
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+
+        $(document).ready(function () {
+            $("#delete_button").on("click", function () {
+                $.ajax({
+                    url: "{% url "trip-detail" pk=trip.pk %}",
+                    method: "DELETE",
+                    success: function (data) {
+                        window.location.href = "{% url "front-profile-home" %}";
+                    }
+                });
+            })
+
+            var mapOptions = {
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map"),
+                mapOptions);
+
+            loadGPXFileIntoGoogleMap(map, "{% url "front-trip-gpx" pk=trip.id %}");
+            Highcharts.chart('chart_denivele', {
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Carte du dénivelé'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Altitude (m)'
+                    },
+                    minPadding: 1, // Pas en dessous du niveau de la mer quand meme !
+                    startOnTick: false
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true
+                        },
+                        enableMouseTracking: false,
+                        threshold: null
+                    },
+                },
+                series: [{
+                    data: {{ statistics.altitude_over_time|safe }},
+                    lineWidth: 0.5,
+                    name: 'Altitude'
+                }]
+
+            });
+        });
+
+    </script>
+
+
+{% endblock %}

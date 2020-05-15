@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     GhostRun — L'application qui compare vos trajets
@@ -10,7 +11,7 @@
     </header>
     <div class="marketing-site-content-section">
         <div class="marketing-site-content-section-img">
-            <img src="https://zupimages.net/up/20/18/q8wd.png" alt="" />
+            <img src="{% static "carte.png" %}" alt="Une vue carte" />
         </div>
         <div class="marketing-site-content-section-block">
             <h3 class="marketing-site-content-section-block-header">L'application pour gérer ses trajets</h3>
@@ -21,9 +22,7 @@
             <p class="marketing-site-content-section-block-subheader subheader">Mesure toi à ton fantôme le plus rapide et bats ton record</p>
         </div>
         <div class="marketing-site-content-section-img medium-order-2">
-            <img src="https://zupimages.net/up/20/18/8w7o.png" alt="" />
+            <img src="{% static "logo_padded.png" %}" alt="Notre logo" />
         </div>
     </div>
-
-
 {% endblock %}

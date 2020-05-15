@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet"
+          href="{% static "home_profile.css" %}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="grid-container fluid">
+        <h2>Bienvenue sur votre espace membres</h2>
+        <div class="grid-x">
+            <div class="cell large-3">
+                <ul class="vertical menu"
+                    data-accordion-menu>
+                    {% for category in categories.all %}
+                        <li>
+                            <a href="#"><i class="far fa-folder-open"></i> {{ category.name }}</a>
+                            <ul class="menu vertical nested">
+                                <li>
+                                    {% for trip in category.trips.all %}
+                                        <a href="{% url "front-trip-detail" pk=trip.id %}"><i class="fas fa-angle-double-right"></i> {{ trip.name }}</a>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="cell large-auto">
+                <div id="bubbles_container">
+                    <!-- Will be filled later by highcharts -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            Highcharts.chart('bubbles_container', {
+                chart: {
+                    type: 'packedbubble',
+                    height: (9 / 16 * 100) + '%' // 16:9 ratio
+                },
+                title: {
+                    text: 'Temps passé dans chacun de vos trajets (par catégorie)'
+                },
+                tooltip: {
+                    useHTML: true,
+                    pointFormat: '<b>{point.name}:</b> {point.value} minutes'
+                },
+                plotOptions: {
+                    series: {
+                        cursor: 'pointer',
+                        point: {
+                            events: {
+                                click: function () {
+                                    location.href = '/trips/' + this.pk;
+                                }
+                            }
+                        }
+                    },
+                    packedbubble: {
+                        minSize: '10%',
+                        maxSize: '100%',
+                        zMin: 0,
+                        zMax: 60,
+                        layoutAlgorithm: {
+                            gravitationalConstant: 0.05,
+                            splitSeries: true,
+                            seriesInteraction: false,
+                            dragBetweenSeries: false,
+                            parentNodeLimit: true
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            useHTML: true,
+                            format: '{point.name}',
+                            filter: {
+                                property: 'y',
+                                operator: '>',
+                                value: 5
+                            },
+                            style: {
+                                color: 'black',
+                                textOutline: 'none',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
+                },
+                series: {{ bubbles_series|safe }}
+            });
+        });
+    </script>
+
+{% endblock %}
