@@ -1,89 +1,139 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import PageOptions from './Component/options';
-import PageStats from './Component/Stats';
-import Mapp from './Component/map';
-import PageDetail from './Component/detailTrajet';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import 'react-native-gesture-handler';
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import {Provider} from 'react-redux';
+import LoginScreen from './Component/LoginScreen';
+import MesComposants from './Component/mesComposants';
+import {composeWithDevTools} from 'redux-devtools-extension';
+import logger from 'redux-logger';
 
-const Tab = createBottomTabNavigator(); // Creation d'un tableau pour la navigation entre les pages
-const Stack = createStackNavigator();
-const HomeStack = createStackNavigator();
-function Home() {
-  return (
-    <Stack.Navigator>
-      <Tab.Screen name="Feed" component={PageStats} />
-      <Tab.Screen name="Messages" component={PageOptions} />
-    </Stack.Navigator>
-  );
+import {connect} from 'react-redux';
+import allReducers from './Component/stateGlobale/allReducer';
+import reducerEstCo from './Component/stateGlobale/reducerEstConnecte';
+import userCorant from './Component/stateGlobale/reducerUtilisateurCourant';
+import {adresse} from './Component/adresseServ';
+
+const initialState = {
+  utilisateurCourant: 'tsp',
+  estConnecte: false,
+  resultatApi: null,
+};
+const inistate = {
+  methode: 'GET',
+  adresse: adresse,
+  password: 'null',
+  zone: 'null',
+};
+const stateTem = {
+  trip: '',
+};
+const stateutil = {
+  creactionDeTrajetEnCours: true,
+
+};
+const stateutil2 = {
+  courseEnCours: false,
+};
+const reducer = (state = initialState.estConnecte, action) => {
+  switch (action.type) {
+    case 'CHANGEMENT_DE_STATUE':
+      return {
+        ...state,
+        estConnecte: !state.estConnecte,
+      };
+  }
+  return state;
+};
+const reducer2 = (state = initialState.utilisateurCourant, action) => {
+  switch (action.type) {
+    case 'CURRENT_USER':
+      return {
+        ...state,
+        utilisateurCourant: action.data,
+      };
+  }
+  return state;
+};
+const reducer3 = (state = initialState.resultatApi, action) => {
+  switch (action.type) {
+    case 'CURRENT_RESULT':
+      return {
+        ...state,
+        resultatApi: action.data,
+      };
+  }
+  return state;
+};
+const reducer4 = (state = inistate, action) => {
+  switch (action.type) {
+    case 'CURRENT_DATA':
+      console.log(action);
+      return {
+        ...state,
+        methode: action.data.methode,
+        adresse: action.data.adresse,
+        password: action.data.password,
+        zone: action.data.zone,
+      };
+  }
+  return state;
+};
+const reducer5 = (state = stateTem, action) => {
+  switch (action.type) {
+    case 'CHANGEMENT_TRIP':
+      return {
+        trip: action.data,
+      };
+  }
+  return state;
+};
+const reducer6 = (state = stateutil2, action) => {
+  switch (action.type) {
+    case 'CHANGEMENT_COURSE_EN_COURS':
+      return {
+        courseEnCours: !state.courseEnCours,
+      };
+  }
+  return state;
+};
+const reducer7 = (state = stateutil, action) => {
+  switch (action.type) {
+    case 'CREACTION_EN_COURS':
+      return {
+        creactionDeTrajetEnCours: !state.creactionDeTrajetEnCours,
+      };
+  }
+  return state;
+};
+const allRedu = combineReducers({
+  estCo: reducer,
+  userCour: reducer2,
+  resltApi: reducer3,
+  datatemp: reducer4,
+  newTrip: reducer5,
+  creactionTrajet: reducer7,
+  creactionCourse: reducer6,
+});
+export const store = createStore(allRedu);
+
+class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <MesComposants />
+      </Provider>
+    );
+  }
 }
-const HomeStackScreen = () => (
-  <HomeStack.Navigator>
-    <HomeStack.Screen name="page1" component={PageStats} />
-    <HomeStack.Screen name="page2" component={PageDetail} />
-  </HomeStack.Navigator>
-);
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-        tabBarOptions={{
-          activeBackgroundColor: '#865138',
-          inactiveBackgroundColor: '#866252',
-          showImages: 'True',
-        }}>
-        <Tab.Screen // Chaque page a son tab.screen avec ces options ( comme l'icon ou le nom )
-          name="Carte"
-          component={Mapp}
-          options={{
-            tabBarIcon: ({color}) => (
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('./Component/icon/m.png')}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Statistiques"
-          component={HomeStackScreen}
-          options={{
-            tabBarIcon: ({color}) => (
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('./Component/icon/r.png')}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Options"
-          component={PageOptions}
-          options={{
-            tabBarIcon: ({color}) => (
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('./Component/icon/s.png')}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="test"
-          component={Home}
-          options={{
-            tabBarIcon: ({color}) => (
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('./Component/icon/s.png')}
-              />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
+export const temp = store;
+export const salut = 'oui';
+export default App;
