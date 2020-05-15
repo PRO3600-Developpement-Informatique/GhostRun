@@ -1,0 +1,20 @@
+{
+  "name": "GhostRun",
+  "short_name": "GhostRun",
+  "icons": [
+    {
+      "src": "/static/logo.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/logo_padded.png",
+      "sizes": "600x350",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/me",
+  "display": "standalone",
+  "background_color": "#3E4EB8",
+  "theme_color": "#2F3BA2"
+}

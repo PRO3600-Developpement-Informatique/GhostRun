@@ -1,14 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr" class="no-js">
+<html lang="fr"
+      class="no-js">
 <head>
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="black">
+    <meta name="apple-mobile-web-app-title"
+          content="GhostRun">
+    <link rel="apple-touch-icon"
+          href="{% static "logo.png" %}">
+    <link rel="manifest"
+          href="{% static "manifest.json" %}">
+    <meta name="description"
+          content="GhostRun est une application de suivi des trajets. Comme dans Mario Kart, battez vous contre vos performances précédentes.">
+    <meta name="theme-color"
+          content="#2F3BA2"/>
+
     <!-- Compressed CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static "front.css" %}"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css"
+          integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I="
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="{% static "front.css" %}"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+          integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="
+          crossorigin="anonymous"/>
     <!-- Compressed JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js"
+            integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o="
+            crossorigin="anonymous"></script>
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.src.js"></script>
 
@@ -30,13 +57,14 @@
                 }
             })
         }
-        )
+    )
 </script>
-    {% block topbar %}
+{% block topbar %}
     <div class="top-bar">
         <div class="top-bar-left">
             <ul class="menu">
-                <li><a href="{% url "front-index" %}"><img src="{% static "logo.png" %}" alt="Logo"></a></li>
+                <li><a href="{% url "front-index" %}"><img src="{% static "logo.png" %}"
+                                                           alt="Logo"></a></li>
                 <li class="menu-text">GhostRun</li>
                 <li><a href="{% url "front-profile-home" %}">Espace Membres</a></li>
                 <li><a href="{% url "front-my-settings" %}">Préférences</a></li>
@@ -44,19 +72,20 @@
         </div>
         <div class="top-bar-right">
             <ul class="menu">
-            {% if not request.user.is_authenticated %}
-                <li><a href="{% url "login" %}" class="round button small">Connexion</a></li>
-            {% else %}
-                <li class="menu-text">Votre compte : {{request.user.first_name}}</li>
-                <li><a href="{% url "logout" %}">Déconnexion</a></li>
-            {% endif %}
+                {% if not request.user.is_authenticated %}
+                    <li><a href="{% url "login" %}"
+                           class="round button small">Connexion</a></li>
+                {% else %}
+                    <li class="menu-text">Votre compte : {{ request.user.first_name }}</li>
+                    <li><a href="{% url "logout" %}">Déconnexion</a></li>
+                {% endif %}
             </ul>
 
         </div>
     </div>
-    {% endblock %}
+{% endblock %}
 
-    <!--{% block sidemenu %}
+<!--{% block sidemenu %}
     <ul class="vertical menu" data-accordion-menu>
         <li>
             <a href="#0">Item 1</a>
@@ -85,8 +114,8 @@
     {% endblock %}
     -->
 
-    {% block content %}
-    {% endblock %}
+{% block content %}
+{% endblock %}
 
 </body>
 </html>
