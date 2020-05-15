@@ -141,7 +141,10 @@ class Trip(models.Model):
 
     @property
     def duration(self) -> Optional[datetime.timedelta]:
-        return self.ended_at - self.started_at
+        if self.ended_at is None :
+            return None
+        else :
+            return self.ended_at - self.started_at
 
     @property
     def fa_name(self):
