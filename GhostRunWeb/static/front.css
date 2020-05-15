@@ -1,3 +1,103 @@
-body {
-    background-color: red;
+
+.subnav-hero-section {
+    text-align: center;
+    background: #1779ff;
+    background-size: cover;
+    position: relative;
+    overflow: visible;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 300px;
 }
+
+.subnav-hero-headline {
+    color: #fefefe;
+}
+
+.subnav-hero-subnav {
+    float: none;
+    position: absolute;
+    text-align: center;
+    margin: 0 auto;
+    bottom: 0;
+    width: 100%;
+}
+
+.marketing-site-content-section {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.marketing-site-content-section .marketing-site-content-section-img {
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
+    align-self: center;
+    -webkit-flex: 1 0 100%;
+    -ms-flex: 1 0 100%;
+    flex: 1 0 100%;
+}
+
+.marketing-site-content-section .marketing-site-content-section-img img {
+    width: 100%;
+}
+
+@media screen and (min-width: 40em) {
+    .marketing-site-content-section .marketing-site-content-section-img {
+        -webkit-flex: 1 0 40%;
+        -ms-flex: 1 0 40%;
+        flex: 1 0 40%;
+    }
+}
+
+.marketing-site-content-section .marketing-site-content-section-block {
+    padding: 1rem;
+    -webkit-flex: 1 0 100%;
+    -ms-flex: 1 0 100%;
+    flex: 1 0 100%;
+    -webkit-align-self: stretch;
+    -ms-flex-item-align: stretch;
+    align-self: stretch;
+    background: #e6e6e6;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+@media screen and (min-width: 40em) {
+    .marketing-site-content-section .marketing-site-content-section-block {
+        -webkit-flex: 1 0 40%;
+        -ms-flex: 1 0 40%;
+        flex: 1 0 40%;
+        padding: 2rem;
+    }
+}
+
+.marketing-site-content-section-block-header {
+    font-size: 36px;
+}
+
+.marketing-site-content-section-block-subheader {
+    font-size: 26px;
+}
+

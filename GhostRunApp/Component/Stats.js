@@ -271,6 +271,30 @@ export default class PageStats extends React.Component {
   handleCancel = () => {
     this.setState({dialogVisible: false});
   };
+  setData = async (cle, valeur) => {
+    try {
+      await AsyncStorage.setItem(cle, valeur);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getData = async cle => {
+    try {
+      let Dataget = await AsyncStorage.getItem(cle);
+      this.setState({temporaire: Dataget});
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  importData = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const result = await AsyncStorage.multiGet(keys);
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   temps_trajet(trajet) {} // Calcul le temps d'un trajet
   distance_trajet(trajet) {} // Calcul la distance d'un trajet
@@ -285,7 +309,7 @@ export default class PageStats extends React.Component {
     let id_trajet_temp = this.state.liste_des_trajets;
     let id_trajet = id_trajet_temp.length + 1;
     let trajet_title = this.state.trajet;
-    let data_trajet = {id: id_trajet, title: trajet_title, liste_des_pos: []};
+    let data_trajet = {id: id_trajet, title: trajet_title};
     console.log(data_trajet);
     this.setState({
       liste_des_trajets: this.state.liste_des_trajets.concat(data_trajet),
@@ -293,6 +317,8 @@ export default class PageStats extends React.Component {
     console.log(this.state.liste_des_trajets);
     let tempp = this.state.liste_des_trajets;
     console.log(tempp);
+    //store.update('cle_liste_trajets', tempp);
+    //store.get('cle_liste_trajets').then(res => this.setState({last_liste: res}));
     console.log(this.state.last_liste);
     fetch('https://e40e14ff.ngrok.io/api/users/', {
       method: 'GET',
@@ -309,6 +335,11 @@ export default class PageStats extends React.Component {
         console.error('Error:', error);
       });
     this.handleCancel();
+    //let temporaire_int = parseInt(this.state.temporaire);
+    //let newvaleurr = temporaire_int + 1;
+    //let newvaleur = newvaleurr.toString();
+    //this.setData('cle', newvaleur);
+    //this.importData();
   }
 
   transmettre_id(id, liste) {
