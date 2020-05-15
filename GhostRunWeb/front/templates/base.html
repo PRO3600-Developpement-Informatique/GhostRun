@@ -46,10 +46,19 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js"
             integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o="
-            crossorigin="anonymous"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-
+            crossorigin="anonymous"
+            defer></script>
+    <script src="https://code.highcharts.com/highcharts.js"
+            defer></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"
+            defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
+            type="text/javascript"
+            defer></script>
+    <script async
+            defer
+            src="{% static "loadgpx.js" %}"
+            type="text/javascript"></script>
 
     <title>{% block title %}{% endblock %}</title>
     {% block head %}
@@ -57,16 +66,23 @@
 </head>
 <body>
 <script>
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+            }
+        }
+    });
     $(document).ready(function () {
-            // La page est "ready"
-            Highcharts.setOptions({
-                credits: {
-                    enabled: false
-                },
-                chart: {
-                    backgroundColor: null
-                }
-            })
+        // La page est "ready"
+        Highcharts.setOptions({
+            credits: {
+                enabled: false
+            },
+            chart: {
+                backgroundColor: null
+            }
+        })
         }
     )
 </script>
@@ -99,6 +115,9 @@
 {% block content %}
 {% endblock %}
 
+<script>
+
+</script>
 
 </body>
 </html>

@@ -6,12 +6,6 @@
 {% endblock %}
 
 {% block head %}
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
-            type="text/javascript"></script>
-    <script async
-            defer
-            src="{% static "loadgpx.js" %}"
-            type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
@@ -80,15 +74,8 @@
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
-                }
-            }
-        });
-        $(document).ready(function () {
 
+        $(document).ready(function () {
             $("#delete_button").on("click", function () {
                 $.ajax({
                     url: "{% url "trip-detail" pk=trip.pk %}",
