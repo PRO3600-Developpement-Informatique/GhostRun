@@ -579,3 +579,5 @@ $RECYCLE.BIN/
 GhostRun.iml
 /documents/rapport/main.pdf
 /repo.mp4
+*.iml
+*/*.iml
