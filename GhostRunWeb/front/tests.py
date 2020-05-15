@@ -35,3 +35,9 @@ class TestView(TestCase):
         ma_page = reverse('front-index')
         r = c.get(ma_page)
         self.assertEquals(r.status_code , 200)
+
+    def test_vues_login(self):
+       c = Client()
+       ma_page = reverse('login')
+       r = c.get(ma_page)
+       self.assertEquals(r.status_code , 200)
