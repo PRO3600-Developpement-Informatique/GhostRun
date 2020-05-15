@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib.staticfiles.finders import find as static
 # Create your views here.
 from django.urls import reverse
 
@@ -49,7 +49,7 @@ def record(request, trip_pk):
         starting_time = first.timestamp  # ghost.started_at
         for loc in ghost.localisations.all():
             map_coords.append({"lat": loc.latitude, "lng": loc.longitude, "delta": (loc.timestamp - starting_time).seconds})
-        context['ghosts_coords'].append({"coords": map_coords, "name": ghost.name})
+        context['ghosts_coords'].append({"coords": map_coords, "name": ghost.name, "icon": static("spooky.png")})
     context['ghosts_coords'] = json.dumps(context['ghosts_coords'])
     context['ghosts_count'] = ghosts.count()
 
