@@ -1,4 +1,5 @@
-import datetime
+from django.utils import timezone
+
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -19,7 +20,7 @@ def index(request):
         form = AppInitForm(request.POST, user=request.user)
         if form.is_valid():
             f_object = form.save(commit=False)
-            f_object.started_at = datetime.datetime.now()
+            f_object.started_at = timezone.now()
             f_object.user = request.user
             f_object.save()
             return HttpResponseRedirect(reverse("app-record", kwargs={"trip_pk": f_object.id}))
