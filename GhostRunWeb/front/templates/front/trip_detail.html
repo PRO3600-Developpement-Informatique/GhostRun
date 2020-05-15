@@ -41,15 +41,20 @@
                     <h3 class="type-sidelines"><span>Météo</span></h3>
                     {{ trip.weather }}
                 {% endif %}
+                <h3 class="type-sidelines"><span>Zone de danger</span></h3>
+                <a class="expanded button alert"
+                   href="#"
+                   id="delete_button">Supprimer ce trajet</a>
 
-                <!--
-                <h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
-                3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)
-                -->
+                                           <!--
+                                           <h3 class="type-sidelines"><span>Erwan a travaillé</span></h3>
+                                           3 minutes sur ce projet (mais il jouait à Brawl Stars en même temps, donc ça compte pas)
+                                           -->
 
             </div>
         </div>
     </div>
+    {% csrf_token %}
 
 
     <script>
@@ -70,7 +75,30 @@
             });
         }
 
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+                }
+            }
+        });
         $(document).ready(function () {
+
+            $("#delete_button").on("click", function () {
+                $.ajax({
+                    url: "{% url "trip-detail" pk=trip.pk %}",
+                    method: "DELETE",
+                    success: function (data) {
+                        window.location.href = "{% url "front-profile-home" %}";
+                    }
+                });
+            })
+
             var mapOptions = {
                 zoom: 8,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
