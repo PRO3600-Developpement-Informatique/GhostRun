@@ -19,7 +19,7 @@ $(document).ready(function () {
 
 function locError(error) {
     // the current position could not be located
-    alert("The current position could not be found! " + error);
+    alert("The current position could not be found! " + error.message);
 }
 
 function watchGhostsPositions() {
@@ -47,18 +47,18 @@ function watchCurrentPosition() {
         var accuracy = position.coords.accuracy;
         var date = new Date(position.timestamp);
 
-        if (accuracy <= 15) {
+        if (accuracy <= 70) {
             var path = current_location_poly.getPath();
             path.push(latLng);
 
-            $.ajax("{% url 'localisation-list' %}", {
+            $.ajax(post_loc_url, {
                 method: "POST",
                 data: {
                     "latitude": latitude,
                     "longitude": longitude,
                     "altitude": altitude,
                     "timestamp": date.toISOString(),
-                    "trip": "{% url 'trip-detail' pk=trip.id %}"
+                    "trip": api_trip_url
                 }
             })
             setStatus("positive", "Enregistrement en cours...");
