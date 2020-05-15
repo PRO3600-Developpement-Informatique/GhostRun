@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'crispy_forms',
+    'crispy_forms_foundation',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +135,5 @@ REST_FRAMEWORK = {
 }
 
 LANGUAGE_CODE = "fr-fr"
+CRISPY_TEMPLATE_PACK = 'foundation-6'
+from crispy_forms_foundation.settings import *
