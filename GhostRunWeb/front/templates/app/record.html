@@ -8,6 +8,78 @@
 {% block head %}
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm-DOjQvHA_M9ew3amcMum6OoICE8TL9w"
             type="text/javascript"></script>
+    <style>
+
+        .dashboard-number-card {
+            background: #fff;
+            border-radius: 5px;
+            margin: 0 20px 20px;
+            position: relative;
+        }
+
+        .dashboard-number-card .dashboard-number-delta {
+            -webkit-align-items: baseline;
+            -ms-flex-align: baseline;
+            align-items: baseline;
+            bottom: 6px;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 0;
+            opacity: 0.7;
+            position: absolute;
+            right: 6px;
+            color: #1779ba;
+        }
+
+        .dashboard-number-card .dashboard-number-delta i {
+            margin-right: 5px;
+            width: 0.6rem;
+        }
+
+        .dashboard-number-card.positive .dashboard-number-delta, .dashboard-number-card.negative .dashboard-number-delta {
+            color: #fefefe;
+        }
+
+        .dashboard-number-card.positive .dashboard-number-value,
+        .dashboard-number-card.positive .dashboard-number-area, .dashboard-number-card.negative .dashboard-number-value,
+        .dashboard-number-card.negative .dashboard-number-area {
+            color: white;
+        }
+
+        .dashboard-number-card.positive .dashboard-number-area, .dashboard-number-card.negative .dashboard-number-area {
+            opacity: 0.6;
+        }
+
+        .dashboard-number-card.positive {
+            background: #3adb76;
+        }
+
+        .dashboard-number-card.negative {
+            background: #cc4b37;
+        }
+
+        .dashboard-number-value {
+            color: #1779ba;
+            font-size: 22px;
+            font-weight: 800;
+            padding: 1rem 2rem 1.75rem;
+            text-align: center;
+        }
+
+        .dashboard-number-area {
+            bottom: 6px;
+            color: #1779ba;
+            font-size: 12px;
+            left: 6px;
+            margin-bottom: 0;
+            position: absolute;
+        }
+
+
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -21,6 +93,32 @@
             </div>
             <div class="cell large-auto">
                 <div id="status"></div>
+                <div id="switch_div">
+                    <div class="grid-x">
+                        <!--<div class="cell small-6">
+                            <div class="switch large">
+                                <input class="switch-input"
+                                       id="recordSwitch"
+                                       type="checkbox"
+                                       name="recordSwitch">
+                                <label class="switch-paddle"
+                                       for="recordSwitch">
+                                    <span class="show-for-sr">Enregistrement ou non</span>
+                                    <span class="switch-active"
+                                          aria-hidden="true"><i class="fas fa-location-arrow"></i></span>
+                                    <span class="switch-inactive"
+                                          aria-hidden="true"><i class="fas fa-pause"></i></span>
+                                </label>
+                            </div>
+                        </div>-->
+
+                        <div class="cell auto">
+                            <a class="expanded button alert"
+                               href="#"
+                               id="stop_recording_and_go">Fin du trajet</a>
+                        </div>
+                    </div>
+                </div>
                 <pre id="capa"></pre>
             </div>
         </div>
@@ -34,9 +132,34 @@
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 
-        function setStatus(cssclass, message) {
-            $("#status").html(`<span class="${cssclass} badge"><i class="fas fa-location-arrow"> </i></span> ${message}`)
+        function setStatus(polarity, message) {
+            var side;
+            $("#status").html(`
+                <div class="dashboard-number-card ${polarity}">
+                    <h5 class="dashboard-number-value">${message}</h5>
+                    <div>
+                        <p class="dashboard-number-area">{{ trip.category.name }}</p>
+
+                        <p class="dashboard-number-delta">
+                            <i class="fa fa-arrow-${side}"
+                               aria-hidden="true"></i>
+                            {{ ghosts_count }} fantômes
+                        </p>
+                    </div>
+                </div>`)
         }
+        function stop_recording() {
+                $.ajax("{% url 'trip-detail' pk=trip.pk %}", {
+                        method: "PATCH",
+                        data: {
+                            "ended_at": new Date().toISOString()
+                        },
+                        complete: function(jqXHR, textStatus){
+                            window.location.href = "{% url 'front-trip-detail' pk=trip.pk %}";
+                        }
+                    })
+
+            }
 
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
@@ -47,7 +170,8 @@
         });
 
         $(document).ready(function () {
-            setStatus("secondary", "Démarrage...");
+            setStatus("", "Démarrage...");
+            $("#stop_recording_and_go").on("click", stop_recording);
             initLocationProcedure();
         });
 
@@ -161,6 +285,10 @@
 
         function watchCurrentPosition() {
             var positionTimer = navigator.geolocation.watchPosition(function (position) {
+                /*if (!$("#recordSwitch").is(':checked')) {
+                    setStatus("", "Enregistrement mis en pause...");
+                    return
+                }*/
                 // setMarkerPosition(userLocation, position);
                 var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
                 map.panTo(latLng);
@@ -185,9 +313,9 @@
                             "trip": "{% url 'trip-detail' pk=trip.id %}"
                         }
                     })
-                    setStatus("success", "Enregistrement en cours...");
+                    setStatus("positive", "Enregistrement en cours...");
                 } else {
-                    setStatus("alert", "Précision insuffisante...");
+                    setStatus("negative", "Précision insuffisante...");
                 }
                 $("#capa").html(`Latitude: ${latitude}\nLongitude: ${longitude}\nAltitude: ${altitude}\nAccuracy: ${accuracy}\nTimestamp: ${date}`);
 

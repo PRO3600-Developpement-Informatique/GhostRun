@@ -51,6 +51,8 @@ def record(request, trip_pk):
             map_coords.append({"lat": loc.latitude, "lng": loc.longitude, "delta": (loc.timestamp - starting_time).seconds})
         context['ghosts_coords'].append({"coords": map_coords, "name": ghost.name})
     context['ghosts_coords'] = json.dumps(context['ghosts_coords'])
+    context['ghosts_count'] = ghosts.count()
+
 
     map_coords = []
     for loc in trip.localisations.all():
