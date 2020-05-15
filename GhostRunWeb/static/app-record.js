@@ -48,7 +48,7 @@ function watchCurrentPosition() {
         var date = new Date(position.timestamp);
 
 
-        if (accuracy <= 15) {
+        if (accuracy <= 25) {
             var path = current_location_poly.getPath();
             path.push(latLng);
 
