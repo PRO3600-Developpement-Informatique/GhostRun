@@ -12,19 +12,19 @@ from django.utils.safestring import mark_safe
 User = get_user_model()
 
 TRANSPORT_MODES = [
-    ('walk', 'Walk'),
-    ('run', 'Run'),
-    ('car', 'Car'),
-    ('motorbike', 'Motorbike'),
+    ('walk', 'Marche'),
+    ('run', 'Course'),
+    ('car', 'Voiture'),
+    ('motorbike', 'Moto/Scooter'),
     ('taxi', 'Taxi'),
-    ('rideshare', 'Rideshare'),
-    ('carpool', 'Carpool'),
+    ('rideshare', 'Uber Pool'),
+    ('carpool', 'Blablacar'),
     ('bus', 'Bus'),
-    ('bike', 'Bike'),
-    ('boat', 'Boat'),
+    ('bike', 'Vélo'),
+    ('boat', 'Bateau'),
     ('train', 'Train'),
     ('rer', 'RER'),
-    ('plane', 'Plane'),
+    ('plane', 'Avion'),
     ('kayak', 'Kayak')
 ]
 
