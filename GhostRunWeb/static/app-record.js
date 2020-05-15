@@ -47,7 +47,8 @@ function watchCurrentPosition() {
         var accuracy = position.coords.accuracy;
         var date = new Date(position.timestamp);
 
-        if (accuracy <= 70) {
+
+        if (accuracy <= 15) {
             var path = current_location_poly.getPath();
             path.push(latLng);
 
@@ -61,9 +62,10 @@ function watchCurrentPosition() {
                     "trip": api_trip_url
                 }
             })
-            setStatus("positive", "Enregistrement en cours...");
+            setStatus("positive", "Enregistrement en cours :)");
         } else {
-            setStatus("negative", "Précision insuffisante...");
+            var racc = Math.round(accuracy);
+            setStatus("negative", `Précision insuffisante...<br/>Actuellement ${racc} m`);
         }
         $("#capa").html(`Latitude: ${latitude}\nLongitude: ${longitude}\nAltitude: ${altitude}\nAccuracy: ${accuracy}\nTimestamp: ${date}`);
 
