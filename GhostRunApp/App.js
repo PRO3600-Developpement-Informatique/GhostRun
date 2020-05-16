@@ -20,7 +20,7 @@ const stateTem = {
   trip: '',
 };
 const stateutil = {
-  creactionDeTrajetEnCours: true,
+  creactionDeTrajetEnCours: false,
 
 };
 const stateutil2 = {

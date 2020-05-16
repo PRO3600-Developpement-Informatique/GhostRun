@@ -14,6 +14,7 @@ import {connect} from 'react-redux';
 import {ListItem} from 'react-native-elements';
 import {Picker} from '@react-native-community/picker';
 import {adresse} from './adresseServ';
+import DialogContainer from 'react-native-dialog/src/Container';
 
 var icon_mode = {
   bike: require('./icon/bike.png'),
@@ -43,12 +44,14 @@ class PageDetail extends React.Component {
       liste_vers_map: [],
       estVide: false,
       dialogVisible: false,
+      dialogVisible2: false,
       text: '',
       user: this.props.state.userCour.utilisateurCourant,
       password: this.props.state.datatemp.password,
       trips: '',
       mode_de_transport: 'walk',
       current_trip: '',
+      trip_a_supp: [],
     };
   }
   showDialog = () => {
@@ -56,6 +59,12 @@ class PageDetail extends React.Component {
   };
   handleCancel = () => {
     this.setState({dialogVisible: false});
+  };
+  showDialog2 = () => {
+    this.setState({dialogVisible2: true});
+  };
+  handleCancel2 = () => {
+    this.setState({dialogVisible2: false});
   };
   componentWillUnmount(): void {
     this.handleCancel();
@@ -161,15 +170,51 @@ class PageDetail extends React.Component {
   }
 
   keyExtractor = (item, index) => index.toString();
+  onLongPress_supprimer_un_trip = id_de_trajet => {
+    const id_trajet_a_supp = id_de_trajet;
+    const url_trip_a_supp = adresse + 'trips' + '/' + id_trajet_a_supp + '/';
+    console.log(
+      'je tente de supp :' + adresse + 'trips' + '/' + id_trajet_a_supp + '/',
+    );
+    console.log('liste des trip act:');
+    console.log(this.state.tabtest);
+
+    fetch(url_trip_a_supp, {
+      method: 'DELETE',
+      headers: new Headers({
+        Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.status)
+      .then(result => {
+        console.log('j ai bien supprimer la cat');
+        console.log(result);
+      });
+    for (var i = 0; i < this.state.tabtest.length; i++) {
+      console.log(this.state.tabtest[i].id);
+      if (this.state.tabtest[i].id === id_trajet_a_supp) {
+        console.log('gleif');
+
+        this.setState({trip_a_supp: this.state.tabtest[i]});
+        break;
+      }
+    }
+    console.log(this.state.trip_a_supp);
+
+    const post_du_trip_a_supprime = this.state.tabtest.indexOf(
+      this.state.trip_a_supp,
+    );
+    console.log('unde?');
+    console.log(post_du_trip_a_supprime);
+    console.log(this.state.tabtest);
+    this.state.tabtest.splice(post_du_trip_a_supprime, 1);
+    this.setState({tabtest: this.state.tabtest});
+  };
 
   renderItem = ({item}) => (
     <View>
-      <TouchableHighlight
-        style={styles.button}
-        onPress={() => {
-          this.onPressSendToMap_pour_start_course();
-          //this.props.navigation.navigate('Carte', {liste_des_details: aSend,});
-        }}>
+      <TouchableHighlight style={styles.button} onPress={this.showDialog2}>
         <ListItem
           title={item.mode}
           subtitle={item.name}
@@ -178,6 +223,23 @@ class PageDetail extends React.Component {
           chevron
         />
       </TouchableHighlight>
+      <Dialog.Container visible={this.state.dialogVisible2}>
+        <Dialog.Title>Que voulez vous faire avec ce trajet ?</Dialog.Title>
+        <Dialog.Button
+          label="Le supprimer"
+          onPress={() => {
+            this.onLongPress_supprimer_un_trip(item.id);
+            this.handleCancel2();
+          }}
+        />
+        <Dialog.Button
+          label="Faire une course !"
+          onPress={() => {
+            this.onPressSendToMap_pour_start_course()
+            this.handleCancel2();
+          }}
+        />
+      </Dialog.Container>
     </View>
   );
 
@@ -356,6 +418,7 @@ class PageDetail extends React.Component {
           ) : (
             <View>
               <FlatList
+                extraData={this.state}
                 keyExtractor={this.keyExtractor}
                 data={this.state.tabtest}
                 renderItem={this.renderItem}
@@ -398,7 +461,6 @@ class PageDetail extends React.Component {
                   title={'Debuter un trajet ! '}
                   onPress={() => {
                     this.showDialog();
-                    this.onPressDebutTrajet();
                   }}
                 />
                 <Button

@@ -93,9 +93,10 @@ class Mapp extends React.Component {
         //Accualise la valeur pour savoir si on crée un trajet ou non
         this.setState({creactionTrajetenCours: this.props.state.creactionTrajet.creactionDeTrajetEnCours});
         console.log('Creation de trajet ' + this.state.creactionTrajetenCours);
-         if (this.state.creactionTrajetenCours === false){
+         if (this.state.creactionTrajetenCours === true){
            //Envoie les donnes des pos a l'api
-           this.postDataApiLocalisations(tripp);
+           console.log(tripp.url)
+           this.postDataApiLocalisations(tripp.url);
          }
          this.setState({courseEnCours: this.props.state.creactionCourse.courseEnCours});
          if(this.state.courseEnCours === true ){
@@ -145,6 +146,10 @@ class Mapp extends React.Component {
     })
       .then(response => response.status)
       .then(result => console.log(result));
+    console.log('je post sa ')
+    console.log(tripp.url,this.state.latitude,this.state.longitude,this.state.altitude,currentTime)
+    console.log('dans');
+    console.log(adresse + 'localisations/')
   };
 
   affiche_trajet_avec_temps = async liste => {
