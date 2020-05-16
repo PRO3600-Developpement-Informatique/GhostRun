@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {connect} from 'react-redux';
 import base64 from 'react-native-base64';
@@ -76,9 +77,9 @@ class LoginScreen extends React.Component {
             onChangeText={text => this.setState({password: text})}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableWithoutFeedback >
           <Text style={styles.forgot}>Forgot Password?</Text>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback >
         <TouchableOpacity
           style={styles.loginBtn}
           onPress={() => {

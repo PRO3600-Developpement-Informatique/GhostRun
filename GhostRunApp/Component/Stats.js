@@ -9,6 +9,7 @@ import {
   Text,
   Button,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import Constants from 'expo-constants';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -83,11 +84,13 @@ class PageStats extends React.Component {
     addDanApi();
     this.handleCancel();
     this.forceUpdate();
-
   }
 
   transmettre_id(id, liste) {
-    this.props.navigation.navigate('Detail de vos trajets', {id: id, trajet: liste});
+    this.props.navigation.navigate('Detail de vos trajets', {
+      id: id,
+      trajet: liste,
+    });
     //console.log(id_trajet);
     //store.get('test').then(res => console.log(res));
   }
@@ -150,6 +153,8 @@ class PageStats extends React.Component {
               console.log(newid);
               const temp_obj = [{id: newid, title: this.state.result[i].name}];
               const newstate = this.state.liste_des_cat.concat(temp_obj);
+              console.log('newstate');
+              console.log(newstate);
               this.setState({
                 liste_des_cat: newstate,
               });
@@ -164,6 +169,23 @@ class PageStats extends React.Component {
     };
     testto();
   }
+  onLongPress_supprimer_une_cat = id_de_cat => {
+    const id_cat_a_supp = id_de_cat;
+    console.log('je tente de supp :' + adresse + 'categories' + '/' + id_cat_a_supp + '/');
+    fetch(adresse + 'categories' + '/' + id_cat_a_supp + '/', {
+      method: 'DELETE',
+      headers: new Headers({
+        Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.status)
+      .then(result => {
+        console.log('j ai bien supprimer la cat');
+        console.log(result);
+      });
+    this.forceUpdate();
+  };
 
   render() {
     console.log('voici les props');
@@ -176,22 +198,31 @@ class PageStats extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.transmettre_id(item.id, item.tout_les_trajets)
-              }>
+              }
+              onLongPress={() => {
+                this.onLongPress_supprimer_une_cat(item.id);
+              }}>
               <Item title={item.title} />
             </TouchableOpacity>
           )}
           keyExtractor={item => item.id}
         />
-        <TouchableOpacity onPress={this.showDialog}>
-          <Text>Ajouter une catégorie</Text>
-        </TouchableOpacity>
+        <Button
+          title={'Ajouter une nouvelle categorie !'}
+          onPress={this.showDialog}
+        />
         <Dialog.Container visible={this.state.dialogVisible}>
           <Dialog.Title>Ajout d'un trajet</Dialog.Title>
-          <Dialog.Description>Ajout d'un trajett</Dialog.Description>
-          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-          <Dialog.Button label="oui" onPress={this.sendtrajet} />
+          <Dialog.Button
+            label="Finalement j'ai changé d'avis"
+            onPress={() => {
+              this.handleCancel()
+              this.forceUpdate();
+            }}
+          />
+          <Dialog.Button label="Ajouter" onPress={this.sendtrajet} />
           <Dialog.Input
-            label="Trajet"
+            label="Maison - Gare"
             onChangeText={trajet => this.setState({trajet})}
           />
         </Dialog.Container>
@@ -205,7 +236,7 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#21627f',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,

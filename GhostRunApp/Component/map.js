@@ -56,16 +56,15 @@ class Mapp extends React.Component {
           error: null,
         });
       },
-      error => this.setState({error: error.message}),
+      error => console.log('ALEDDD'),
       {
         enableHighAccuracy: true,
         timeout: 200000,
-        maximumAge: 10000,
         distanceFilter: 1,
       },
     );
-    this.watchID = Geolocation.watchPosition(
-      // pour l'acctualisation de la pos ( que cette partie ce lance en boucle)
+     Geolocation.watchPosition(
+      // ce lance a chaque changement (+/- le timeout) de position
       position => {
         this.setState({
           latitude: position.coords.latitude,
@@ -83,7 +82,6 @@ class Mapp extends React.Component {
         };
         this.setState({count: this.state.count});
 
-        Geolocation.getCurrentPosition(info => console.log(info));
         let value_de_stats = this.props.route.params;
         if (this.props.route.params == undefined) {
           console.log('pasdef');
@@ -94,7 +92,7 @@ class Mapp extends React.Component {
         const tripp = this.props.state.newTrip.trip;
         //Accualise la valeur pour savoir si on crée un trajet ou non
         this.setState({creactionTrajetenCours: this.props.state.creactionTrajet.creactionDeTrajetEnCours});
-        console.log('Creation de trajet' + this.state.creactionTrajetenCours);
+        console.log('Creation de trajet ' + this.state.creactionTrajetenCours);
          if (this.state.creactionTrajetenCours === false){
            //Envoie les donnes des pos a l'api
            this.postDataApiLocalisations(tripp);
@@ -115,14 +113,11 @@ class Mapp extends React.Component {
            }
          }
 
-
-
       },
-      error => console.log(error),
+      error => console.log('ALED'),
       {
         enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000,
+        timeout: 1000,
         distanceFilter: 1,
       },
     );
@@ -130,8 +125,10 @@ class Mapp extends React.Component {
     console.log(this.props);
   }
   postDataApiLocalisations = tripp => {
+    console.log('je passe iciii');
     var date = new Date();
     const currentTime = date.toJSON();
+    console.log(tripp,this.state.latitude,this.state.longitude,this.state.altitude,currentTime);
     fetch(adresse + 'localisations/', {
       method: 'POST',
       headers: new Headers({
@@ -200,7 +197,7 @@ class Mapp extends React.Component {
       latitude: this.state.latitude_course,
       longitude: this.state.longitude_course,
     };
-    console.log(this.props);
+    //console.log(this.props);
     const le_trajet_a_afficher = this.afficher_trajet();
     return (
       <View>

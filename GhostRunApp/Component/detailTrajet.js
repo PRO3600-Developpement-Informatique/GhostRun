@@ -7,12 +7,22 @@ import {
   FlatList,
   Button,
   TouchableHighlight,
+  ScrollView,
 } from 'react-native';
 import base64 from 'react-native-base64';
 import {connect} from 'react-redux';
 import {ListItem} from 'react-native-elements';
 import {Picker} from '@react-native-community/picker';
 import {adresse} from './adresseServ';
+
+var icon_mode = {
+  bike: require('./icon/bike.png'),
+  car: require('./icon/car.png'),
+  motobike: require('./icon/motobike.png'),
+  rer: require('./icon/rer.png'),
+  run: require('./icon/run.png'),
+  walk: require('./icon/walk.png'),
+};
 
 function Item({title}) {
   return (
@@ -38,6 +48,7 @@ class PageDetail extends React.Component {
       password: this.props.state.datatemp.password,
       trips: '',
       mode_de_transport: 'walk',
+      current_trip: '',
     };
   }
   showDialog = () => {
@@ -58,9 +69,7 @@ class PageDetail extends React.Component {
       const passwordString = user.toString();
       const testo = async () => {
         await fetch(
-          adresse + 'categories/' +
-            this.props.route.params.id +
-            '/',
+          adresse + 'categories/' + this.props.route.params.id + '/',
           {
             method: 'GET',
             headers: new Headers({
@@ -97,6 +106,8 @@ class PageDetail extends React.Component {
                 const year = date.getFullYear();
                 const month = date.getMonth() + 1;
                 const dt = date.getDate();
+                const heurs = date.getHours();
+                const minu = date.getMinutes();
                 if (dt < 10) {
                   const dt = '0' + dt;
                 }
@@ -104,7 +115,16 @@ class PageDetail extends React.Component {
                   const month = '0' + month;
                 }
                 const newdate =
-                  'Trajet fait le : ' + year + '-' + month + '-' + dt;
+                  'Trajet fait le : ' +
+                  year +
+                  '-' +
+                  month +
+                  '-' +
+                  dt +
+                  ' à ' +
+                  heurs +
+                  ':' +
+                  minu;
 
                 const url = this.state.result[i].url;
                 const url_taile = url.length;
@@ -123,6 +143,7 @@ class PageDetail extends React.Component {
                 ];
                 const newstate = this.state.tab.concat(temp_obj);
                 const newstatetest = this.state.tabtest.concat(temp_obj_test);
+                console.log(newstatetest);
                 this.setState({tab: newstate});
                 this.setState({tabtest: newstatetest});
               }
@@ -152,11 +173,7 @@ class PageDetail extends React.Component {
         <ListItem
           title={item.mode}
           subtitle={item.name}
-          leftAvatar={{
-            source: {
-              uri: 'https://image.flaticon.com/icons/png/128/10/10624.png',
-            },
-          }}
+          leftAvatar={{source: icon_mode[item.mode]}}
           bottomDivider
           chevron
         />
@@ -214,10 +231,8 @@ class PageDetail extends React.Component {
     this.props.changementEtatCreactionTrajet();
     var date = new Date();
     const currentTime = date.toJSON();
-    const categorie =adresse+
-      '/categories/' +
-      this.props.route.params.id +
-      '/';
+    const categorie =
+      adresse + 'categories/' + this.props.route.params.id + '/';
     fetch(adresse + 'trips/', {
       method: 'POST',
       headers: new Headers({
@@ -227,94 +242,175 @@ class PageDetail extends React.Component {
       }),
       body: JSON.stringify({
         started_at: currentTime,
-        transport_used: 'walk',
+        transport_used: this.state.mode_de_transport,
         category: categorie,
       }),
     })
       .then(response => response.json())
       .then(result => {
         const url_du_trip = result.url;
-        this.props.changementTrip(url_du_trip);
+        this.setState({current_trip: result});
+        console.log('C LE TRIPPPPPPPPPPPPPPPPPPP');
+        console.log(result);
+        this.props.changementTrip(result);
+
+        //concat
       });
     //this.props.navigation.navigate('Carte');
   };
   onPressFinTrajet = () => {
+    const date = new Date(this.state.current_trip.started_at);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const dt = date.getDate();
+    const heurs = date.getHours();
+    const minu = date.getMinutes();
+    if (dt < 10) {
+      const dt = '0' + dt;
+    }
+    if (month < 10) {
+      const month = '0' + month;
+    }
+    const newdate =
+      'Trajet fait le : ' +
+      year +
+      '-' +
+      month +
+      '-' +
+      dt +
+      ' à ' +
+      heurs +
+      ':' +
+      minu;
+
+    const url = this.state.current_trip.url;
+    const url_taile = url.length;
+    const pos_cat = url.search('trips');
+    const pos_use = pos_cat + 6;
+    const newid_string = url.substring(pos_use, url_taile - 1);
+    const newid = parseInt(newid_string);
+    const temp_obj_test = [
+      {
+        name: newdate,
+        mode: this.state.current_trip.transport_used,
+        id: newid,
+      },
+    ];
+    const newtrip_to_add_render = this.state.tabtest.concat(temp_obj_test);
+    this.setState({tabtest: newtrip_to_add_render});
     this.props.changementEtatCreactionTrajet();
   };
 
   render() {
     return (
       <View>
-        {this.state.estVide === true ? (
-          <View>
-            <Button
-              title={'Pas encore de trajet ? '}
-              onPress={() => {
-                this.showDialog();
-              }}
-            />
-            <Button
-              title={'Cliquer moi pour finir le trajet en cours !'}
-              onPress={() => {
-                this.onPressFinTrajet();
-              }}
-            />
-            <Dialog.Container visible={this.state.dialogVisible}>
-              <Dialog.Title>Ajout d'un trajet</Dialog.Title>
-              <Dialog.Description>Ajout d'un trajett</Dialog.Description>
-              <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-              <Dialog.Button
-                label="oui"
-                onPress={() => {
-                  this.handleCancel();
-                  this.onPressDebutTrajet();
-                }}
-              />
-              <Picker
-                selectedValue={this.state.mode_de_transport}
-                style={{height: 50, width: 10}}
-                onValueChange={(itemValue, itemIndex) => console.log(itemValue)
-                }>
-                <Picker.Item label="Marche" value="walk" />
-                <Picker.Item label="Course" value="run" />
-                <Picker.Item label="Voiture" value="car" />
-                <Picker.Item label="Moto/Scooter" value="motorbike" />
-                <Picker.Item label="Taxi" value="taxi" />
-                <Picker.Item label="Uber Pool" value="rideshare" />
-                <Picker.Item label="Blablacar" value="carpool" />
-                <Picker.Item label="Bus" value="bus" />
-                <Picker.Item label="Vélo" value="bike" />
-                <Picker.Item label="Bateau" value="boat" />
-                <Picker.Item label="Train" value="train" />
-                <Picker.Item label="RER" value="rer" />
-                <Picker.Item label="Avion" value="plane" />
-                <Picker.Item label="Kayak" value="kayak" />
-              </Picker>
-            </Dialog.Container>
-          </View>
-        ) : (
-          <View>
-            <FlatList
-              keyExtractor={this.keyExtractor}
-              data={this.state.tabtest}
-              renderItem={this.renderItem}
-            />
+        <ScrollView>
+          {this.state.estVide === true ? (
             <View>
               <Button
-                title={'Debuter un trajet ! '}
+                title={'Pas encore de trajet ? '}
                 onPress={() => {
-                  this.onPressDebutTrajet();
+                  this.showDialog();
                 }}
               />
               <Button
-                title={'Fin du trajet ! '}
+                title={'Cliquer moi pour finir le trajet en cours !'}
                 onPress={() => {
                   this.onPressFinTrajet();
                 }}
               />
+              <Dialog.Container visible={this.state.dialogVisible}>
+                <Dialog.Title>Ajout d'un trajet</Dialog.Title>
+                <Dialog.Description>Ajout d'un trajett</Dialog.Description>
+                <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                <Dialog.Button
+                  label="oui"
+                  onPress={() => {
+                    this.handleCancel();
+                    this.onPressDebutTrajet();
+                  }}
+                />
+                <Picker
+                  selectedValue={this.state.mode_de_transport}
+                  style={{height: 100, width: 300}}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({mode_de_transport: itemValue})
+                  }>
+                  <Picker.Item label="Marche" value="walk" />
+                  <Picker.Item label="Course" value="run" />
+                  <Picker.Item label="Voiture" value="car" />
+                  <Picker.Item label="Moto/Scooter" value="motorbike" />
+                  <Picker.Item label="Taxi" value="taxi" />
+                  <Picker.Item label="Uber Pool" value="rideshare" />
+                  <Picker.Item label="Blablacar" value="carpool" />
+                  <Picker.Item label="Bus" value="bus" />
+                  <Picker.Item label="Vélo" value="bike" />
+                  <Picker.Item label="Bateau" value="boat" />
+                  <Picker.Item label="Train" value="train" />
+                  <Picker.Item label="RER" value="rer" />
+                  <Picker.Item label="Avion" value="plane" />
+                  <Picker.Item label="Kayak" value="kayak" />
+                </Picker>
+              </Dialog.Container>
             </View>
-          </View>
-        )}
+          ) : (
+            <View>
+              <FlatList
+                keyExtractor={this.keyExtractor}
+                data={this.state.tabtest}
+                renderItem={this.renderItem}
+              />
+              <View>
+                <Dialog.Container visible={this.state.dialogVisible}>
+                  <Dialog.Title>Ajout d'un trajet</Dialog.Title>
+                  <Dialog.Description>Ajout d'un trajett</Dialog.Description>
+                  <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                  <Dialog.Button
+                    label="oui"
+                    onPress={() => {
+                      this.handleCancel();
+                      this.onPressDebutTrajet();
+                    }}
+                  />
+                  <Picker
+                    selectedValue={this.state.mode_de_transport}
+                    style={{height: 100, width: 300}}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({mode_de_transport: itemValue})
+                    }>
+                    <Picker.Item label="Marche" value="walk" />
+                    <Picker.Item label="Course" value="run" />
+                    <Picker.Item label="Voiture" value="car" />
+                    <Picker.Item label="Moto/Scooter" value="motorbike" />
+                    <Picker.Item label="Taxi" value="taxi" />
+                    <Picker.Item label="Uber Pool" value="rideshare" />
+                    <Picker.Item label="Blablacar" value="carpool" />
+                    <Picker.Item label="Bus" value="bus" />
+                    <Picker.Item label="Vélo" value="bike" />
+                    <Picker.Item label="Bateau" value="boat" />
+                    <Picker.Item label="Train" value="train" />
+                    <Picker.Item label="RER" value="rer" />
+                    <Picker.Item label="Avion" value="plane" />
+                    <Picker.Item label="Kayak" value="kayak" />
+                  </Picker>
+                </Dialog.Container>
+                <Button
+                  title={'Debuter un trajet ! '}
+                  onPress={() => {
+                    this.showDialog();
+                    this.onPressDebutTrajet();
+                  }}
+                />
+                <Button
+                  title={'Fin du trajet ! '}
+                  onPress={() => {
+                    this.onPressFinTrajet();
+                  }}
+                />
+              </View>
+            </View>
+          )}
+        </ScrollView>
       </View>
     );
   }
