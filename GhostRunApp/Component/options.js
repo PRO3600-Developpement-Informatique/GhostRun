@@ -1,24 +1,12 @@
 import React from 'react';
 import ReactNativeSettingsPage, {
   SectionRow,
-  NavigateRow,
-  CheckRow,
   SwitchRow,
-  SliderRow,
 } from 'react-native-settings-page';
 import {connect} from 'react-redux';
 var mapStyle = [];
 export {mapStyle};
-
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Platform,
-  PermissionsAndroid,
-  Button,
-} from 'react-native';
+import {Button} from 'react-native';
 var dark = 1;
 
 class PageOptions extends React.Component {

@@ -1,4 +1,3 @@
-import datetime
 import json
 import humanfriendly
 
@@ -88,7 +87,8 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
         denivele = gpx.get_uphill_downhill()
 
         elevations = list(map(lambda point: [point.time.timestamp(), round(point.elevation, 2)], gpx.tracks[0].segments[0].points))
-        duration = max(gpx.get_duration(), 1)
+        duration = gpx.get_duration()
+        duration = max(duration if duration else 1, 1)
         length_2d = gpx.length_2d()
         length_3d = gpx.length_3d()
         # context['gpx_object'] = gpx

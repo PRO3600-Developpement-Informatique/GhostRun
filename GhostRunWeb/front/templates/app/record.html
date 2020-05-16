@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static "app-record.css" %}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="grid-container fluid">
+        <h2>{{ trip.name }} ({{ trip.category.name }})</h2>
+        <div class="grid-x grid-padding-x">
+            <div class="cell large-8">
+                <div id="map_canvas"
+                     style="height: 75vh">
+                </div>
+            </div>
+            <div class="cell large-auto">
+                <div id="status"></div>
+                <div id="switch_div">
+                    <div class="grid-x">
+                        <!--<div class="cell small-6">
+                            <div class="switch large">
+                                <input class="switch-input"
+                                       id="recordSwitch"
+                                       type="checkbox"
+                                       name="recordSwitch">
+                                <label class="switch-paddle"
+                                       for="recordSwitch">
+                                    <span class="show-for-sr">Enregistrement ou non</span>
+                                    <span class="switch-active"
+                                          aria-hidden="true"><i class="fas fa-location-arrow"></i></span>
+                                    <span class="switch-inactive"
+                                          aria-hidden="true"><i class="fas fa-pause"></i></span>
+                                </label>
+                            </div>
+                        </div>-->
+
+                        <div class="cell auto">
+                            <a class="expanded button alert"
+                               href="#"
+                               id="stop_recording_and_go">Fin du trajet</a>
+                        </div>
+                    </div>
+                </div>
+                <pre id="capa"></pre>
+            </div>
+        </div>
+    </div>
+    {% csrf_token %}
+
+    <script>
+        ghosts_coords = {{ ghosts_coords|safe }};
+        post_loc_url = "{% url 'localisation-list' %}";
+        api_trip_url = "{% url 'trip-detail' pk=trip.id %}";
+
+        function setStatus(polarity, message) {
+            var side;
+            $("#status").html(`
+                <div class="dashboard-number-card ${polarity}">
+                    <h5 class="dashboard-number-value">${message}</h5>
+                    <div>
+                        <p class="dashboard-number-area">{{ trip.category.name }}</p>
+
+                        <p class="dashboard-number-delta">
+                            <i class="fa fa-arrow-${side}"
+                               aria-hidden="true"></i>
+                            {{ ghosts_count }} fantômes
+                        </p>
+                    </div>
+                </div>`)
+        }
+
+        function stop_recording() {
+            $.ajax("{% url 'trip-detail' pk=trip.pk %}", {
+                method: "PATCH",
+                data: {
+                    "ended_at": new Date().toISOString()
+                },
+                complete: function (jqXHR, textStatus) {
+                    window.location.href = "{% url 'front-trip-detail' pk=trip.pk %}";
+                }
+            })
+
+        }
+        start_date = new Date("{{ trip.started_at.isoformat|escapejs }}");
+        map_coords = {{ map_coords|safe }};
+    </script>
+    <script src="{% static "app-record.js" %}"></script>
+
+
+{% endblock %}

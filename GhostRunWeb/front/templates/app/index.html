@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    GhostRun — L'application qui compare vos trajets
+{% endblock %}
+
+{% block content %}
+    <div class="grid-container fluid">
+        <h2>C'est parti! Démarrage d'un trajet.</h2>
+        <div class="grid-x">
+            <div class="cell auto">
+                {% if form.subject.errors %}
+                    <ol>
+                        {% for error in form.subject.errors %}
+                            <li><strong>{{ error|escape }}</strong></li>
+                        {% endfor %}
+                    </ol>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

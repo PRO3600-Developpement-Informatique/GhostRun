@@ -10,5 +10,7 @@ humanfriendly>=8.2
 colorama>=0.4.3
 pyyaml>=5.3.1
 uritemplate>=3.0.1
+django-crispy-forms>=1.9.0
+git+https://github.com/mpasternak/crispy-forms-foundation
 gunicorn>=20.0.4
 psycopg2>=2.8.5

@@ -1,0 +1,69 @@
+
+.dashboard-number-card {
+    background: #fff;
+    border-radius: 5px;
+    margin: 0 20px 20px;
+    position: relative;
+}
+
+.dashboard-number-card .dashboard-number-delta {
+    -webkit-align-items: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+    bottom: 6px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 0;
+    opacity: 0.7;
+    position: absolute;
+    right: 6px;
+    color: #1779ba;
+}
+
+.dashboard-number-card .dashboard-number-delta i {
+    margin-right: 5px;
+    width: 0.6rem;
+}
+
+.dashboard-number-card.positive .dashboard-number-delta, .dashboard-number-card.negative .dashboard-number-delta {
+    color: #fefefe;
+}
+
+.dashboard-number-card.positive .dashboard-number-value,
+.dashboard-number-card.positive .dashboard-number-area, .dashboard-number-card.negative .dashboard-number-value,
+.dashboard-number-card.negative .dashboard-number-area {
+    color: white;
+}
+
+.dashboard-number-card.positive .dashboard-number-area, .dashboard-number-card.negative .dashboard-number-area {
+    opacity: 0.6;
+}
+
+.dashboard-number-card.positive {
+    background: #3adb76;
+}
+
+.dashboard-number-card.negative {
+    background: #cc4b37;
+}
+
+.dashboard-number-value {
+    color: #1779ba;
+    font-size: 22px;
+    font-weight: 800;
+    padding: 1rem 2rem 1.75rem;
+    text-align: center;
+}
+
+.dashboard-number-area {
+    bottom: 6px;
+    color: #1779ba;
+    font-size: 12px;
+    left: 6px;
+    margin-bottom: 0;
+    position: absolute;
+}
+

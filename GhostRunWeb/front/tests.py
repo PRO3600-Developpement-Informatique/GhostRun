@@ -6,6 +6,7 @@ from hypothesis.extra.django import TestCase, from_model
 from hypothesis import given
 from .models import Trip, Category, User
 from django.test import Client
+from django.urls import reverse
 
 
 class FrontTests(TestCase):
@@ -28,3 +29,15 @@ class TestView(TestCase):
     def test_duration_without_ended_at(self, example_trip:Trip):
         example_trip.ended_at = None
         example_trip.duration
+
+    def test_vues_index(self):
+        c = Client()
+        ma_page = reverse('front-index')
+        r = c.get(ma_page)
+        self.assertEquals(r.status_code , 200)
+
+    def test_vues_login(self):
+       c = Client()
+       ma_page = reverse('login')
+       r = c.get(ma_page)
+       self.assertEquals(r.status_code , 200)
