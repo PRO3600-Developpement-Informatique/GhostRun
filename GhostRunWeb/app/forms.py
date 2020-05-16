@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 
 from front.models import Trip, User
-from crispy_forms_foundation.layout import Layout, Fieldset, ButtonHolder, Submit
+from crispy_forms_foundation.layout import Layout, Fieldset, ButtonHolder, Submit, Row, Column
 
 
 class CategoryChoiceField(forms.ModelChoiceField):
@@ -21,6 +21,13 @@ class AppInitForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_action = '.'
         self.helper.layout = Layout(
+            Fieldset(
+                'Publish settings',
+                Row(
+                    Column('category', css_class='large-6'),
+                    Column('slug', css_class='large-6'),
+                ),
+            ),
             Fieldset("{{ user.username|title }}, ou voulez-vous aller ?",
                      'category',
                      'transport_used',
