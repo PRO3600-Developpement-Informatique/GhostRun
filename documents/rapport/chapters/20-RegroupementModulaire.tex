@@ -17,22 +17,24 @@ Le fait de connaitre la position de l'utilisateur à cette fréquence nos permet
 mais aussi de connaitre l'évolution de la vitesse au fûr ét à mesure du trajet.
 % Expliquer ce que c'est, ce pourquoi l'appli s'en sert et à quelle fréquence, etc..
 
+
 \section{Base de données}
 Nous allons utiliser deux bases de données une locale et une autre à distance. Nous allons stocker différentes informations comme les données et statistiques des différents trajets, les positions favorites des utilisateurs, ces identifiants de connexions et leurs historiques de connexions.
-Le programme principal communiquera avec la base de données locale et cette base de données se synchronisera avec la base de données externe. Des ressources devront passer par une api REST avant d’être stockées sur le serveur distant.
-
+Le programme principal communiquera avec la base de données locale et cette base de données se synchronisera avec la base de données externe. Des ressources devront passer par une \gls{API} REST avant d’être stockées sur le serveur distant.
 
 
 \section{Google Maps}
-Nous allons utilisé l'API de Google Maps pour avoir la carte sur notre application.
+Nous allons utilisé l'\gls{API} de Google Maps pour avoir la carte sur notre application.
 Elle permettra à l'utilisateur de voir sa position actuelle et de préparer une course en choisissant une position de départ et une position d'arrivée.
 L'utilisateur pourra de plus enregistrer des positions prédéfinies sur cette carte pour ne pas avoir à réécrire des adresses.
-Le programme utilisera cette api pour des fonctions comme création d'un trajet ou pour obtenir une position.
+Le programme utilisera cette \gls{API} pour des fonctions comme création d'un trajet ou pour obtenir une position.
+
 
 \section{Ressources externes}
 Les ressources externes permettent de stocker tout ce qui ne peut pas être stocké dans la base de données.
-Par exemple, si l'utilisateur souhaite ajouter une image pour décrire son trajet, celle-ci ira dans les ressources externes et à l'aide de l'api REST,
+Par exemple, si l'utilisateur souhaite ajouter une image pour décrire son trajet, celle-ci ira dans les ressources externes et à l'aide de l'\gls{API} REST,
 les ressources seront transférés à la base de données externe.
+
 
 \section{Affichage}
 L'interface Homme-Machine permettra à l'utilisateur de voir la carte de Google Maps pour voir sa position actuelle, le trajet en cours,
