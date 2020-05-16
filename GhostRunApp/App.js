@@ -7,8 +7,11 @@ import {adresse} from './Component/adresseServ';
 
 const initialState = {
   utilisateurCourant: 'tsp',
+  passwordCourant: 'null',
   estConnecte: false,
   resultatApi: null,
+  conteurCourse: 0,
+  conteurRun: 0,
 };
 const inistate = {
   methode: 'GET',
@@ -42,6 +45,16 @@ const reducer2 = (state = initialState.utilisateurCourant, action) => {
       return {
         ...state,
         utilisateurCourant: action.data,
+      };
+  }
+  return state;
+};
+const reducerPass  = (state = initialState.passwordCourant, action) => {
+  switch (action.type) {
+    case 'CURRENT_PASS':
+      return {
+        ...state,
+        passwordCourant: action.data,
       };
   }
   return state;
@@ -97,14 +110,39 @@ const reducer7 = (state = stateutil, action) => {
   }
   return state;
 };
+const reducerConteurCourse = (state = stateutil, action) => {
+  switch (action.type) {
+    case 'COMPTEUR_COURSE':
+      return {
+        conteurCourse: action.data,
+      };
+  }
+  return state;
+};
+const reducerConteurRun = (state = stateutil, action) => {
+  switch (action.type) {
+    case 'COMPTEUR_COURSE_INCREMENT':
+      return {
+        conteurRun: state.conteurRun+ 1,
+      };
+    case 'RAZ':
+      return {
+        conteurRun: 0,
+      };
+  }
+  return state;
+};
 const allRedu = combineReducers({
   estCo: reducer,
   userCour: reducer2,
+  passCour: reducerPass,
   resltApi: reducer3,
   datatemp: reducer4,
   newTrip: reducer5,
   creactionTrajet: reducer7,
   creactionCourse: reducer6,
+  countCourse: reducerConteurCourse,
+  countRun: reducerConteurRun,
 });
 export const store = createStore(allRedu);
 

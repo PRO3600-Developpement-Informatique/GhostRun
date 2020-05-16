@@ -44,6 +44,8 @@ class PageStats extends React.Component {
       zone: 'categories',
       currentIditem: null,
       currentTitileitem: '',
+      usera: '',
+      password: '',
     };
   }
 
@@ -75,8 +77,8 @@ class PageStats extends React.Component {
     ];
     this.setState({liste_des_cat: this.state.liste_des_cat.concat(temp_obj)});
     function addDanApi() {
-      const userString = 'arthur';
-      const passwordString = 'arthur';
+      const userString = this.props.state.userCour.utilisateurCourant;
+      const passwordString = this.props.state.passCour.passwordCourant;
 
       fetch(adresse + 'categories' + '/', {
         method: 'POST',
@@ -111,14 +113,6 @@ class PageStats extends React.Component {
   }
 
   UNSAFE_componentWillMount(): void {
-    this.props.changementData(
-      'GET',
-      adresse,
-      this.props.state.userCour.utilisateurCourant,
-      'arthur',
-      'categories',
-    );
-    this.setState({temporaire: 'wesh'});
     const testto = async () => {
       const data = this.props.state.datatemp;
       const user = this.props.state.userCour.utilisateurCourant;
@@ -129,7 +123,6 @@ class PageStats extends React.Component {
       console.log('pass ' + password);
       const userString = user.toString();
       const passwordString = user.toString();
-
       await fetch(adresse + zone + '/', {
         method: 'GET',
         headers: new Headers({
@@ -190,7 +183,7 @@ class PageStats extends React.Component {
     fetch(url_cat_a_supp, {
       method: 'DELETE',
       headers: new Headers({
-        Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
+        Authorization: 'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
         'Content-Type': 'application/json',
       }),
     })
@@ -254,6 +247,24 @@ class PageStats extends React.Component {
     );
   }
 }
+
+function mapStateToPros(state) {
+  return {
+    state,
+  };
+}
+function mapDipatchToPros(dispatch) {
+  return {
+    changementTrip: data =>
+      dispatch({
+        type: 'CHANGEMENT_TRIP',
+        data: data,
+      }),
+    changementEtatCreactionTrajet: () => dispatch({type: 'CREACTION_EN_COURS'}),
+    changementCourseEnCours: () =>
+      dispatch({type: 'CHANGEMENT_COURSE_EN_COURS'}),
+  };
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -269,21 +280,6 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
 });
-function mapStateToPros(state) {
-  return {
-    state,
-  };
-}
-function mapDipatchToPros(dispatch) {
-  return {
-    changementData: (metode, adressee, user, password, zone) =>
-      dispatch({
-        type: 'CURRENT_DATA',
-        data: {metode, adressee, user, password, zone},
-      }),
-  };
-}
-
 export default connect(
   mapStateToPros,
   mapDipatchToPros,

@@ -25,11 +25,12 @@ class Mapp extends React.Component {
       liste_des_positions: [],
       valuee: [],
       user: this.props.state.userCour.utilisateurCourant,
-      password: this.props.state.datatemp.password,
+      password: this.props.state.passCour.passwordCourant,
       creactionTrajetenCours: this.props.state.creactionTrajet
         .creactionDeTrajetEnCours,
       courseEnCours: this.props.state.creactionCourse.courseEnCours,
       count: 0,
+      count_affiche:0,
       //test: this.props.match.route.params.other || '',
     };
   }
@@ -81,36 +82,37 @@ class Mapp extends React.Component {
           longitude: this.state.longitude,
         };
         this.setState({count: this.state.count});
-
-        let value_de_stats = this.props.route.params;
-        if (this.props.route.params == undefined) {
-          console.log('pasdef');
-        } else {
-          this.get_trajet();
-          console.log('c deffff');
-        }
         const tripp = this.props.state.newTrip.trip;
         //Accualise la valeur pour savoir si on crée un trajet ou non
         this.setState({creactionTrajetenCours: this.props.state.creactionTrajet.creactionDeTrajetEnCours});
-        console.log('Creation de trajet ' + this.state.creactionTrajetenCours);
+        //console.log('Creation de trajet ' + this.state.creactionTrajetenCours)
          if (this.state.creactionTrajetenCours === true){
            //Envoie les donnes des pos a l'api
            console.log(tripp.url)
            this.postDataApiLocalisations(tripp.url);
          }
          this.setState({courseEnCours: this.props.state.creactionCourse.courseEnCours});
+        console.log('route')
+        console.log(this.props.route)
          if(this.state.courseEnCours === true ){
            this.setState({count: this.state.count + 1});
-           if(this.state.count < this.props.route.params.liste_des_details_pour_course.length - 1) {
-             console.log('count = ' +this.state.count + 'taille liste = ' +this.props.route.params.liste_des_details_pour_course.length);
+           this.props.changementCourseRunIncre();
+           console.log('count = ' + this.props.state.countRun.conteurRun + 'taille liste = ' + this.props.route.params.liste_des_details_pour_course.length);
+           if(this.props.state.countRun.conteurRun < this.props.route.params.liste_des_details_pour_course.length - 1) {
+             console.log('count = ' +this.props.state.countRun.conteurRun + 'taille liste = ' +this.props.route.params.liste_des_details_pour_course.length);
              //Actualisation de la position de ghost
-             this.setState({latitude_course: this.props.route.params.liste_des_details_pour_course[this.state.count].latitude});
-             this.setState({longitude_course: this.props.route.params.liste_des_details_pour_course[this.state.count].longitude});
-             this.setState({altitude_course: this.props.route.params.liste_des_details_pour_course[this.state.count].altitude});
+             this.setState({latitude_course: this.props.route.params.liste_des_details_pour_course[this.props.state.countRun.conteurRun].latitude});
+             this.setState({longitude_course: this.props.route.params.liste_des_details_pour_course[this.props.state.countRun.conteurRun].longitude});
+             this.setState({altitude_course: this.props.route.params.liste_des_details_pour_course[this.props.state.countRun.conteurRun].altitude});
            }
            else{
-             //code pour arriver du ghost
-             console.log('ghost arrivé');
+             //code pour arriver du ghost+
+             if(this.props.state.countCourse.conteurCourse === 0){
+               alert('Le ghost est arrivé avant vous !')
+               console.log('ghost arrivé');
+               this.props.changementCourseoupas();
+             }
+             this.props.changementCourseCount(1);
            }
          }
 
@@ -123,17 +125,17 @@ class Mapp extends React.Component {
       },
     );
 
-    console.log(this.props);
+
   }
   postDataApiLocalisations = tripp => {
-    console.log('je passe iciii');
+
     var date = new Date();
     const currentTime = date.toJSON();
-    console.log(tripp,this.state.latitude,this.state.longitude,this.state.altitude,currentTime);
+    //console.log(tripp,this.state.latitude,this.state.longitude,this.state.altitude,currentTime);
     fetch(adresse + 'localisations/', {
       method: 'POST',
       headers: new Headers({
-        Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
+        Authorization: 'Basic ' + base64.encode(this.state.user + ':' + this.state.password),
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({
@@ -145,11 +147,11 @@ class Mapp extends React.Component {
       }),
     })
       .then(response => response.status)
-      .then(result => console.log(result));
-    console.log('je post sa ')
-    console.log(tripp.url,this.state.latitude,this.state.longitude,this.state.altitude,currentTime)
-    console.log('dans');
-    console.log(adresse + 'localisations/')
+      .then(result => {});
+    //console.log('je post sa ')
+    //console.log(tripp.url,this.state.latitude,this.state.longitude,this.state.altitude,currentTime)
+    //console.log('dans');
+    //console.log(adresse + 'localisations/')
   };
 
   affiche_trajet_avec_temps = async liste => {
@@ -192,8 +194,26 @@ class Mapp extends React.Component {
       return [{latitude:0 ,longitude:0}];
     }
   };
+  test_si_course_en_cours_pour_button = () =>{
+    if(this.state.courseEnCours === true) {
+      return 'Course en cours ...'
+}
+    else {
+      return'Pas de course en cours'
+}
+}
+test_si_trajet_en_cours_pour_button = () =>
+{
+  if (this.state.creactionTrajetenCours === true) {
+    return 'Trajet en cours ...'
+  } else {
+    return 'Pas de trajet en cours'
+  }
 
+}
   render() {
+    const text_trajet = this.test_si_trajet_en_cours_pour_button()
+    const text_course = this.test_si_course_en_cours_pour_button()
     const mesCord = {
       latitude: this.state.latitude,
       longitude: this.state.longitude,
@@ -227,6 +247,16 @@ class Mapp extends React.Component {
             strokeWidth={4}
           />
         </MapView>
+        <View
+            style={{
+              position: 'absolute',//use absolute position to show button on top of the map
+              top: '80%', //for center align
+              alignSelf: 'flex-end' //for align to right
+            }}
+        >
+         <Button title={text_trajet} onPress={() => console.log('testo')}/>
+          <Button title={text_course} onPress={() => console.log('testo')}/>
+        </View>
       </View>
     );
   }
@@ -244,10 +274,15 @@ function mapStateToPros(state) {
 }
 function mapDipatchToPros(dispatch) {
   return {
-    changementVide: () =>
-      dispatch({
-        type: 'CHANGEMENT_VIDE',
-      }),
+    changementCourseCount: (data) =>
+        dispatch({type: 'COMPTEUR_COURSE',data:data}),
+    changementCourseRunIncre: () =>
+        dispatch({type: 'COMPTEUR_COURSE_INCREMENT'}),
+    changementCourseRAZ: () =>
+        dispatch({type: 'RAZ'}),
+    changementCourseoupas: () =>
+  dispatch({type: 'CHANGEMENT_COURSE_EN_COURS'}),
+
   };
 }
 

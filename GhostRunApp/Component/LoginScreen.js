@@ -77,15 +77,16 @@ class LoginScreen extends React.Component {
             onChangeText={text => this.setState({password: text})}
           />
         </View>
-        <TouchableWithoutFeedback >
+        <TouchableWithoutFeedback>
           <Text style={styles.forgot}>Forgot Password?</Text>
-        </TouchableWithoutFeedback >
+        </TouchableWithoutFeedback>
         <TouchableOpacity
           style={styles.loginBtn}
           onPress={() => {
             console.log('ERROR= ' + this.state.erreur);
             if (this.state.erreur == false) {
               this.props.utilisateurCourant(this.state.email);
+              this.props.passwordCourant(this.state.password);
               this.props.changementDeStatue();
             } else {
               Alert.alert('Compte non existant');
@@ -105,12 +106,15 @@ function mapStateToPros(state) {
   return {
     estConnecte: state.estConnecte,
     utilisateurCourant: state.utilisateurCourant,
+    passwordCourant: state.passwordCourant,
   };
 }
 function mapDipatchToPros(dispatch) {
   return {
-    utilisateurCourant: userMail =>
-      dispatch({type: 'CURRENT_USER', data: userMail}),
+    utilisateurCourant: userLogin =>
+      dispatch({type: 'CURRENT_USER', data: userLogin}),
+    passwordCourant: passLogin =>
+      dispatch({type: 'CURRENT_PASS', data: passLogin}),
     changementDeStatue: () => dispatch({type: 'CHANGEMENT_DE_STATUE'}),
   };
 }

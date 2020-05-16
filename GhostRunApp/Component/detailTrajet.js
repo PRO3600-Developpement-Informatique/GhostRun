@@ -47,11 +47,13 @@ class PageDetail extends React.Component {
       dialogVisible2: false,
       text: '',
       user: this.props.state.userCour.utilisateurCourant,
-      password: this.props.state.datatemp.password,
+      password: this.props.state.passCour.passwordCourant,
       trips: '',
       mode_de_transport: 'walk',
       current_trip: '',
       trip_a_supp: [],
+      resultTemp: [],
+      tempItem: null,
     };
   }
   showDialog = () => {
@@ -90,8 +92,6 @@ class PageDetail extends React.Component {
         )
           .then(response => response.json())
           .then(result => {
-            console.log('voici le resultat de la req');
-            console.log(result);
             if (
               result.detail ===
               "Nom d'utilisateur et/ou mot de passe non valide(s)."
@@ -109,6 +109,7 @@ class PageDetail extends React.Component {
             } else {
               console.log('je passe else');
               const requete = result.trips;
+              console.log(requete);
               this.setState({result: requete});
               for (var i = 0; i < this.state.result.length; i++) {
                 const date = new Date(this.state.result[i].started_at);
@@ -173,16 +174,12 @@ class PageDetail extends React.Component {
   onLongPress_supprimer_un_trip = id_de_trajet => {
     const id_trajet_a_supp = id_de_trajet;
     const url_trip_a_supp = adresse + 'trips' + '/' + id_trajet_a_supp + '/';
-    console.log(
-      'je tente de supp :' + adresse + 'trips' + '/' + id_trajet_a_supp + '/',
-    );
-    console.log('liste des trip act:');
-    console.log(this.state.tabtest);
 
     fetch(url_trip_a_supp, {
       method: 'DELETE',
       headers: new Headers({
-        Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
+        Authorization:
+          'Basic ' + base64.encode(this.state.user + ':' + this.state.password),
         'Content-Type': 'application/json',
       }),
     })
@@ -214,7 +211,12 @@ class PageDetail extends React.Component {
 
   renderItem = ({item}) => (
     <View>
-      <TouchableHighlight style={styles.button} onPress={this.showDialog2}>
+      <TouchableHighlight
+        style={styles.button}
+        onPress={() => {
+          this.setState({tempItem: item});
+          this.showDialog2();
+        }}>
         <ListItem
           title={item.mode}
           subtitle={item.name}
@@ -228,14 +230,22 @@ class PageDetail extends React.Component {
         <Dialog.Button
           label="Le supprimer"
           onPress={() => {
-            this.onLongPress_supprimer_un_trip(item.id);
+            this.onLongPress_supprimer_un_trip(this.state.tempItem.id);
             this.handleCancel2();
           }}
         />
         <Dialog.Button
           label="Faire une course !"
           onPress={() => {
-            this.onPressSendToMap_pour_start_course()
+            this.showDialog();
+            this.onPressSendToMap_pour_start_course(this.state.tempItem.id);
+            this.handleCancel2();
+          }}
+        />
+        <Dialog.Button
+          label="Rien"
+          onPress={() => {
+            console.log(this.state.tempItem.id);
             this.handleCancel2();
           }}
         />
@@ -243,47 +253,64 @@ class PageDetail extends React.Component {
     </View>
   );
 
-  onPressSendToMap_pour_start_course = async () => {
-    for (var i = 0; i < this.state.result.length; i++) {
-      const lesLocalisations = this.state.result[i].localisations;
-      for (var j = 0; j < lesLocalisations.length; j++) {
-        await fetch(lesLocalisations[j], {
-          method: 'GET',
-          headers: new Headers({
-            Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
-            'Content-Type': 'application/json',
-          }),
-        })
-          .then(response => response.json())
-          .then(result => {
-            console.log('voici le resultat de la req');
-            console.log(result);
-            if (
-              result.detail ==
-              "Nom d'utilisateur et/ou mot de passe non valide(s)."
-            ) {
-              console.log('errer');
-            } else {
-              const requete = result;
-              const temp_obj = [
-                {
-                  latitude: requete.latitude,
-                  longitude: requete.longitude,
-                  timestamp: requete.timestamp,
-                },
-              ];
-              this.setState({
-                liste_vers_map: this.state.liste_vers_map.concat(temp_obj),
-              });
-            }
-          })
-          .catch(e => {
-            console.log('erreur de co !');
+  onPressSendToMap_pour_start_course = async id_trip => {
+    this.props.changementCourseCount(0);
+    this.props.changementCourseRAZ();
+
+     await fetch(adresse + 'trips/' + id_trip + '/', {
+      method: 'GET',
+      headers: new Headers({
+        Authorization:
+          'Basic ' + base64.encode(this.state.user + ':' + this.state.password),
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (
+          result.detail == "Nom d'utilisateur et/ou mot de passe non valide(s)."
+        ) {
+          console.log('errer');
+        } else {
+          this.setState({resultTemp: result});
+
+        }
+      })
+      .catch(e => {
+        console.log('erreur de co !');
+      });
+    console.log('je lance sa')
+    console.log(this.state)
+
+    for (var i = 0; i < this.state.resultTemp.localisations.length; i++) {
+      console.log(i)
+      await fetch(this.state.resultTemp.localisations[i], {
+        method: 'GET',
+        headers: new Headers({
+          Authorization:
+            'Basic ' +
+            base64.encode(this.state.user + ':' + this.state.password),
+          'Content-Type': 'application/json',
+        }),
+      })
+        .then(response => response.json())
+        .then(result => {
+          const requete = result;
+          const temp_obj = [
+            {
+              latitude: requete.latitude,
+              longitude: requete.longitude,
+              timestamp: requete.timestamp,
+            },
+          ];
+          console.log('temp_obj')
+          console.log(temp_obj)
+          this.setState({
+            liste_vers_map: this.state.liste_vers_map.concat(temp_obj),
           });
-      }
+        });
     }
-    console.log('Voilalaaa');
-    console.log(this.state.liste_vers_map);
+
     this.props.navigation.navigate('Carte', {
       liste_des_details_pour_course: this.state.liste_vers_map,
     });
@@ -312,8 +339,6 @@ class PageDetail extends React.Component {
       .then(result => {
         const url_du_trip = result.url;
         this.setState({current_trip: result});
-        console.log('C LE TRIPPPPPPPPPPPPPPPPPPP');
-        console.log(result);
         this.props.changementTrip(result);
 
         //concat
@@ -388,6 +413,9 @@ class PageDetail extends React.Component {
                 <Dialog.Button
                   label="oui"
                   onPress={() => {
+                    alert(
+                      'Vous pouvez commencer a bouger, nous enrengirons tout, à la fin du trajet cliquez sur le bouton juste en dessous !',
+                    );
                     this.handleCancel();
                     this.onPressDebutTrajet();
                   }}
@@ -431,6 +459,9 @@ class PageDetail extends React.Component {
                   <Dialog.Button
                     label="oui"
                     onPress={() => {
+                      alert(
+                        'Vous pouvez commencer a bouger, nous enrengirons tout, à la fin du trajet cliquez sur le bouton juste en dessous !',
+                      );
                       this.handleCancel();
                       this.onPressDebutTrajet();
                     }}
@@ -493,6 +524,9 @@ function mapDipatchToPros(dispatch) {
     changementEtatCreactionTrajet: () => dispatch({type: 'CREACTION_EN_COURS'}),
     changementCourseEnCours: () =>
       dispatch({type: 'CHANGEMENT_COURSE_EN_COURS'}),
+    changementCourseCount: data =>
+      dispatch({type: 'COMPTEUR_COURSE', data: data}),
+    changementCourseRAZ: () => dispatch({type: 'RAZ'}),
   };
 }
 const styles = StyleSheet.create({
