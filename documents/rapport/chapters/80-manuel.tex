@@ -55,7 +55,7 @@ L'interface administrateur permet aux administrateur de consulter la base de don
 \section{API}
 
 L'\gls{API} est une interface permettant à des services externes de se connecter au site web et de lui communiquer des données, ou d'en récupérer. Un utilisateur souhaitant utiliser l'\gls{API}, par exemple à travers l'application téléphone, devra se connecter avec son utilisateur et son mot de passe.
-L'\gls{API} suit les normes REST usuelles auxquelles on pourrait s'attendre d'un tel service. Par exemple, l'endpoint /trips contient la liste des trips et supporte GET, HEAD, et POST pour respectivement récupérer la liste des trajets de l'utilisateur connecté, en connaitre la date de dernière modification et en ajouter un.
+L'\gls{API} suit les normes \gls{REST} usuelles auxquelles on pourrait s'attendre d'un tel service. Par exemple, l'endpoint /trips contient la liste des trips et supporte GET, HEAD, et POST pour respectivement récupérer la liste des trajets de l'utilisateur connecté, en connaitre la date de dernière modification et en ajouter un.
 Un trajet particulier, identifié par sa clé primaire dans l'URL, pourra être modifié (PATCH), remplacé (PUT), récupéré (GET) ou encore supprimé (DELETE).
 
 Enfin, chaque route supporte la requête de type OPTIONS, qui permet de connaitre les éléments à passer à la route donnée, et les contraintes qui seront calculées.

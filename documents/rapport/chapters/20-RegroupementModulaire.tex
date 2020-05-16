@@ -20,7 +20,7 @@ mais aussi de connaitre l'évolution de la vitesse au fûr ét à mesure du traj
 
 \section{Base de données}
 Nous allons utiliser deux bases de données une locale et une autre à distance. Nous allons stocker différentes informations comme les données et statistiques des différents trajets, les positions favorites des utilisateurs, ces identifiants de connexions et leurs historiques de connexions.
-Le programme principal communiquera avec la base de données locale et cette base de données se synchronisera avec la base de données externe. Des ressources devront passer par une \gls{API} REST avant d’être stockées sur le serveur distant.
+Le programme principal communiquera avec la base de données locale et cette base de données se synchronisera avec la base de données externe. Des ressources devront passer par une \gls{API} \gls{REST} avant d’être stockées sur le serveur distant.
 
 
 \section{Google Maps}
@@ -32,7 +32,7 @@ Le programme utilisera cette \gls{API} pour des fonctions comme création d'un t
 
 \section{Ressources externes}
 Les ressources externes permettent de stocker tout ce qui ne peut pas être stocké dans la base de données.
-Par exemple, si l'utilisateur souhaite ajouter une image pour décrire son trajet, celle-ci ira dans les ressources externes et à l'aide de l'\gls{API} REST,
+Par exemple, si l'utilisateur souhaite ajouter une image pour décrire son trajet, celle-ci ira dans les ressources externes et à l'aide de l'\gls{API} \gls{REST},
 les ressources seront transférés à la base de données externe.
 
 
