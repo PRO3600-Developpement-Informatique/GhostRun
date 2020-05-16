@@ -69,3 +69,56 @@ Enfin, l'\gls{API} dispose d'une interface HTML permettant d'interagir facilemen
     \caption{L'interface de l'API utilisable pour le développement.}
     \label{fig:80-interface-API}
 \end{figure}
+
+
+\chapter{Manuel administrateur}
+
+
+\section{Installation du site web}
+
+Pour installer le site web, rien de plus simple. Tout d'abord, il vous faudra télécharge et installer python3.8+.
+
+Sous Debian/Ubuntu,
+\begin{verbatim}
+    apt install python3
+\end{verbatim}
+devrait se charger de son installation automatiquement.
+
+Ensuite, il faut utiliser pip pour installer les dépendances. Pour cela, déplacez vous dans le répertoire GhostRunWeb, puis lancez la commande suivante\footnote{Sur certains systèmes, la commande pip correspond a la version 2 de python ou n'existe pas. Dans ce cas, utilisez py -3 -m pip (sous windows) ou pip3, voire pip3.X, ou X est la version mineure de python.}
+
+\begin{verbatim}
+    pip install -U -r requirements.txt
+\end{verbatim}
+
+Une fois les requirements installés, vous pouvez lancer le site web. Pour cela, reportez vous à la section suivante pour une installation de développement, ou sur la section production pour une installation prête à être déployée.
+
+\subsection{Pour le développement}
+
+Lors du développement de l'application, il est plus simple d'utiliser une base de données SQLITE et le mode de débuggage de Django.
+
+Pour lancer le serveur, utilisez les commandes suivantes:
+\begin{verbatim}
+    # Crée la base de données sqlite et les tables correspondantes
+    python3 manage.py migrate
+
+    # Facultatif, mais permet la création d'un utilisateur
+    # avec un compte permettant d'accéder à l'interface d'administration
+    python3 manage.py createsuperuser
+
+    # Lance le serveur sur le port 8000
+    python3 manage.py runserver
+\end{verbatim}
+
+Le serveur est maintenant lancé et accepte les connexions. Rendez-vous sur \url{http://localhost:8000} pour utiliser le site web.
+
+\subsection{Pour la production}
+
+Pour le deployment, la base de données a privilégier est une base PostgreSQL.
+
+
+\section{Compilation de l'application}
+
+\subsection{Pour le développement}
+
+\subsection{Pour la production}
+
