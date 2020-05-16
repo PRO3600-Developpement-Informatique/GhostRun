@@ -2,7 +2,6 @@
 
 \section{Application Android}
 
-
 L'application Android permet à l'utilisateur de suivre son trajet sur une carte Google Maps et de faire une course contre un autre trajet.
 
 Tout d'abord, lors du lancement de l'application, il faut se connecter avec son identifiant et son mot de passe pour arriver sur la carte. La navigation se fait avec trois onglets. Le premier onglet correspond à la carte où l'on peut voir sa position et de plus le trajet que l'on est en train de faire durant une course.
@@ -15,15 +14,37 @@ Et enfin le troisième onglet correspond à la page des options où l'utilisateu
 
 Le site web a une interface très simple d'utilisation. La page d'accueil décrit très simplement le but de l'application GhostRun.
 
-En haut à gauche de la page d'accueil, nous avons deux boutons, Espace membres et préférences, qui ne sont disponibles que si l'utilisateur s'est connecté. Il peut le faire avec le bouton Connexion en haut à droite. Les identifiants de l'utilisateur sont les mêmes que ceux sur l'application. Si un utilisateur essaye d'accéder à l'une de ces pages sans être connecté, il sera redirigé sur la page de connexion.
+En haut à gauche de la page d'accueil \autoref{fig:80-accueil}, nous avons le bouton Espace membres, qui n'est disponibles que si l'utilisateur s'est connecté. Il peut le faire avec le bouton Connexion en haut à droite. Les identifiants de l'utilisateur sont les mêmes que ceux sur l'application. Si un utilisateur essaye d'accéder à l'une de ces pages sans être connecté, il sera redirigé sur la page de connexion.
 
-Après s'être connecté, l'utilisateur a donc accès à son espace membres où il peut voir tous les trajets qu'il a réalisé dans chacune de ses catégories. En cliquant sur l'un des trajets, il peut voir plusieurs statistiques sur ce trajet (comme la distance parcourue, sa vitesse moyenne, la durée du trajet, ou encore un graphique du dénivelé). Il peut aussi bien évidemment consulter l'itinéraire parcouru sur la carte à gauche de la page. Tout ceci peut lui permettre de faire son choix sur quel trajet il souhaite réaliser une course.
+\begin{figure}[H]
+    \centering
+    \includegraphics[keepaspectratio, width=2\textwidth/2, height=2\textheight/5]{ima/accueil}
+    \caption{Page d'accueil du site web GhostRun}
+    \label{fig:80-accueil}
+\end{figure}
+
+Après s'être connecté, l'utilisateur a donc accès à son espace membres où il peut voir tous les trajets qu'il a réalisé dans chacune de ses catégories (\autoref{fig:80-espace}). En cliquant sur l'un des trajets, il peut voir plusieurs statistiques sur ce trajet (comme la distance parcourue, sa vitesse moyenne, la durée du trajet, ou encore un graphique du dénivelé). Il peut aussi bien évidemment consulter l'itinéraire parcouru sur la carte à gauche de la page ou encore supprimer le trajet. Tout ceci peut lui permettre de faire son choix sur quel trajet il souhaite réaliser une course (\autoref{fig:80-stat}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[keepaspectratio, width=2\textwidth/2, height=2\textheight/5]{ima/espace}
+    \caption{Espace membres du site web GhostRun}
+    \label{fig:80-espace}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[keepaspectratio, width=2\textwidth/2, height=2\textheight/5]{ima/stat}
+    \caption{Statistiques d'un trajet}
+    \label{fig:80-stat}
+\end{figure}
+
 
 \section{Interface administrateur}
 
 L'interface administrateur permet aux administrateur de consulter la base de données depuis une interface plus agréable que des commandes SQL. Elle est générée dynamiquement en fonction des tables définies. Elle permet d'ajouter, de supprimer ou de modifier les données concernant n'importe quel trajet ou catégorie de n'importe quel utilisateur. Son accès est réservé aux comptes disposant de l'attribut "super-utilisateur".
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[keepaspectratio, width=2\textwidth/2, height=2\textheight/5]{ima/interface-admin}
     \caption{L'interface administrateur en images.}
