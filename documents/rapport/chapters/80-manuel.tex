@@ -113,10 +113,35 @@ Le serveur est maintenant lancé et accepte les connexions. Rendez-vous sur \url
 
 \subsection{Pour la production}
 
-Pour le deployment, la base de données a privilégier est une base PostgreSQL.
+Pour le deployment, la base de données à privilégier est une base PostgreSQL. Son installation ne relève pas du domaine de ce document. Il est aussi nécéssaire de créer un utilisateur et une base propre à l'application.
+
+Il faudra vous assurer que les données de configuration de production dans le fichier GhostRunWeb/GhostRunWeb/production.py sont correctes. Pensez à corriger les informations de connexion à la base de données, et l'URL du site web en production.
+
+En vous aidant des instruction de la partie développement, vous pourrez créer les tables, et un superutilisateur.
+
+Il est maintenant temps de rassembler les fichiers statiques pour qu'ils puissent êtres servis par le serveur web. Pour cela, utilisez,
+
+\begin{verbatim}
+    python3 manage.py collectstatic
+\end{verbatim}
+
+Pour lancer le serveur, il vous faudra un proxy, tel que nginx ou caddy, qui relaye les connexions depuis le port 80/443 (http/https) et sert les fichiers sur URL/static depuis le répertoire GhostRunWeb/static.
+
+Une fois votre serveur web configuré\footnote{Une Caddyfile pour l'utilisation avec Caddy V2 est disponible en annexe}, lancez le site avec gunicorn (installé par pip), en utilisant les réglages de production.
+
+\begin{verbatim}
+    export DJANGO_SETTINGS_MODULE=GhostRunWeb.production
+    gunicorn -b "127.0.0.1:8000" GhostRunWeb.wsgi -D --threads 8
+\end{verbatim}
+
+Si tout c'est bien passé, vous devriez pouvoir accéder à votre application à l'adresse configurée.
+
+Pour finir, si vous utilisez Nginx, installez certbot pour obtenir un certificat vous permettant d'activer HTTPS sur le site.
 
 
 \section{Compilation de l'application}
+
+Pour compiler l'application, il est nécéssaire d'installer react-native (React Native CLI) sur votre ordinateur de développement. L'installation est documentée sur le site de react, à l'adresse \url{https://reactnative.dev/docs/environment-setup}, et varie grandement en fonction de l'OS utilisé.
 
 \subsection{Pour le développement}
 

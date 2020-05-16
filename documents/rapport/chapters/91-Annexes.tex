@@ -25,3 +25,33 @@
 \end{sidewaysfigure}
 
 
+\chapter{Caddyfile pour le deployment du site web en production}
+
+\begin{lstlisting}
+(global) {
+    # logs
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 1gb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+        format json
+    }
+    log
+    file_server
+}
+
+(static_site) {
+    import global
+}
+
+ghostrun.api-d.com {
+    root * /var/www/ghostrun.api-d.com/GhostRun/GhostRunWeb/
+    import static_site
+    @notStatic {
+        not path /static/* /media/*
+    }
+    reverse_proxy @notStatic localhost:8000
+}
+\end{lstlisting}
