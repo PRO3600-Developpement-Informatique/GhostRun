@@ -34,6 +34,7 @@ class PageStats extends React.Component {
     this.sendtrajet = this.sendtrajet.bind(this);
     this.state = {
       dialogVisible: false,
+      dialogVisible2: false,
       trajet: '',
       result: '',
       temporaire: '',
@@ -41,6 +42,8 @@ class PageStats extends React.Component {
       last_liste: [],
       liste_des_cat: [],
       zone: 'categories',
+      currentIditem: null,
+      currentTitileitem: '',
     };
   }
 
@@ -49,6 +52,12 @@ class PageStats extends React.Component {
   };
   handleCancel = () => {
     this.setState({dialogVisible: false});
+  };
+  showDialog2 = () => {
+    this.setState({dialogVisible2: true});
+  };
+  handleCancel2 = () => {
+    this.setState({dialogVisible2: false});
   };
 
   temps_trajet(trajet) {} // Calcul le temps d'un trajet
@@ -83,7 +92,6 @@ class PageStats extends React.Component {
     }
     addDanApi();
     this.handleCancel();
-    this.forceUpdate();
   }
 
   transmettre_id(id, liste) {
@@ -150,8 +158,8 @@ class PageStats extends React.Component {
               const newid_string = url.substring(pos_use, url_taile - 1);
               const newid = parseInt(newid_string);
               console.log('+++++++++++++++++++++++++');
-              console.log(newid);
               const temp_obj = [{id: newid, title: this.state.result[i].name}];
+              console.log(temp_obj);
               const newstate = this.state.liste_des_cat.concat(temp_obj);
               console.log('newstate');
               console.log(newstate);
@@ -169,10 +177,17 @@ class PageStats extends React.Component {
     };
     testto();
   }
-  onLongPress_supprimer_une_cat = id_de_cat => {
+  onLongPress_supprimer_une_cat = (id_de_cat, nom_cat) => {
     const id_cat_a_supp = id_de_cat;
-    console.log('je tente de supp :' + adresse + 'categories' + '/' + id_cat_a_supp + '/');
-    fetch(adresse + 'categories' + '/' + id_cat_a_supp + '/', {
+    const cat_a_supp = {id: id_cat_a_supp, title: nom_cat};
+    const url_cat_a_supp = adresse + 'categories' + '/' + id_cat_a_supp + '/';
+    console.log(
+      'je tente de supp :' + adresse + 'categories' + '/' + id_cat_a_supp + '/',
+    );
+    console.log('liste des catt act:');
+    console.log(this.state.liste_des_cat);
+
+    fetch(url_cat_a_supp, {
       method: 'DELETE',
       headers: new Headers({
         Authorization: 'Basic ' + base64.encode('arthur' + ':' + 'arthur'),
@@ -184,7 +199,13 @@ class PageStats extends React.Component {
         console.log('j ai bien supprimer la cat');
         console.log(result);
       });
-    this.forceUpdate();
+
+    const post_de_la_cat_a_supprime = this.state.liste_des_cat.indexOf(
+      cat_a_supp,
+    );
+    const curr = this.state.liste_des_cat;
+    curr.splice(post_de_la_cat_a_supprime, 1);
+    this.setState({liste_des_cat: this.state.liste_des_cat});
   };
 
   render() {
@@ -193,6 +214,8 @@ class PageStats extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
+          delayLongPress={500}
+          extraData={this.state}
           data={this.state.liste_des_cat}
           renderItem={({item}) => (
             <TouchableOpacity
@@ -200,7 +223,7 @@ class PageStats extends React.Component {
                 this.transmettre_id(item.id, item.tout_les_trajets)
               }
               onLongPress={() => {
-                this.onLongPress_supprimer_une_cat(item.id);
+                this.onLongPress_supprimer_une_cat(item.id, item.title);
               }}>
               <Item title={item.title} />
             </TouchableOpacity>
@@ -216,11 +239,12 @@ class PageStats extends React.Component {
           <Dialog.Button
             label="Finalement j'ai changé d'avis"
             onPress={() => {
-              this.handleCancel()
+              this.handleCancel();
               this.forceUpdate();
             }}
           />
           <Dialog.Button label="Ajouter" onPress={this.sendtrajet} />
+          <Dialog.Button label="Supprimer" onPress={() => {}} />
           <Dialog.Input
             label="Maison - Gare"
             onChangeText={trajet => this.setState({trajet})}
