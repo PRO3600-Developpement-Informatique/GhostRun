@@ -21,13 +21,6 @@ class AppInitForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_action = '.'
         self.helper.layout = Layout(
-            Fieldset(
-                'Publish settings',
-                Row(
-                    Column('category', css_class='large-6'),
-                    Column('slug', css_class='large-6'),
-                ),
-            ),
             Fieldset("{{ user.username|title }}, ou voulez-vous aller ?",
                      'category',
                      'transport_used',
