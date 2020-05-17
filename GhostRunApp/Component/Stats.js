@@ -77,8 +77,8 @@ class PageStats extends React.Component {
     ];
     this.setState({liste_des_cat: this.state.liste_des_cat.concat(temp_obj)});
 
-    const userString = this.props.state.userCour.utilisateurCourant;
-    const passwordString = this.props.state.passCour.passwordCourant;
+    const userString = this.props.state.userCour.utilisateurCourant.toString();
+    const passwordString = this.props.state.passCour.passwordCourant.toString();
 
     fetch(adresse + 'categories' + '/', {
       method: 'POST',
@@ -115,13 +115,13 @@ class PageStats extends React.Component {
     const testto = async () => {
       const data = this.props.state.datatemp;
       const user = this.props.state.userCour.utilisateurCourant;
-      const password = this.props.state.datatemp.password;
+      const password = this.props.state.passCour.passwordCourant;
       const zone = this.state.zone;
       console.log(this.props);
       console.log('user ' + user);
       console.log('pass ' + password);
       const userString = user.toString();
-      const passwordString = user.toString();
+      const passwordString = password.toString();
       await fetch(adresse + zone + '/', {
         method: 'GET',
         headers: new Headers({
@@ -134,6 +134,7 @@ class PageStats extends React.Component {
         .then(result => {
           console.log('voici le resultat de la req');
           console.log(result);
+          console.log()
           if (
             result.detail ==
             "Nom d'utilisateur et/ou mot de passe non valide(s)."

@@ -76,8 +76,9 @@ class PageDetail extends React.Component {
   UNSAFE_componentWillMount(): void {
     {
       const user = this.props.state.userCour.utilisateurCourant;
+      const password = this.props.state.passCour.passwordCourant
       const userString = user.toString();
-      const passwordString = user.toString();
+      const passwordString = password.toString();
       const testo = async () => {
         await fetch(
           adresse + 'categories/' + this.props.route.params.id + '/',
@@ -179,7 +180,7 @@ class PageDetail extends React.Component {
       method: 'DELETE',
       headers: new Headers({
         Authorization:
-          'Basic ' + base64.encode(this.state.user + ':' + this.state.password),
+          'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
         'Content-Type': 'application/json',
       }),
     })
@@ -261,7 +262,7 @@ class PageDetail extends React.Component {
       method: 'GET',
       headers: new Headers({
         Authorization:
-          'Basic ' + base64.encode(this.state.user + ':' + this.state.password),
+          'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
         'Content-Type': 'application/json',
       }),
     })
@@ -289,7 +290,7 @@ class PageDetail extends React.Component {
         headers: new Headers({
           Authorization:
             'Basic ' +
-            base64.encode(this.state.user + ':' + this.state.password),
+            base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
           'Content-Type': 'application/json',
         }),
       })
@@ -326,7 +327,7 @@ class PageDetail extends React.Component {
       method: 'POST',
       headers: new Headers({
         Authorization:
-          'Basic ' + base64.encode(this.state.user + ':' + this.state.password),
+          'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({
