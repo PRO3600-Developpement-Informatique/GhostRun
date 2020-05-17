@@ -76,23 +76,22 @@ class PageStats extends React.Component {
       {id: this.state.liste_des_cat.length + 1, title: trajet_title},
     ];
     this.setState({liste_des_cat: this.state.liste_des_cat.concat(temp_obj)});
-    function addDanApi() {
-      const userString = this.props.state.userCour.utilisateurCourant;
-      const passwordString = this.props.state.passCour.passwordCourant;
 
-      fetch(adresse + 'categories' + '/', {
-        method: 'POST',
-        headers: new Headers({
-          Authorization:
-            'Basic ' + base64.encode(userString + ':' + passwordString),
-          'Content-Type': 'application/json',
-        }),
-        body: JSON.stringify({
-          name: trajet_title,
-        }),
-      });
-    }
-    addDanApi();
+    const userString = this.props.state.userCour.utilisateurCourant;
+    const passwordString = this.props.state.passCour.passwordCourant;
+
+    fetch(adresse + 'categories' + '/', {
+      method: 'POST',
+      headers: new Headers({
+        Authorization:
+          'Basic ' + base64.encode(userString + ':' + passwordString),
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify({
+        name: trajet_title,
+      }),
+    });
+
     this.handleCancel();
   }
 
@@ -183,7 +182,13 @@ class PageStats extends React.Component {
     fetch(url_cat_a_supp, {
       method: 'DELETE',
       headers: new Headers({
-        Authorization: 'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
+        Authorization:
+          'Basic ' +
+          base64.encode(
+            this.props.state.userCour.utilisateurCourant +
+              ':' +
+              this.props.state.passCour.passwordCourant,
+          ),
         'Content-Type': 'application/json',
       }),
     })
@@ -202,8 +207,6 @@ class PageStats extends React.Component {
   };
 
   render() {
-    console.log('voici les props');
-    console.log(this.state);
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -232,6 +235,8 @@ class PageStats extends React.Component {
           <Dialog.Button
             label="Finalement j'ai changé d'avis"
             onPress={() => {
+              console.log('ICI');
+              console.log(this.props);
               this.handleCancel();
               this.forceUpdate();
             }}
