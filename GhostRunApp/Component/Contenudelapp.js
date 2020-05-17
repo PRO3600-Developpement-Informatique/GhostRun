@@ -21,9 +21,11 @@ import base64 from 'react-native-base64';
 import {useState} from 'react';
 import demandeApii from './demandeApi';
 
+
 const Tab = createBottomTabNavigator(); // Creation d'un tableau pour la navigation entre les pages
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
+const CreationCompteStack = createStackNavigator();
 const contextDeConnection = React.createContext();
 const HomeStackScreen = () => (
   <HomeStack.Navigator>

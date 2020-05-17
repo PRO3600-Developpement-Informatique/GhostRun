@@ -19,6 +19,7 @@ class LoginScreen extends React.Component {
       email: '',
       password: '',
       erreur: false,
+      showOverLay: false,
     };
   }
 
@@ -26,7 +27,6 @@ class LoginScreen extends React.Component {
     const userString = user.toString();
     const passwordString = password.toString();
     const error = true;
-    console.log('adresse ' + adresse);
     fetch(adresse, {
       method: 'GET',
       headers: new Headers({
@@ -37,24 +37,34 @@ class LoginScreen extends React.Component {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
         if (result.detail == 'Invalid username/password.') {
           console.log('Invalid usermane');
           this.setState({erreur: true});
-          console.log('dans la fonction ' + this.state.erreur);
         } else {
           this.setState({erreur: false});
-          console.log('dans la fonction ' + this.state.erreur);
         }
       })
       .catch(e => {
         console.log('erreur de co');
         this.setState({erreur: true});
-        console.log('dans la fonction ' + this.state.erreur);
       });
-    console.log(this.state.error + ' GFINI');
   }
+  test =  async () => {
+   await fetch(adresse + 'trips/', {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: 'Basic ' + base64.encode('arthur' + ':' + '0'),
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response)
+      .then(result => {
+        console.log(result);
+      });
+  };
+
   render() {
+    this.test();
     //console.log(this.props.estConnecte);
     this.verifAccount(this.state.email, this.state.password);
     return (
@@ -77,7 +87,7 @@ class LoginScreen extends React.Component {
             onChangeText={text => this.setState({password: text})}
           />
         </View>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => {}}>
           <Text style={styles.forgot}>Forgot Password?</Text>
         </TouchableWithoutFeedback>
         <TouchableOpacity
@@ -94,8 +104,11 @@ class LoginScreen extends React.Component {
           }}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.loginText}>Signup</Text>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate("Creation d'un compte")
+          }>
+          <Text style={styles.loginText}>Ce creer un compte</Text>
         </TouchableOpacity>
       </View>
     );

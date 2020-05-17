@@ -18,6 +18,7 @@ import base64 from 'react-native-base64';
 import App from '../App';
 import temp from '../App';
 const AuthContext = React.createContext();
+import ContenuPageLogin from './contenuPageLogin';
 
 class MesComposants extends React.Component {
   static demandeApii = () => {
@@ -34,7 +35,7 @@ class MesComposants extends React.Component {
     const test = this.props.state.estCo.estConnecte;
     return (
       <AuthContext.Provider value={authContext}>
-        {test ? <ContenuApp /> : <LoginScreen />}
+        {test ? <ContenuApp /> : <ContenuPageLogin />}
       </AuthContext.Provider>
     );
   }

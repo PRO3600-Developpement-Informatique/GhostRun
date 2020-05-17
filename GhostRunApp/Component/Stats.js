@@ -118,23 +118,23 @@ class PageStats extends React.Component {
       const password = this.props.state.passCour.passwordCourant;
       const zone = this.state.zone;
       console.log(this.props);
-      console.log('user ' + user);
+      console.log('userrr ' + user);
       console.log('pass ' + password);
       const userString = user.toString();
       const passwordString = password.toString();
-      await fetch(adresse + zone + '/', {
+      await fetch(adresse + "categories/", {
         method: 'GET',
         headers: new Headers({
-          Authorization:
-            'Basic ' + base64.encode(userString + ':' + passwordString),
+          Authorization: 'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
           'Content-Type': 'application/json',
         }),
       })
         .then(response => response.json())
         .then(result => {
           console.log('voici le resultat de la req');
+          console.log('ici :' + 'https://ghostrun.api-d.com/api/categories/');
           console.log(result);
-          console.log()
+          console.log(userString, passwordString);
           if (
             result.detail ==
             "Nom d'utilisateur et/ou mot de passe non valide(s)."

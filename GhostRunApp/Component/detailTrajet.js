@@ -11,10 +11,11 @@ import {
 } from 'react-native';
 import base64 from 'react-native-base64';
 import {connect} from 'react-redux';
-import {ListItem} from 'react-native-elements';
+import {ListItem, Overlay} from 'react-native-elements';
 import {Picker} from '@react-native-community/picker';
 import {adresse} from './adresseServ';
 import DialogContainer from 'react-native-dialog/src/Container';
+import WebView from 'react-native-webview';
 
 var icon_mode = {
   bike: require('./icon/bike.png'),
@@ -53,7 +54,8 @@ class PageDetail extends React.Component {
       current_trip: '',
       trip_a_supp: [],
       resultTemp: [],
-      tempItem: null,
+      tempItem: {id: 0},
+      showOverLay: false,
     };
   }
   showDialog = () => {
@@ -76,7 +78,7 @@ class PageDetail extends React.Component {
   UNSAFE_componentWillMount(): void {
     {
       const user = this.props.state.userCour.utilisateurCourant;
-      const password = this.props.state.passCour.passwordCourant
+      const password = this.props.state.passCour.passwordCourant;
       const userString = user.toString();
       const passwordString = password.toString();
       const testo = async () => {
@@ -180,7 +182,12 @@ class PageDetail extends React.Component {
       method: 'DELETE',
       headers: new Headers({
         Authorization:
-          'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
+          'Basic ' +
+          base64.encode(
+            this.props.state.userCour.utilisateurCourant +
+              ':' +
+              this.props.state.passCour.passwordCourant,
+          ),
         'Content-Type': 'application/json',
       }),
     })
@@ -209,9 +216,25 @@ class PageDetail extends React.Component {
     this.state.tabtest.splice(post_du_trip_a_supprime, 1);
     this.setState({tabtest: this.state.tabtest});
   };
+  toggleOverlay = () => {
+    this.setState({showOverLay: !this.state.showOverLay});
+  };
 
   renderItem = ({item}) => (
     <View>
+      <Overlay
+        isVisible={this.state.showOverLay}
+        onBackdropPress={() => this.toggleOverlay()}
+        fullScreen={true}>
+        <WebView
+          source={{
+            uri:
+              'https://ghostrun.api-d.com/trips/' +
+              this.state.tempItem.id +
+              '/',
+          }}
+        />
+      </Overlay>
       <TouchableHighlight
         style={styles.button}
         onPress={() => {
@@ -250,6 +273,13 @@ class PageDetail extends React.Component {
             this.handleCancel2();
           }}
         />
+        <Dialog.Button
+          label="Stats"
+          onPress={() => {
+            console.log(this.state.tempItem.id);
+            this.toggleOverlay();
+          }}
+        />
       </Dialog.Container>
     </View>
   );
@@ -258,11 +288,16 @@ class PageDetail extends React.Component {
     this.props.changementCourseCount(0);
     this.props.changementCourseRAZ();
 
-     await fetch(adresse + 'trips/' + id_trip + '/', {
+    await fetch(adresse + 'trips/' + id_trip + '/', {
       method: 'GET',
       headers: new Headers({
         Authorization:
-          'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
+          'Basic ' +
+          base64.encode(
+            this.props.state.userCour.utilisateurCourant +
+              ':' +
+              this.props.state.passCour.passwordCourant,
+          ),
         'Content-Type': 'application/json',
       }),
     })
@@ -271,26 +306,29 @@ class PageDetail extends React.Component {
         if (
           result.detail == "Nom d'utilisateur et/ou mot de passe non valide(s)."
         ) {
-          console.log('errer');
+          console.log('errerr');
         } else {
           this.setState({resultTemp: result});
-
         }
       })
       .catch(e => {
         console.log('erreur de co !');
       });
-    console.log('je lance sa')
-    console.log(this.state)
+    console.log('je lance sa');
+    console.log(this.state);
 
     for (var i = 0; i < this.state.resultTemp.localisations.length; i++) {
-      console.log(i)
+      console.log(i);
       await fetch(this.state.resultTemp.localisations[i], {
         method: 'GET',
         headers: new Headers({
           Authorization:
             'Basic ' +
-            base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
+            base64.encode(
+              this.props.state.userCour.utilisateurCourant +
+                ':' +
+                this.props.state.passCour.passwordCourant,
+            ),
           'Content-Type': 'application/json',
         }),
       })
@@ -304,8 +342,8 @@ class PageDetail extends React.Component {
               timestamp: requete.timestamp,
             },
           ];
-          console.log('temp_obj')
-          console.log(temp_obj)
+          console.log('temp_obj');
+          console.log(temp_obj);
           this.setState({
             liste_vers_map: this.state.liste_vers_map.concat(temp_obj),
           });
@@ -317,17 +355,22 @@ class PageDetail extends React.Component {
     });
     this.props.changementCourseEnCours();
   };
-  onPressDebutTrajet = () => {
+  onPressDebutTrajet = async () => {
     this.props.changementEtatCreactionTrajet();
     var date = new Date();
     const currentTime = date.toJSON();
     const categorie =
       adresse + 'categories/' + this.props.route.params.id + '/';
-    fetch(adresse + 'trips/', {
+    await fetch(adresse + 'trips/', {
       method: 'POST',
       headers: new Headers({
         Authorization:
-          'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
+          'Basic ' +
+          base64.encode(
+            this.props.state.userCour.utilisateurCourant +
+              ':' +
+              this.props.state.passCour.passwordCourant,
+          ),
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({
@@ -338,6 +381,9 @@ class PageDetail extends React.Component {
     })
       .then(response => response.json())
       .then(result => {
+        console.log('debug')
+        console.log(adresse + 'categories/' + this.props.route.params.id + '/')
+        console.log(result)
         const url_du_trip = result.url;
         this.setState({current_trip: result});
         this.props.changementTrip(result);
@@ -370,6 +416,8 @@ class PageDetail extends React.Component {
       heurs +
       ':' +
       minu;
+    console.log('curr')
+    console.log(this.state.current_trip)
 
     const url = this.state.current_trip.url;
     const url_taile = url.length;
