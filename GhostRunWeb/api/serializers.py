@@ -17,7 +17,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TripSerializer(serializers.HyperlinkedModelSerializer):
-    # localisations = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="localisation-detail")
+    localisations = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="localisation-detail")
 
     class Meta:
         model = Trip
