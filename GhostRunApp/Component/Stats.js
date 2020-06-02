@@ -71,6 +71,7 @@ class PageStats extends React.Component {
   afficher_trajet_sur_map(trajet) {} // Affiche le trajet selec sur la carte
   ajout_de_trajet() {}
   sendtrajet() {
+
     let trajet_title = this.state.trajet;
     const temp_obj = [
       {id: this.state.liste_des_cat.length + 1, title: trajet_title},
@@ -79,8 +80,9 @@ class PageStats extends React.Component {
 
     const userString = this.props.state.userCour.utilisateurCourant.toString();
     const passwordString = this.props.state.passCour.passwordCourant.toString();
+    console.log(userString)
 
-    fetch(adresse + 'categories' + '/', {
+    fetch(adresse + 'categories/', {
       method: 'POST',
       headers: new Headers({
         Authorization:
@@ -90,7 +92,11 @@ class PageStats extends React.Component {
       body: JSON.stringify({
         name: trajet_title,
       }),
-    });
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+      });
 
     this.handleCancel();
   }
@@ -112,6 +118,8 @@ class PageStats extends React.Component {
   }
 
   UNSAFE_componentWillMount(): void {
+    console.log('le state');
+    console.log(this.state);
     const testto = async () => {
       const data = this.props.state.datatemp;
       const user = this.props.state.userCour.utilisateurCourant;
@@ -122,10 +130,16 @@ class PageStats extends React.Component {
       console.log('pass ' + password);
       const userString = user.toString();
       const passwordString = password.toString();
-      await fetch(adresse + "categories/", {
+      await fetch(adresse + 'categories/', {
         method: 'GET',
         headers: new Headers({
-          Authorization: 'Basic ' + base64.encode(this.props.state.userCour.utilisateurCourant + ':' + this.props.state.passCour.passwordCourant),
+          Authorization:
+            'Basic ' +
+            base64.encode(
+              this.props.state.userCour.utilisateurCourant +
+                ':' +
+                this.props.state.passCour.passwordCourant,
+            ),
           'Content-Type': 'application/json',
         }),
       })
@@ -134,7 +148,9 @@ class PageStats extends React.Component {
           console.log('voici le resultat de la req');
           console.log('ici :' + 'https://ghostrun.api-d.com/api/categories/');
           console.log(result);
-          console.log(userString, passwordString);
+          console.log(
+            'le user ' + this.props.state.userCour.utilisateurCourant,
+          );
           if (
             result.detail ==
             "Nom d'utilisateur et/ou mot de passe non valide(s)."
@@ -208,6 +224,7 @@ class PageStats extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <SafeAreaView style={styles.container}>
         <FlatList

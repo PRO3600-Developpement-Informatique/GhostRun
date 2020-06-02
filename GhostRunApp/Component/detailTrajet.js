@@ -191,8 +191,9 @@ class PageDetail extends React.Component {
         'Content-Type': 'application/json',
       }),
     })
-      .then(response => response.status)
+      .then(response => response.json())
       .then(result => {
+        console.log(this.props.state.userCour.utilisateurCourant,this.props.state.passCour.passwordCourant,)
         console.log('j ai bien supprimer la cat');
         console.log(result);
       });
@@ -285,6 +286,7 @@ class PageDetail extends React.Component {
   );
 
   onPressSendToMap_pour_start_course = async id_trip => {
+    console.log("g ask");
     this.props.changementCourseCount(0);
     this.props.changementCourseRAZ();
 
@@ -308,6 +310,8 @@ class PageDetail extends React.Component {
         ) {
           console.log('errerr');
         } else {
+          console.log("ici")
+          console.log(result)
           this.setState({resultTemp: result});
         }
       })

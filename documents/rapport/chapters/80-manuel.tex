@@ -145,10 +145,30 @@ Pour compiler l'application, il est nécéssaire d'installer react-native (React
 
 \subsection{Pour le développement}
 
+Pour le développement et pour pouvoir éditer le code en même temps que l'application tourne sur un émulateur (android studio) il faut lancer la commande suivante dans le dossier GhostRun :
+
+\begin{verbatim}
+    npx react-native run-android
+\end{verbatim}
+
 \subsection{Pour la production}
 
+Pour obtenir un .apk de l'application il faut lancé la commande suivante dans le dossier android de l'application
+
+\begin{verbatim}
+    ./gradlew app:assembleRelease
+\end{verbatim}
+
+puis le .apk se trouve dans GhostRunApp/android/app/build/outputs/apk/debug
 
 \section{Lancement des tests}
+Pour lancer les tests il faut taper la commande
+
+\begin{verbatim}
+    npx jest
+\end{verbatim}
+
+
 
 \subsection{Pour le site web}
 

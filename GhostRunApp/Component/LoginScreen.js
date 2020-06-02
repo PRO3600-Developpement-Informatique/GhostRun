@@ -37,7 +37,11 @@ class LoginScreen extends React.Component {
     })
       .then(response => response.json())
       .then(result => {
-        if (result.detail == 'Invalid username/password.') {
+        console.log(result);
+        if (
+          result.detail ===
+          "Nom d'utilisateur et/ou mot de passe non valide(s)."
+        ) {
           console.log('Invalid usermane');
           this.setState({erreur: true});
         } else {
@@ -49,22 +53,23 @@ class LoginScreen extends React.Component {
         this.setState({erreur: true});
       });
   }
-  test =  async () => {
-   await fetch(adresse + 'trips/', {
+  test = async () => {
+    fetch(adresse + 'categories/', {
       method: 'GET',
       headers: new Headers({
-        Authorization: 'Basic ' + base64.encode('arthur' + ':' + '0'),
+        Authorization:
+          'Basic ' + base64.encode('userSatriang' + ':' + 'passwordString'),
         'Content-Type': 'application/json',
       }),
     })
-      .then(response => response)
+      .then(response => response.json())
       .then(result => {
         console.log(result);
       });
   };
 
   render() {
-    this.test();
+    //this.test();
     //console.log(this.props.estConnecte);
     this.verifAccount(this.state.email, this.state.password);
     return (
