@@ -9,18 +9,20 @@ React native est React mais pour les applications mobiles. Ce langage est un peu
 “Phase de Commit” : Peuvent opérer sur le DOM, engendrer des effets secondaires, programmer des mises à jour.
 Plus d’information sur le cycle de vie d’un composant ici :
 
-https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+\url{https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/}
 
 Et pour React ici :
 
-https://fr.reactjs.org/
+\url{https://fr.reactjs.org/}
 
 
 Nous allons expliquer le fonctionnement de chaque composant :
 
+
 \section{App.js}
 
-En React native l’application charge le composant App.js au lancement de l’application. Dans ce composant on y retrouve principalement un appel à d’autre composants (dans notre cas MesComposants) pour ne pas écrire tout le code dans un seul et même ficher. Nous y retrouvons aussi une déclaration de store et des reducers du module redux. Ce module permet la communication entre tous les composants de notre application (ce qui n’ai pas possible sans ce module en react ) . Tous les composants sont connectés au « magasin » et peuvent modifier ou accéder à ces valeurs
+En React native l’application charge le composant App.js au lancement de l’application. Dans ce composant on y retrouve principalement un appel à d’autre composants (dans notre cas MesComposants) pour ne pas écrire tout le code dans un seul et même ficher. Nous y retrouvons aussi une déclaration de store et des reducers du module redux. Ce module permet la communication entre tous les composants de notre application (ce qui n’ai pas possible sans ce module en react). Tous les composants sont connectés au « magasin » et peuvent modifier ou accéder à ces valeurs
+
 
 \section{MesComposant.js}
 
@@ -29,6 +31,7 @@ Ce composant sert juste de composant intermédiaire, il affiche le contenue de l
 Code :
 
 Le rendu se fait en fonction d’une variable booléenne dans le magasin et qui change quand l’utilisateur se connecte ou se déconnecte
+
 
 \section{ContenuPageLogin.js}
 
