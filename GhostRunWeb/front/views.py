@@ -99,7 +99,7 @@ class TripDetail(LoginRequiredMixin, generic.DetailView):
             "downhill": humanfriendly.format_length(denivele.downhill),  # Metres
             "altitude_over_time": json.dumps(elevations, cls=DjangoJSONEncoder),
             "duration": humanfriendly.format_timespan(duration),  # Minutes
-            "speed": int(length_2d/duration * (1000 / 60 / 60)),  # km/h
+            "speed": int(length_2d / duration * (60 * 60 / 1000)),  # km/h
         }
 
         context['statistics'] = statistics
